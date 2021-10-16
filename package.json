@@ -2,7 +2,7 @@
   "name": "batch-rename-final",
   "version": "1.0.0",
   "description": "An application for renaming multiple files",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron ."
   },
