@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
-const meny = require('electron').Menu
+const menu = require('electron').Menu
 
 const isMac = process.platform === 'darwin'
 
