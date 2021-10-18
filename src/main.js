@@ -2,7 +2,6 @@ const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
 const menu = require('electron').Menu
-const ffi = require('ffi-napi');
 
 const isMac = process.platform === 'darwin'
 
@@ -147,10 +146,3 @@ const openFolder = () => {
   if (!folders) { return; }
   return folders;
 }
-
-//DLL DEMO
-const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
-  'add': ['int', ['int', 'int']]
-});
-const result = libm.add(2, 3);
-console.log(result);
