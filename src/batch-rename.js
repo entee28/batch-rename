@@ -77,7 +77,7 @@ class AddPrefix extends IRenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with needle ${this.prefix}!`);
+        console.log(`This is ${this.name} rule with prefix ${this.prefix}!`);
     }
 }
 
@@ -89,7 +89,7 @@ class AddSuffix extends IRenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with needle ${this.suffix}`);
+        console.log(`This is ${this.name} rule with suffix ${this.suffix}`);
     }
 }
 
@@ -161,5 +161,15 @@ class RuleCreator extends IRuleCreator {
         } else return null;
     }
 }
-let o1 = new RuleCreator();
-o1.invokeTransform('Add prefix', '', 'google');
+
+module.exports = {
+    OnlyOneSpace : OnlyOneSpace,
+    AddCounter : AddCounter,
+    AddPrefix: AddPrefix,
+    AddSuffix: AddSuffix,
+    ReplaceCharacters: ReplaceCharacters,
+    ReplaceExtension: ReplaceExtension,
+    PascalCase: PascalCase,
+    LowerAll: LowerAll,
+    RuleCreator: RuleCreator,
+  }

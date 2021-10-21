@@ -3,8 +3,14 @@ const ipc = require('electron').ipcMain
 const dialog = require('electron').dialog
 const menu = require('electron').Menu
 const ffi = require('ffi-napi');
+const {AddCounter, AddPrefix, AddSuffix, LowerAll, PascalCase,
+OnlyOneSpace, ReplaceCharacters, ReplaceExtension, RuleCreator} = require('./batch-rename')
 
 const isMac = process.platform === 'darwin'
+
+let o1 = new RuleCreator();
+o1.invokeTransform('Add prefix', '', 'google');
+o1.invokeTransform('Replace characters', '', 'google', 'facebook' );
 
 function createWindow() {
   const win = new BrowserWindow({
