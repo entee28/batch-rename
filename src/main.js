@@ -232,4 +232,3 @@ const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
 });
 const result = libm.add(2, 3);
 console.log(result);
-}
