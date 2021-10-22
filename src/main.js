@@ -1,12 +1,11 @@
 const { app, BrowserWindow, Menu } = require('electron');
-const ipc = require('electron').ipcMain
-const dialog = require('electron').dialog
-const menu = require('electron').Menu
+const ipc = require('electron').ipcMain;
+const dialog = require('electron').dialog;
+const menu = require('electron').Menu;
 const ffi = require('ffi-napi');
-const {AddCounter, AddPrefix, AddSuffix, LowerAll, PascalCase,
-OnlyOneSpace, ReplaceCharacters, ReplaceExtension, RuleCreator} = require('./batch-rename')
+const {RuleCreator} = require('./rule-creator');
 
-const isMac = process.platform === 'darwin'
+const isMac = process.platform === 'darwin';
 
 let o1 = new RuleCreator();
 o1.invokeTransform('Add prefix', '', 'google');

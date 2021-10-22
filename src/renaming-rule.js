@@ -1,13 +1,13 @@
 //ABSTRACT PRODUCT CLASS
-class IRenamingRule {
+class RenamingRule {
     constructor() {
-        if (this.constructor === IRenamingRule) {
+        if (this.constructor === RenamingRule) {
             // Abstract class can not be constructed.
             throw new TypeError("Can not construct abstract class.");
         }
         //else (called from child)
         // Check if all instance methods are implemented.
-        if (this.Transform === IRenamingRule.prototype.Transform) {
+        if (this.Transform === RenamingRule.prototype.Transform) {
             //Child has not implemented this abstract method.
             throw new TypeError("Please implement abstract method Transform.");
         }
@@ -18,7 +18,7 @@ class IRenamingRule {
     }
 }
 
-class OnlyOneSpace extends IRenamingRule {
+class OnlyOneSpace extends RenamingRule {
     constructor() {
         super();
         this.name = "Only one space";
@@ -29,7 +29,7 @@ class OnlyOneSpace extends IRenamingRule {
     }
 }
 
-class ReplaceCharacters extends IRenamingRule {
+class ReplaceCharacters extends RenamingRule {
     constructor(needle, replacement) {
         super();
         this.name = "Replace characters";
@@ -43,7 +43,7 @@ class ReplaceCharacters extends IRenamingRule {
     }
 }
 
-class ReplaceExtension extends IRenamingRule {
+class ReplaceExtension extends RenamingRule {
     constructor(needle, replacement) {
         super();
         this.name = "Replace extension";
@@ -57,7 +57,7 @@ class ReplaceExtension extends IRenamingRule {
     }
 }
 
-class AddCounter extends IRenamingRule {
+class AddCounter extends RenamingRule {
     constructor(needle, replacement) {
         super();
         this.name = "Add counter";
@@ -69,7 +69,7 @@ class AddCounter extends IRenamingRule {
     }
 }
 
-class AddPrefix extends IRenamingRule {
+class AddPrefix extends RenamingRule {
     constructor(prefix) {
         super();
         this.name = "Add prefix";
@@ -81,7 +81,7 @@ class AddPrefix extends IRenamingRule {
     }
 }
 
-class AddSuffix extends IRenamingRule {
+class AddSuffix extends RenamingRule {
     constructor(suffix) {
         super();
         this.name = "Add suffix";
@@ -93,7 +93,7 @@ class AddSuffix extends IRenamingRule {
     }
 }
 
-class LowerAll extends IRenamingRule {
+class LowerAll extends RenamingRule {
     constructor() {
         super();
         this.name = "Convert lowercase";
@@ -104,7 +104,7 @@ class LowerAll extends IRenamingRule {
     }
 }
 
-class PascalCase extends IRenamingRule {
+class PascalCase extends RenamingRule {
     constructor() {
         super();
         this.name = "Convert to PascalCase";
@@ -112,53 +112,6 @@ class PascalCase extends IRenamingRule {
 
     Transform(original) {
         console.log(`This is ${this.name} rule!`);
-    }
-}
-
-//ABSTRACT CREATOR CLASS
-class IRuleCreator {
-    constructor() {
-        if (this.constructor === IRuleCreator) {
-            throw new TypeError("Can not construct abstract class.");
-        }
-        if (this.createRule === IRuleCreator.prototype.createRule) {
-            throw new TypeError("Please implement abstract method createRule.");
-        }
-    }
-    //factory method
-    createRule(type, arg1, arg2) {
-        throw new TypeError("Do not call abstract method createRule from child.");
-    }
-
-    invokeTransform(type, original, arg1, arg2) {
-        let rule = this.createRule(type, arg1, arg2);
-        rule.Transform(original);
-    }
-}
-
-class RuleCreator extends IRuleCreator {
-    constructor() {
-        super();
-    }
-
-    createRule(type, arg1, arg2) {
-        if(type === 'Only one space') {
-            return new OnlyOneSpace();
-        } else if(type === 'Replace characters') {
-            return new ReplaceCharacters(arg1, arg2);
-        } else if (type === 'Replace extension') {
-            return new ReplaceExtension(arg1, arg2);
-        } else if (type === 'Add prefix') {
-            return new AddPrefix(arg1);
-        } else if (type === 'Add suffix') {
-            return new AddSuffix(arg1);
-        } else if (type === 'Convert lowercase') {
-            return new LowerAll();
-        } else if (type === 'Convert PascalCase') {
-            return new PascalCase();
-        } else if (type === 'Add counter') {
-            return new AddCounter();
-        } else return null;
     }
 }
 
@@ -171,5 +124,5 @@ module.exports = {
     ReplaceExtension: ReplaceExtension,
     PascalCase: PascalCase,
     LowerAll: LowerAll,
-    RuleCreator: RuleCreator,
   }
+  
