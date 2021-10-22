@@ -7,6 +7,7 @@ const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
 
+
 const isMac = process.platform === 'darwin';
 
 let o1 = new RuleCreator();
@@ -231,3 +232,4 @@ const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
 });
 const result = libm.add(2, 3);
 console.log(result);
+}
