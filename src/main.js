@@ -227,8 +227,8 @@ const savePreset = () => {
 }
 
 //DLL DEMO
-const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
-  'add': ['int', ['int', 'int']]
-});
-const result = libm.add(2, 3);
-console.log(result);
+// const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
+//   'add': ['int', ['int', 'int']]
+// });
+// const result = libm.add(2, 3);
+// console.log(result);
