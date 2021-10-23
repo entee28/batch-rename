@@ -14,7 +14,7 @@ let o1 = new RuleCreator();
 o1.invokeTransform('Add prefix', '', 'google');
 o1.invokeTransform('Replace characters', '', 'google', 'facebook');
 
-function createWindow() {
+app.whenReady().then(() => {
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -24,11 +24,6 @@ function createWindow() {
     }
   })
   win.loadFile('src/index.html');
-  // win.webContents.openDevTools();
-}
-
-app.whenReady().then(() => {
-  createWindow();
 
   const template = [
     //File menu
@@ -38,15 +33,16 @@ app.whenReady().then(() => {
         {
           label: "Open File...",
           accelerator: "Ctrl+O",
-          click() {
-            openFile();
+          click(event) {
+            const files = openFile();
+            if (files) win.webContents.send('selected-file', files)
           }
         },
         {
           label: "Open Folder...",
           click() {
-            openFolder();
-          }
+            const folders = openFolder();
+            if (folders) win.webContents.send('selected-folder', folders)          }
         },
         {
           type: 'separator'
@@ -180,14 +176,14 @@ const openFile = () => {
 
 const loadPreset = () => {
   const preset = dialog.showOpenDialogSync({
-     title: "Load Existing Preset",
-     properties: ['openFile'],
-     filters: [
+    title: "Load Existing Preset",
+    properties: ['openFile'],
+    filters: [
       {
         name: 'JSON file',
         extensions: ['json']
       },],
-    });
+  });
 
   if (!preset) { return; }
   return preset;
@@ -220,7 +216,7 @@ const savePreset = () => {
           if (err) throw err;
           console.log('Saved!');
         });
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
   }
