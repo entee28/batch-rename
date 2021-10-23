@@ -56,18 +56,16 @@ const addFileItem = (__filepath) => {
     const container = document.querySelector("#file-list-container");
     const item = document.createElement('li');
     item.textContent = path.basename(__filepath);
-    // const button = document.createElement('button');
-    // const deleteIcon = document.createElement('i');
-    // deleteIcon.classList.add('fas fa-trash-alt');
-    // button.appendChild(deleteIcon);
-    // item.appendChild(button);
     addDelButton(item);
     container.appendChild(item);
 }
 
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
-    delBtn.innerHTML = "Delete";
+    const delIcon = document.createElement('i');
+    delIcon.classList.add('fa');
+    delIcon.classList.add('fa-trash');
+    delBtn.appendChild(delIcon);
     delBtn.onclick = function() {
         this.parentElement.remove();
     }}
