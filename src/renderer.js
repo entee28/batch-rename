@@ -22,6 +22,11 @@ loadPresetBtn.addEventListener('click', function(event) {
 
 ipc.on('selected-file', function(event, files) {
     //received files from main process, need handle
+    const output = document.querySelector("#test");
+    output.textContent = "List of Selected Files:";
+    for (let i = 0; i < files.length; i++) {
+        output.textContent += `\nFilename: ${files[i]}`;
+      }
 })
 
 ipc.on('selected-preset', function(event, preset) {
