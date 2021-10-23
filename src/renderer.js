@@ -1,4 +1,5 @@
-const ipc = require('electron').ipcRenderer
+const path = require('path');
+const ipc = require('electron').ipcRenderer;
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function(event) {
@@ -21,12 +22,12 @@ loadPresetBtn.addEventListener('click', function(event) {
 })
 
 ipc.on('selected-file', function(event, files) {
-    //received files from main process, need handle
-    const output = document.querySelector("#test");
-    output.textContent = "List of Selected Files:";
+    const container = document.querySelector("#file-list-container");
     for (let i = 0; i < files.length; i++) {
-        output.textContent += `\nFilename: ${files[i]}`;
-      }
+        const item = document.createElement('li');
+        item.textContent = path.basename(files[i]);
+        container.appendChild(item);
+    }
 })
 
 ipc.on('selected-preset', function(event, preset) {
@@ -34,17 +35,24 @@ ipc.on('selected-preset', function(event, preset) {
 })
 
 ipc.on('selected-folder', function(event, folders) {
-    //received files from main process, need handle
+    const container = document.querySelector("#file-list-container");
+    for (let i = 0; i < folders.length; i++) {
+        const item = document.createElement('li');
+        item.textContent = path.basename(folders[i]);
+        container.appendChild(item);
+    }
 })
 
 //drag and drop handle
 document.addEventListener('drop', (event) => {
     event.preventDefault();
     event.stopPropagation();
+    const container = document.querySelector("#file-list-container");
   
     for (const f of event.dataTransfer.files) {
-        // Using the path attribute to get absolute file path
-        console.log('File Path of dragged files: ', f.path)
+        const item = document.createElement('li');
+        item.textContent = path.basename(f.path); // Using the path attribute to get absolute file path
+        container.appendChild(item);
       }
 });
   
