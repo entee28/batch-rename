@@ -22,11 +22,8 @@ loadPresetBtn.addEventListener('click', function(event) {
 })
 
 ipc.on('selected-file', function(event, files) {
-    const container = document.querySelector("#file-list-container");
     for (let i = 0; i < files.length; i++) {
-        const item = document.createElement('li');
-        item.textContent = path.basename(files[i]);
-        container.appendChild(item);
+        addFileItem(files[i]);
     }
 })
 
@@ -35,11 +32,8 @@ ipc.on('selected-preset', function(event, preset) {
 })
 
 ipc.on('selected-folder', function(event, folders) {
-    const container = document.querySelector("#file-list-container");
     for (let i = 0; i < folders.length; i++) {
-        const item = document.createElement('li');
-        item.textContent = path.basename(folders[i]);
-        container.appendChild(item);
+        addFileItem(folders[i]);
     }
 })
 
@@ -47,12 +41,9 @@ ipc.on('selected-folder', function(event, folders) {
 document.addEventListener('drop', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const container = document.querySelector("#file-list-container");
   
     for (const f of event.dataTransfer.files) {
-        const item = document.createElement('li');
-        item.textContent = path.basename(f.path); // Using the path attribute to get absolute file path
-        container.appendChild(item);
+        addFileItem(f.path);
       }
 });
   
@@ -60,3 +51,23 @@ document.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
   });
+
+const addFileItem = (__filepath) => {
+    const container = document.querySelector("#file-list-container");
+    const item = document.createElement('li');
+    item.textContent = path.basename(__filepath);
+    // const button = document.createElement('button');
+    // const deleteIcon = document.createElement('i');
+    // deleteIcon.classList.add('fas fa-trash-alt');
+    // button.appendChild(deleteIcon);
+    // item.appendChild(button);
+    addDelButton(item);
+    container.appendChild(item);
+}
+
+function addDelButton(parent) {
+    const delBtn = parent.appendChild(document.createElement("button"));
+    delBtn.innerHTML = "Delete";
+    delBtn.onclick = function() {
+        this.parentElement.remove();
+    }}
