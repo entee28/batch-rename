@@ -168,6 +168,10 @@ ipc.on('save-preset-dialog', function (event) {
   const file = savePreset();
 })
 
+ipc.on('error-handle', function (event, file) {
+  dialog.showErrorBox('Error', `Duplicate files detected!`)
+})
+
 const openFile = () => {
   const files = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });
 
