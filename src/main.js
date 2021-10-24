@@ -6,6 +6,7 @@ const ffi = require('ffi-napi');
 const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
+require('electron-reloader')(module);
 
 
 const isMac = process.platform === 'darwin';
@@ -232,4 +233,3 @@ const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
 });
 const result = libm.add(2, 3);
 console.log(result);
-}

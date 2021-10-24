@@ -12,6 +12,7 @@
     "electron": "^15.2.0"
   },
   "dependencies": {
+    "electron-reloader": "^1.2.1",
     "ffi-napi": "^4.0.3",
     "fs": "0.0.1-security"
   }
