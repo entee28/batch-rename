@@ -1,4 +1,5 @@
-const ipc = require('electron').ipcRenderer
+const path = require('path');
+const ipc = require('electron').ipcRenderer;
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function(event) {
@@ -21,7 +22,9 @@ loadPresetBtn.addEventListener('click', function(event) {
 })
 
 ipc.on('selected-file', function(event, files) {
-    //received files from main process, need handle
+    for (let i = 0; i < files.length; i++) {
+        addFileItem(files[i]);
+    }
 })
 
 ipc.on('selected-preset', function(event, preset) {
@@ -29,7 +32,9 @@ ipc.on('selected-preset', function(event, preset) {
 })
 
 ipc.on('selected-folder', function(event, folders) {
-    //received files from main process, need handle
+    for (let i = 0; i < folders.length; i++) {
+        addFileItem(folders[i]);
+    }
 })
 
 //drag and drop handle
@@ -38,8 +43,7 @@ document.addEventListener('drop', (event) => {
     event.stopPropagation();
   
     for (const f of event.dataTransfer.files) {
-        // Using the path attribute to get absolute file path
-        console.log('File Path of dragged files: ', f.path)
+        addFileItem(f.path);
       }
 });
   
@@ -47,3 +51,22 @@ document.addEventListener('dragover', (e) => {
     e.preventDefault();
     e.stopPropagation();
   });
+
+const addFileItem = (__filepath) => {
+    const container = document.querySelector("#file-list-container");
+    const item = document.createElement('li');
+    item.textContent = path.basename(__filepath);
+    addDelButton(item);
+    container.appendChild(item);
+}
+
+function addDelButton(parent) {
+    const delBtn = parent.appendChild(document.createElement("button"));
+    delBtn.classList.add('btn');
+    const delIcon = document.createElement('i');
+    delIcon.classList.add('fa');
+    delIcon.classList.add('fa-trash');
+    delBtn.appendChild(delIcon);
+    delBtn.onclick = function() {
+        this.parentElement.remove();
+    }}
