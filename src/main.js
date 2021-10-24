@@ -2,10 +2,11 @@ const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain;
 const dialog = require('electron').dialog;
 const menu = require('electron').Menu;
-//const ffi = require('ffi-napi');
+const ffi = require('ffi-napi');
 const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
+require('electron-reloader')(module);
 
 
 const isMac = process.platform === 'darwin';
@@ -223,8 +224,8 @@ const savePreset = () => {
 }
 
 //DLL DEMO
-// const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
-//   'add': ['int', ['int', 'int']]
-// });
-// const result = libm.add(2, 3);
-// console.log(result);
+const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
+  'add': ['int', ['int', 'int']]
+});
+const result = libm.add(2, 3);
+console.log(result);
