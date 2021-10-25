@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <button id="openFileBtn">Open File</button>
-    <button id="openFolderBtn">Open Folder</button>
-    <button id="savePresetBtn">Save Preset</button>
-    <button id="loadPresetBtn">Load Preset</button>
-    <script src="./renderer.js"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="style.css">
+  <title>Hello World!</title>
+</head>
+
+<body>
+  <section>
+
+    <div class="container" id="file-list-container">
+      <ul id="item-list">
+      </ul>
+    </div>
+
+  </section>
+
+  <section>
+    <footer>
+      <div class="container">
+        <h1>Hello World!</h1>
+        <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
+        <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
+        <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
+        <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
+        <script src="./renderer.js"></script>
+      </div>
+    </footer>
+  </section>
+
+</body>
+
 </html>
