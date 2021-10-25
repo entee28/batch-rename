@@ -29,7 +29,7 @@ ipc.on('selected-file', function (event, files) {
     try {
         for (let i = 0; i < files.length; i++) {
             for(let j = 0; j < duplicateCheck.length; j++) {
-                if(files[i] = duplicateCheck[j]) {
+                if(files[i] === duplicateCheck[j]) {
                     throw err;
                 }
             }
@@ -48,7 +48,7 @@ ipc.on('selected-folder', function (event, folders) {
     try {
         for (let i = 0; i < folders.length; i++) {
             for(let j = 0; j < duplicateCheck.length; j++) {
-                if(folders[i] = duplicateCheck[j]) {
+                if(folders[i] === duplicateCheck[j]) {
                     throw err;
                 }
             }
