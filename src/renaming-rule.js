@@ -1,3 +1,18 @@
+// const ffi = require('ffi-napi');
+
+// const dll = ffi.Library(__dirname + '\\RenamingRulesDLL.dll', {
+//     'AddPrefix': ['string', ['string', 'string']],
+//     'AddSuffix': ['string', ['string', 'string']]
+// });
+
+// function TEXT(text) {
+//     return Buffer.from(`${text}\0`, "ucs2");
+// }
+
+// const result = dll.AddPrefix(TEXT("hello"), TEXT("world"));
+// console.log(result);
+
+
 //ABSTRACT PRODUCT CLASS
 class RenamingRule {
     constructor() {
@@ -116,13 +131,12 @@ class PascalCase extends RenamingRule {
 }
 
 module.exports = {
-    OnlyOneSpace : OnlyOneSpace,
-    AddCounter : AddCounter,
+    OnlyOneSpace: OnlyOneSpace,
+    AddCounter: AddCounter,
     AddPrefix: AddPrefix,
     AddSuffix: AddSuffix,
     ReplaceCharacters: ReplaceCharacters,
     ReplaceExtension: ReplaceExtension,
     PascalCase: PascalCase,
     LowerAll: LowerAll,
-  }
-  
+}
