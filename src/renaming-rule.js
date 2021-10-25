@@ -1,17 +1,13 @@
-// const ffi = require('ffi-napi');
+const ffi = require('ffi-napi');
 
-// const dll = ffi.Library(__dirname + '\\RenamingRulesDLL.dll', {
-//     'AddPrefix': ['string', ['string', 'string']],
-//     'AddSuffix': ['string', ['string', 'string']]
-// });
-
-// function TEXT(text) {
-//     return Buffer.from(`${text}\0`, "ucs2");
-// }
-
-// const result = dll.AddPrefix(TEXT("hello"), TEXT("world"));
-// console.log(result);
-
+const Rules = ffi.Library(__dirname + '\\RenamingRulesLibrary.dll', {
+    'AddSuffix': ['string', ['string', 'string']],
+    'AddPrefix': ['string', ['string', 'string']],
+    'RemoveExtraSpace': ['string', ['string']],
+    'PascalCase': ['string', ['string']],
+    'LowerAll': ['string', ['string']],
+    'Replace': ['string', ['string', 'string', 'string']],
+});
 
 //ABSTRACT PRODUCT CLASS
 class RenamingRule {
@@ -40,7 +36,7 @@ class OnlyOneSpace extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.RemoveExtraSpace(original);
     }
 }
 
@@ -48,13 +44,12 @@ class ReplaceCharacters extends RenamingRule {
     constructor(needle, replacement) {
         super();
         this.name = "Replace characters";
-        this.needle = needle || ['-', '_'];
+        this.needle = needle || '-';
         this.replacement = replacement || ' ';
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with needle ${this.needle}
-        and replacement ${this.replacement}!`);
+        return Rules.Replace(original, this.needle, this.replacement);
     }
 }
 
@@ -67,8 +62,7 @@ class ReplaceExtension extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with needle ${this.needle}
-        and replacement ${this.replacement}!`);
+        return Rules.Replace(original, this.needle, this.replacement);
     }
 }
 
@@ -92,7 +86,7 @@ class AddPrefix extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with prefix ${this.prefix}!`);
+        return Rules.AddPrefix(original, this.prefix);
     }
 }
 
@@ -104,7 +98,7 @@ class AddSuffix extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with suffix ${this.suffix}`);
+        return Rules.AddPrefix(original, this.suffix);
     }
 }
 
@@ -115,7 +109,7 @@ class LowerAll extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.LowerAll(original);
     }
 }
 
@@ -126,7 +120,7 @@ class PascalCase extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.PascalCase(original);
     }
 }
 

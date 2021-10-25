@@ -17,7 +17,7 @@ class IRuleCreator {
 
     invokeTransform(type, original, arg1, arg2) {
         let rule = this.createRule(type, arg1, arg2);
-        rule.Transform(original);
+        return rule.Transform(original);
     }
 }
 

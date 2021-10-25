@@ -12,8 +12,8 @@ require('electron-reloader')(module);
 const isMac = process.platform === 'darwin';
 
 let o1 = new RuleCreator();
-o1.invokeTransform('Add prefix', '', 'google');
-o1.invokeTransform('Replace characters', '', 'google', 'facebook');
+console.log(o1.invokeTransform('Add prefix', 'Hello', 'google'));
+console.log(o1.invokeTransform('Replace characters', 'Hello google', 'google', 'facebook'));
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
@@ -225,10 +225,3 @@ const savePreset = () => {
     }
   }
 }
-
-//DLL DEMO
-const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
-  'add': ['int', ['int', 'int']]
-});
-const result = libm.add(2, 3);
-console.log(result);
