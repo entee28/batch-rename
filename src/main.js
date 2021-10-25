@@ -1,13 +1,11 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain;
 const dialog = require('electron').dialog;
-const menu = require('electron').Menu;
-const ffi = require('ffi-napi');
 const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
 require('electron-reloader')(module);
-
+require('electron').Menu;
 
 const isMac = process.platform === 'darwin';
 
