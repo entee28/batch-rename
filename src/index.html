@@ -15,8 +15,54 @@
 <body>
   <section>
 
-    <div class="container" id="file-list-container">
+    <div class="container-fluid border" id="file-list-container">
       <ul id="item-list">
+      </ul>
+    </div>
+
+    <button id="btn">Click here</button>
+    <div class="container-fluid border" id="rule-list-container">
+      <ul class="container-fluid" id="rule-list">
+        <li>
+          <label for="extension">
+            <input type="checkbox" id="extension" name="renaming-rules" value="extension"> Change File Extension
+          </label>
+        </li>
+        <li>
+          <label for="remove-space">
+            <input type="checkbox" id="remove-space" name="renaming-rules" value="remove-space"> Remove All Space
+          </label>
+        </li>
+        <li>
+          <label for="replace-characters">
+            <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters"> Replace Characters
+          </label>
+        </li>
+        <li>
+          <label for="add-prefix">
+            <input type="checkbox" id="add-prefix" name="renaming-rules" value="add-prefix"> Add Prefix
+          </label>
+        </li>
+        <li>
+          <label for="add-suffix">
+            <input type="checkbox" id="add-suffix" name="renaming-rules" value="add-suffix"> Add Suffix
+          </label>
+        </li>
+        <li>
+          <label for="lowercase">
+            <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case And No Space
+          </label>
+        </li>
+        <li>
+          <label for="pascalcase">
+            <input type="checkbox" id="pascalcase" name="renaming-rules" value="pascalcase"> Convert To PascalCase
+          </label>
+        </li>
+        <li>
+          <label for="counter">
+            <input type="checkbox" id="counter" name="renaming-rules" value="counter"> Add Counter
+          </label>
+        </li>
       </ul>
     </div>
 
@@ -24,7 +70,7 @@
 
   <section>
     <footer>
-      <div class="container">
+      <div class="container-fluid">
         <h1>Hello World!</h1>
         <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
         <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>

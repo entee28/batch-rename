@@ -1,5 +1,6 @@
 const path = require('path');
 const ipc = require('electron').ipcRenderer;
+const { RuleCreator } = require('./rule-creator');
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function (event) {
@@ -96,3 +97,17 @@ function addDelButton(parent) {
         this.parentElement.remove();
     }
 }
+
+function getSelectedCheckboxValues(name) {
+    const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+    let values = [];
+    checkboxes.forEach((checkbox) => {
+        values.push(checkbox.value);
+    });
+    return values;
+}
+
+const btn = document.querySelector('#btn');
+btn.addEventListener('click', (event) => {
+    alert(getSelectedCheckboxValues('renaming-rules'));
+});
