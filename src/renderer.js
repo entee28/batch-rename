@@ -2,6 +2,7 @@ const path = require('path');
 const ipc = require('electron').ipcRenderer;
 const { RuleCreator } = require('./rule-creator');
 window.$ = window.jQuery = require('jquery');
+const fs = require('fs');
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function (event) {
@@ -34,8 +35,8 @@ loadPresetBtn.addEventListener('click', function (event) {
 ipc.on('selected-file', function (event, files) {
     try {
         for (let i = 0; i < files.length; i++) {
-            for (let j = 0; j < duplicateCheck.length; j++) {
-                if (files[i] === duplicateCheck[j]) {
+            for (let j = 0; j < pathList.length; j++) {
+                if (files[i] === pathList[j]) {
                     throw err;
                 }
             }
@@ -53,8 +54,8 @@ ipc.on('selected-preset', function (event, preset) {
 ipc.on('selected-folder', function (event, folders) {
     try {
         for (let i = 0; i < folders.length; i++) {
-            for (let j = 0; j < duplicateCheck.length; j++) {
-                if (folders[i] === duplicateCheck[j]) {
+            for (let j = 0; j < pathList.length; j++) {
+                if (folders[i] === pathList[j]) {
                     throw err;
                 }
             }
@@ -81,15 +82,17 @@ document.addEventListener('dragover', (e) => {
 });
 
 const addFileItem = (__filepath) => {
-    duplicateCheck.push(__filepath);
+    pathList.push(__filepath);
     const container = document.querySelector("#file-list-container");
     const item = document.createElement('li');
+    item.classList.add('item')
     item.textContent = path.basename(__filepath);
     addDelButton(item);
     container.appendChild(item);
 }
 
-const duplicateCheck = new Array();
+const pathList = new Array();
+
 
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
@@ -123,17 +126,10 @@ function getExtensionParam() {
 function getReplaceParam() {
     const params = document.querySelectorAll(`input[name="replace-parameter"]`);
     let values = [];
-    try {
-        params.forEach((param) => {
-            if (param.value === '') {
-                throw err;
-            }
-            values.push(param.value);
-        });
-        return values;
-    } catch (err) {
-        emptyHandle();
-    }
+    params.forEach((param) => {
+        values.push(param.value);
+    });
+    return values;
 }
 
 function getPrefixParam() {
@@ -187,35 +183,44 @@ const btn = document.querySelector('#btn');
 btn.addEventListener('click', () => {
     const rules = order;
     let factory = new RuleCreator();
-    let string = "hello world"
 
-    for (let i = 0; i < rules.length; i++) {
-        if (rules[i] === 'extension') {
-            const params = getExtensionParam();
-            if (params) {
-                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
+    const items = document.querySelectorAll(`li[class="item"]`);
+    for(let i = 0; i < pathList.length; i++) {
+    
+        let string = path.basename(pathList[i]);
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === 'extension') {
+                const params = getExtensionParam();
+                if (params) {
+                    string = factory.invokeTransform(rules[j], string, params[0], params[1]);
+                }
+            } else if (rules[j] === 'replace-characters') {
+                const params = getReplaceParam();
+                if (params) {
+                    string = factory.invokeTransform(rules[j], string, params[0], params[1]);
+                }
+            } else if (rules[j] === 'add-prefix') {
+                const prefix = getPrefixParam();
+                if (prefix) {
+                    string = factory.invokeTransform(rules[j], string, prefix);
+                }
+            } else if (rules[j] === 'add-suffix') {
+                const suffix = getSuffixParam();
+                if (suffix) {
+                    string = factory.invokeTransform(rules[j], string, suffix);
+                }
+            } else {
+                string = factory.invokeTransform(rules[j], string);
             }
-        } else if (rules[i] === 'replace-characters') {
-            const params = getReplaceParam();
-            if (params) {
-                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
-            }
-        } else if (rules[i] === 'add-prefix') {
-            const prefix = getPrefixParam();
-            if (prefix) {
-                string = factory.invokeTransform(rules[i], string, prefix);
-            }
-        } else if (rules[i] === 'add-suffix') {
-            const suffix = getSuffixParam();
-            if (suffix) {
-                string = factory.invokeTransform(rules[i], string, suffix);
-            }
-        } else {
-            string = factory.invokeTransform(rules[i], string);
         }
-    }
 
-    console.log(string);
+        let newName = path.join(pathList[i], '..', string);
+        fs.rename(pathList[i], newName, function() {
+            pathList[i] = newName;
+            items[i].textContent = path.basename(newName);
+            addDelButton(items[i]);
+        });
+    }
 });
 
 function EnableDisableSuffixParam() {
@@ -226,6 +231,19 @@ function EnableDisableSuffixParam() {
         suffix.value = '';
     }
 }
+
+// const btn2 = document.querySelector('#btn2');
+// btn2.addEventListener('click', () => {
+//     const items = document.querySelectorAll(`li[class="item"]`);
+//     for(let i = 0; i < pathList.length; i++) {
+//         let newName = path.join(pathList[i], '..', `helloworld${i}.txt`);
+//         fs.rename(pathList[i], newName, function() {
+//             pathList[i] = newName;
+//             items[i].textContent = path.basename(newName);
+//             addDelButton(items[i]);
+//         });
+//     }
+// })
 
 function EnableDisablePrefixParam() {
     const prefixChk = document.getElementById('add-prefix')

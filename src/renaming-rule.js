@@ -67,13 +67,15 @@ class ReplaceExtension extends RenamingRule {
 }
 
 class AddCounter extends RenamingRule {
-    constructor(needle, replacement) {
+    constructor(needle, start, step, ndigit) {
         super();
         this.name = "Add counter";
-        this.count = '01';
+        this.start = start || 0;
+        this.step = step || 1;
+        this.ndigit = ndigit || 1;
     }
 
-    Transform(original) {
+    Transform(original, start, step, ndigit) {
         console.log(`This is ${this.name} rule!`);
     }
 }
