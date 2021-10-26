@@ -114,49 +114,69 @@ function getSelectedRules() {
 function getExtensionParam() {
     const params = document.querySelectorAll(`input[name="extension-parameter"]`);
     let values = [];
-    params.forEach((param) => {
-        values.push(param.value);
-    });
-    return values;
+    try {
+        params.forEach((param) => {
+            if (param.value === '') {
+                throw err;
+            }
+            values.push(param.value);
+            return values;
+        });
+    } catch (err) {
+        emptyHandle();
+    }
 }
 
 function getReplaceParam() {
     const params = document.querySelectorAll(`input[name="replace-parameter"]`);
     let values = [];
-    params.forEach((param) => {
-        values.push(param.value);
-    });
-    return values;
+    try {
+        params.forEach((param) => {
+            if (param.value === '') {
+                throw err;
+            }
+            values.push(param.value);
+            return values;
+        });
+    } catch (err) {
+        emptyHandle();
+    }
 }
 
 function getPrefixParam() {
     try {
-        const prefix = document.querySelectorAll('prefix');
-        if(prefix === '') {
+        const prefix = document.getElementById('prefix');
+        if (prefix.value === '') {
             throw err;
         }
-        return prefix.values;
-    } catch(err) {
-
+        return prefix.value;
+    } catch (err) {
+        emptyHandle();
     }
 }
 
 function getSuffixParam() {
-    const suffix = document.getElementById('suffix');
-    return suffix.values;
+    try {
+        const suffix = document.getElementById('suffix');
+        if (suffix.value === '') {
+            throw err;
+        }
+        return suffix.value;
+    } catch (err) {
+        emptyHandle();
+    }
 }
 
 const btn = document.querySelector('#btn');
 btn.addEventListener('click', (event) => {
-    const rules = getSelectedRules();
-    let
+    console.log(getReplaceParam());
 });
 
 function EnableDisableSuffixParam() {
     const suffixChk = document.getElementById('add-suffix')
     let suffix = document.getElementById('suffix');
     suffix.disabled = suffixChk.checked ? false : true;
-    if(suffix.disabled) {
+    if (suffix.disabled) {
         suffix.value = '';
     }
 }
@@ -165,7 +185,7 @@ function EnableDisablePrefixParam() {
     const prefixChk = document.getElementById('add-prefix')
     let prefix = document.getElementById('prefix');
     prefix.disabled = prefixChk.checked ? false : true;
-    if(prefix.disabled) {
+    if (prefix.disabled) {
         prefix.value = '';
     }
 }
@@ -175,7 +195,7 @@ function EnableDisableExtensionParam() {
     let params = document.querySelectorAll(`input[name="extension-parameter"]`);
     params.forEach((param) => {
         param.disabled = extensionChk.checked ? false : true;
-        if(param.disabled) {
+        if (param.disabled) {
             param.value = '';
         }
     });
@@ -186,7 +206,7 @@ function EnableDisableReplaceParam() {
     let params = document.querySelectorAll(`input[name="replace-parameter"]`);
     params.forEach((param) => {
         param.disabled = replaceChk.checked ? false : true;
-        if(param.disabled) {
+        if (param.disabled) {
             param.value = '';
         }
     });

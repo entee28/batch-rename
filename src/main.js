@@ -169,6 +169,10 @@ ipc.on('error-handle', function (event, file) {
   dialog.showErrorBox('Error', `Duplicate files detected!`)
 })
 
+ipc.on('empty-handle', function (event, file) {
+  dialog.showErrorBox('Error', `Empty parameter!`)
+})
+
 const openFile = () => {
   const files = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });
 
