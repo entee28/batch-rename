@@ -120,8 +120,9 @@ function getExtensionParam() {
                 throw err;
             }
             values.push(param.value);
-            return values;
         });
+        return values;
+
     } catch (err) {
         emptyHandle();
     }
@@ -136,8 +137,8 @@ function getReplaceParam() {
                 throw err;
             }
             values.push(param.value);
-            return values;
         });
+        return values;
     } catch (err) {
         emptyHandle();
     }
@@ -169,7 +170,37 @@ function getSuffixParam() {
 
 const btn = document.querySelector('#btn');
 btn.addEventListener('click', (event) => {
-    console.log(getReplaceParam());
+    const rules = getSelectedRules();
+    let factory = new RuleCreator();
+    let string = "hello world"
+
+    for (let i = 0; i < rules.length; i++) {
+        if (rules[i] === 'extension') {
+            const params = getExtensionParam();
+            if (params) {
+                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
+            }
+        } else if (rules[i] === 'replace-characters') {
+            const params = getReplaceParam();
+            if (params) {
+                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
+            }
+        } else if (rules[i] === 'add-prefix') {
+            const prefix = getPrefixParam();
+            if (prefix) {
+                string = factory.invokeTransform(rules[i], string, prefix);
+            }
+        } else if (rules[i] === 'add-suffix') {
+            const suffix = getSuffixParam();
+            if (suffix) {
+                string = factory.invokeTransform(rules[i], string, suffix);
+            }
+        } else {
+            string = factory.invokeTransform(rules[i], string);
+        }
+    }
+
+    console.log(string);
 });
 
 function EnableDisableSuffixParam() {

@@ -98,7 +98,7 @@ class AddSuffix extends RenamingRule {
     }
 
     Transform(original) {
-        return Rules.AddPrefix(original, this.suffix);
+        return Rules.AddSuffix(original, this.suffix);
     }
 }
 
