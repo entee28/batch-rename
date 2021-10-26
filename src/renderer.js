@@ -11,6 +11,10 @@ const duplicateHandle = (event) => {
     ipc.send('error-handle');
 }
 
+const emptyHandle = (event) => {
+    ipc.send('empty-handle');
+}
+
 const openFolderBtn = document.getElementById('openFolderBtn');
 openFolderBtn.addEventListener('click', function (event) {
     ipc.send('open-folder-dialog')
@@ -29,14 +33,14 @@ loadPresetBtn.addEventListener('click', function (event) {
 ipc.on('selected-file', function (event, files) {
     try {
         for (let i = 0; i < files.length; i++) {
-            for(let j = 0; j < duplicateCheck.length; j++) {
-                if(files[i] === duplicateCheck[j]) {
+            for (let j = 0; j < duplicateCheck.length; j++) {
+                if (files[i] === duplicateCheck[j]) {
                     throw err;
                 }
             }
             addFileItem(files[i]);
         }
-    } catch(err) {
+    } catch (err) {
         duplicateHandle();
     }
 })
@@ -48,14 +52,14 @@ ipc.on('selected-preset', function (event, preset) {
 ipc.on('selected-folder', function (event, folders) {
     try {
         for (let i = 0; i < folders.length; i++) {
-            for(let j = 0; j < duplicateCheck.length; j++) {
-                if(folders[i] === duplicateCheck[j]) {
+            for (let j = 0; j < duplicateCheck.length; j++) {
+                if (folders[i] === duplicateCheck[j]) {
                     throw err;
                 }
             }
             addFileItem(folders[i]);
         }
-    } catch(err) {
+    } catch (err) {
         duplicateHandle();
     }
 })
@@ -98,8 +102,8 @@ function addDelButton(parent) {
     }
 }
 
-function getSelectedCheckboxValues(name) {
-    const checkboxes = document.querySelectorAll(`input[name="${name}"]:checked`);
+function getSelectedRules() {
+    const checkboxes = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
     let values = [];
     checkboxes.forEach((checkbox) => {
         values.push(checkbox.value);
@@ -107,7 +111,95 @@ function getSelectedCheckboxValues(name) {
     return values;
 }
 
+function getExtensionParam() {
+    const params = document.querySelectorAll(`input[name="extension-parameter"]`);
+    let values = [];
+    params.forEach((param) => {
+        values.push(param.value);
+    });
+    return values;
+}
+
+function getReplaceParam() {
+    const params = document.querySelectorAll(`input[name="replace-parameter"]`);
+    let values = [];
+    params.forEach((param) => {
+        values.push(param.value);
+    });
+    return values;
+}
+
+function getPrefixParam() {
+    try {
+        const prefix = document.querySelectorAll('prefix');
+        if(prefix === '') {
+            throw err;
+        }
+        return prefix.values;
+    } catch(err) {
+
+    }
+}
+
+function getSuffixParam() {
+    const suffix = document.getElementById('suffix');
+    return suffix.values;
+}
+
 const btn = document.querySelector('#btn');
 btn.addEventListener('click', (event) => {
-    alert(getSelectedCheckboxValues('renaming-rules'));
+    const rules = getSelectedRules();
+    let
 });
+
+function EnableDisableSuffixParam() {
+    const suffixChk = document.getElementById('add-suffix')
+    let suffix = document.getElementById('suffix');
+    suffix.disabled = suffixChk.checked ? false : true;
+    if(suffix.disabled) {
+        suffix.value = '';
+    }
+}
+
+function EnableDisablePrefixParam() {
+    const prefixChk = document.getElementById('add-prefix')
+    let prefix = document.getElementById('prefix');
+    prefix.disabled = prefixChk.checked ? false : true;
+    if(prefix.disabled) {
+        prefix.value = '';
+    }
+}
+
+function EnableDisableExtensionParam() {
+    const extensionChk = document.getElementById('extension')
+    let params = document.querySelectorAll(`input[name="extension-parameter"]`);
+    params.forEach((param) => {
+        param.disabled = extensionChk.checked ? false : true;
+        if(param.disabled) {
+            param.value = '';
+        }
+    });
+}
+
+function EnableDisableReplaceParam() {
+    const replaceChk = document.getElementById('replace-characters')
+    let params = document.querySelectorAll(`input[name="replace-parameter"]`);
+    params.forEach((param) => {
+        param.disabled = replaceChk.checked ? false : true;
+        if(param.disabled) {
+            param.value = '';
+        }
+    });
+}
+
+const suffixCheckBox = document.getElementById('add-suffix');
+suffixCheckBox.addEventListener('click', EnableDisableSuffixParam);
+
+const prefixCheckBox = document.getElementById('add-prefix');
+prefixCheckBox.addEventListener('click', EnableDisablePrefixParam);
+
+const extensionCheckBox = document.getElementById('extension');
+extensionCheckBox.addEventListener('click', EnableDisableExtensionParam);
+
+const replaceCheckBox = document.getElementById('replace-characters');
+replaceCheckBox.addEventListener('click', EnableDisableReplaceParam);

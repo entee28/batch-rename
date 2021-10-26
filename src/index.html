@@ -9,7 +9,7 @@
   <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="style.css">
-  <title>Hello World!</title>
+  <title>Batch Rename</title>
 </head>
 
 <body>
@@ -27,6 +27,10 @@
           <label for="extension">
             <input type="checkbox" id="extension" name="renaming-rules" value="extension"> Change File Extension
           </label>
+          <label for="extension-needle">Needle: </label>
+          <input type="text" id="extension-needle" name="extension-parameter" disabled>
+          <label for="extension-replacement">Replacement: </label>
+          <input type="text" id="extension-replacement" name="extension-parameter" disabled>
         </li>
         <li>
           <label for="remove-space">
@@ -35,22 +39,32 @@
         </li>
         <li>
           <label for="replace-characters">
-            <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters"> Replace Characters
+            <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters"> Replace
+            Characters
           </label>
+          <label for="needle">Needle: </label>
+          <input type="text" id="needle" name="replace-parameter" disabled>
+          <label for="replacement">Replacement: </label>
+          <input type="text" id="replacement" name="replace-parameter" disabled>
         </li>
         <li>
           <label for="add-prefix">
             <input type="checkbox" id="add-prefix" name="renaming-rules" value="add-prefix"> Add Prefix
           </label>
+          <label for="prefix">Prefix: </label>
+          <input type="text" id="prefix" name="prefix-parameter" disabled>
         </li>
         <li>
           <label for="add-suffix">
             <input type="checkbox" id="add-suffix" name="renaming-rules" value="add-suffix"> Add Suffix
           </label>
+          <label for="suffix">Suffix: </label>
+          <input type="text" id="suffix" name="suffix-parameter" disabled>
         </li>
         <li>
           <label for="lowercase">
-            <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case And No Space
+            <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case And No
+            Space
           </label>
         </li>
         <li>
@@ -71,7 +85,7 @@
   <section>
     <footer>
       <div class="container-fluid">
-        <h1>Hello World!</h1>
+        <h1>Batch Rename</h1>
         <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
         <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
         <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>

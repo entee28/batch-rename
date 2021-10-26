@@ -1,12 +1,17 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain;
 const dialog = require('electron').dialog;
+const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
 require('electron-reloader')(module);
 require('electron').Menu;
 
 const isMac = process.platform === 'darwin';
+
+// let o1 = new RuleCreator();
+// console.log(o1.invokeTransform('add-prefix', 'Hello', 'google'));
+// console.log(o1.invokeTransform('replace-characters', 'Hello google', 'google', 'facebook'));
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
