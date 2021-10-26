@@ -1,6 +1,7 @@
 const path = require('path');
 const ipc = require('electron').ipcRenderer;
 const { RuleCreator } = require('./rule-creator');
+window.$ = window.jQuery = require('jquery');
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function (event) {
@@ -102,15 +103,6 @@ function addDelButton(parent) {
     }
 }
 
-function getSelectedRules() {
-    const checkboxes = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
-    let values = [];
-    checkboxes.forEach((checkbox) => {
-        values.push(checkbox.value);
-    });
-    return values;
-}
-
 function getExtensionParam() {
     const params = document.querySelectorAll(`input[name="extension-parameter"]`);
     let values = [];
@@ -168,9 +160,32 @@ function getSuffixParam() {
     }
 }
 
+let order = [];
+[].forEach.call(document.querySelectorAll('input[type="checkbox"]'), function (checkbox) {
+    'use strict';
+    checkbox.addEventListener('change', function () {
+        let rules = document.querySelectorAll('input[type="checkbox"]');
+        let previousLi = checkbox.parentNode.parentNode.previousElementSibling;
+        let index = 0;
+        while (previousLi !== null) {
+            previousLi = previousLi.previousElementSibling;
+            index += 1;
+        }
+
+        if (checkbox.checked) {
+            order.push(rules[index].value);
+        } else {
+            order.splice(order.indexOf(rules[index].value), 1);
+        }
+
+        let result = document.getElementById('result');
+        result.textContent = order;
+    });
+});
+
 const btn = document.querySelector('#btn');
-btn.addEventListener('click', (event) => {
-    const rules = getSelectedRules();
+btn.addEventListener('click', () => {
+    const rules = order;
     let factory = new RuleCreator();
     let string = "hello world"
 
