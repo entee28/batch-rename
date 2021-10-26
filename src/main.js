@@ -1,19 +1,17 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain;
 const dialog = require('electron').dialog;
-const menu = require('electron').Menu;
-const ffi = require('ffi-napi');
 const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
 require('electron-reloader')(module);
-
+require('electron').Menu;
 
 const isMac = process.platform === 'darwin';
 
-let o1 = new RuleCreator();
-console.log(o1.invokeTransform('Add prefix', 'Hello', 'google'));
-console.log(o1.invokeTransform('Replace characters', 'Hello google', 'google', 'facebook'));
+// let o1 = new RuleCreator();
+// console.log(o1.invokeTransform('add-prefix', 'Hello', 'google'));
+// console.log(o1.invokeTransform('replace-characters', 'Hello google', 'google', 'facebook'));
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
@@ -169,6 +167,10 @@ ipc.on('save-preset-dialog', function (event) {
 
 ipc.on('error-handle', function (event, file) {
   dialog.showErrorBox('Error', `Duplicate files detected!`)
+})
+
+ipc.on('empty-handle', function (event, file) {
+  dialog.showErrorBox('Error', `Empty parameter!`)
 })
 
 const openFile = () => {

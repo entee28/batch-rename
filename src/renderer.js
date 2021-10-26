@@ -1,5 +1,7 @@
 const path = require('path');
 const ipc = require('electron').ipcRenderer;
+const { RuleCreator } = require('./rule-creator');
+window.$ = window.jQuery = require('jquery');
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function (event) {
@@ -8,6 +10,10 @@ openFileBtn.addEventListener('click', function (event) {
 
 const duplicateHandle = (event) => {
     ipc.send('error-handle');
+}
+
+const emptyHandle = (event) => {
+    ipc.send('empty-handle');
 }
 
 const openFolderBtn = document.getElementById('openFolderBtn');
@@ -28,14 +34,14 @@ loadPresetBtn.addEventListener('click', function (event) {
 ipc.on('selected-file', function (event, files) {
     try {
         for (let i = 0; i < files.length; i++) {
-            for(let j = 0; j < duplicateCheck.length; j++) {
-                if(files[i] = duplicateCheck[j]) {
+            for (let j = 0; j < duplicateCheck.length; j++) {
+                if (files[i] === duplicateCheck[j]) {
                     throw err;
                 }
             }
             addFileItem(files[i]);
         }
-    } catch(err) {
+    } catch (err) {
         duplicateHandle();
     }
 })
@@ -47,14 +53,14 @@ ipc.on('selected-preset', function (event, preset) {
 ipc.on('selected-folder', function (event, folders) {
     try {
         for (let i = 0; i < folders.length; i++) {
-            for(let j = 0; j < duplicateCheck.length; j++) {
-                if(folders[i] = duplicateCheck[j]) {
+            for (let j = 0; j < duplicateCheck.length; j++) {
+                if (folders[i] === duplicateCheck[j]) {
                     throw err;
                 }
             }
             addFileItem(folders[i]);
         }
-    } catch(err) {
+    } catch (err) {
         duplicateHandle();
     }
 })
@@ -96,3 +102,170 @@ function addDelButton(parent) {
         this.parentElement.remove();
     }
 }
+
+function getExtensionParam() {
+    const params = document.querySelectorAll(`input[name="extension-parameter"]`);
+    let values = [];
+    try {
+        params.forEach((param) => {
+            if (param.value === '') {
+                throw err;
+            }
+            values.push(param.value);
+        });
+        return values;
+
+    } catch (err) {
+        emptyHandle();
+    }
+}
+
+function getReplaceParam() {
+    const params = document.querySelectorAll(`input[name="replace-parameter"]`);
+    let values = [];
+    try {
+        params.forEach((param) => {
+            if (param.value === '') {
+                throw err;
+            }
+            values.push(param.value);
+        });
+        return values;
+    } catch (err) {
+        emptyHandle();
+    }
+}
+
+function getPrefixParam() {
+    try {
+        const prefix = document.getElementById('prefix');
+        if (prefix.value === '') {
+            throw err;
+        }
+        return prefix.value;
+    } catch (err) {
+        emptyHandle();
+    }
+}
+
+function getSuffixParam() {
+    try {
+        const suffix = document.getElementById('suffix');
+        if (suffix.value === '') {
+            throw err;
+        }
+        return suffix.value;
+    } catch (err) {
+        emptyHandle();
+    }
+}
+
+let order = [];
+[].forEach.call(document.querySelectorAll('input[type="checkbox"]'), function (checkbox) {
+    'use strict';
+    checkbox.addEventListener('change', function () {
+        let rules = document.querySelectorAll('input[type="checkbox"]');
+        let previousLi = checkbox.parentNode.parentNode.previousElementSibling;
+        let index = 0;
+        while (previousLi !== null) {
+            previousLi = previousLi.previousElementSibling;
+            index += 1;
+        }
+
+        if (checkbox.checked) {
+            order.push(rules[index].value);
+        } else {
+            order.splice(order.indexOf(rules[index].value), 1);
+        }
+
+        let result = document.getElementById('result');
+        result.textContent = order;
+    });
+});
+
+const btn = document.querySelector('#btn');
+btn.addEventListener('click', () => {
+    const rules = order;
+    let factory = new RuleCreator();
+    let string = "hello world"
+
+    for (let i = 0; i < rules.length; i++) {
+        if (rules[i] === 'extension') {
+            const params = getExtensionParam();
+            if (params) {
+                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
+            }
+        } else if (rules[i] === 'replace-characters') {
+            const params = getReplaceParam();
+            if (params) {
+                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
+            }
+        } else if (rules[i] === 'add-prefix') {
+            const prefix = getPrefixParam();
+            if (prefix) {
+                string = factory.invokeTransform(rules[i], string, prefix);
+            }
+        } else if (rules[i] === 'add-suffix') {
+            const suffix = getSuffixParam();
+            if (suffix) {
+                string = factory.invokeTransform(rules[i], string, suffix);
+            }
+        } else {
+            string = factory.invokeTransform(rules[i], string);
+        }
+    }
+
+    console.log(string);
+});
+
+function EnableDisableSuffixParam() {
+    const suffixChk = document.getElementById('add-suffix')
+    let suffix = document.getElementById('suffix');
+    suffix.disabled = suffixChk.checked ? false : true;
+    if (suffix.disabled) {
+        suffix.value = '';
+    }
+}
+
+function EnableDisablePrefixParam() {
+    const prefixChk = document.getElementById('add-prefix')
+    let prefix = document.getElementById('prefix');
+    prefix.disabled = prefixChk.checked ? false : true;
+    if (prefix.disabled) {
+        prefix.value = '';
+    }
+}
+
+function EnableDisableExtensionParam() {
+    const extensionChk = document.getElementById('extension')
+    let params = document.querySelectorAll(`input[name="extension-parameter"]`);
+    params.forEach((param) => {
+        param.disabled = extensionChk.checked ? false : true;
+        if (param.disabled) {
+            param.value = '';
+        }
+    });
+}
+
+function EnableDisableReplaceParam() {
+    const replaceChk = document.getElementById('replace-characters')
+    let params = document.querySelectorAll(`input[name="replace-parameter"]`);
+    params.forEach((param) => {
+        param.disabled = replaceChk.checked ? false : true;
+        if (param.disabled) {
+            param.value = '';
+        }
+    });
+}
+
+const suffixCheckBox = document.getElementById('add-suffix');
+suffixCheckBox.addEventListener('click', EnableDisableSuffixParam);
+
+const prefixCheckBox = document.getElementById('add-prefix');
+prefixCheckBox.addEventListener('click', EnableDisablePrefixParam);
+
+const extensionCheckBox = document.getElementById('extension');
+extensionCheckBox.addEventListener('click', EnableDisableExtensionParam);
+
+const replaceCheckBox = document.getElementById('replace-characters');
+replaceCheckBox.addEventListener('click', EnableDisableReplaceParam);

@@ -3,7 +3,7 @@ const ffi = require('ffi-napi');
 const Rules = ffi.Library(__dirname + '\\RenamingRulesLibrary.dll', {
     'AddSuffix': ['string', ['string', 'string']],
     'AddPrefix': ['string', ['string', 'string']],
-    'RemoveExtraSpace': ['string', ['string']],
+    'RemoveAllSpace': ['string', ['string']],
     'PascalCase': ['string', ['string']],
     'LowerAll': ['string', ['string']],
     'Replace': ['string', ['string', 'string', 'string']],
@@ -29,14 +29,14 @@ class RenamingRule {
     }
 }
 
-class OnlyOneSpace extends RenamingRule {
+class RemoveAllSpace extends RenamingRule {
     constructor() {
         super();
         this.name = "Only one space";
     }
 
     Transform(original) {
-        return Rules.RemoveExtraSpace(original);
+        return Rules.RemoveAllSpace(original);
     }
 }
 
@@ -98,7 +98,7 @@ class AddSuffix extends RenamingRule {
     }
 
     Transform(original) {
-        return Rules.AddPrefix(original, this.suffix);
+        return Rules.AddSuffix(original, this.suffix);
     }
 }
 
@@ -125,7 +125,7 @@ class PascalCase extends RenamingRule {
 }
 
 module.exports = {
-    OnlyOneSpace: OnlyOneSpace,
+    RemoveAllSpace: RemoveAllSpace,
     AddCounter: AddCounter,
     AddPrefix: AddPrefix,
     AddSuffix: AddSuffix,
