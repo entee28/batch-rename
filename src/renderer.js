@@ -2,6 +2,7 @@ const path = require('path');
 const ipc = require('electron').ipcRenderer;
 const { RuleCreator } = require('./rule-creator');
 window.$ = window.jQuery = require('jquery');
+const fs = require('fs');
 
 const openFileBtn = document.getElementById('openFileBtn');
 openFileBtn.addEventListener('click', function (event) {
@@ -14,6 +15,10 @@ const duplicateHandle = (event) => {
 
 const emptyHandle = (event) => {
     ipc.send('empty-handle');
+}
+
+const invalidHandle = (event) => {
+    ipc.send('invalid-handle');
 }
 
 const openFolderBtn = document.getElementById('openFolderBtn');
@@ -34,8 +39,8 @@ loadPresetBtn.addEventListener('click', function (event) {
 ipc.on('selected-file', function (event, files) {
     try {
         for (let i = 0; i < files.length; i++) {
-            for (let j = 0; j < duplicateCheck.length; j++) {
-                if (files[i] === duplicateCheck[j]) {
+            for (let j = 0; j < pathList.length; j++) {
+                if (files[i] === pathList[j]) {
                     throw err;
                 }
             }
@@ -53,8 +58,8 @@ ipc.on('selected-preset', function (event, preset) {
 ipc.on('selected-folder', function (event, folders) {
     try {
         for (let i = 0; i < folders.length; i++) {
-            for (let j = 0; j < duplicateCheck.length; j++) {
-                if (folders[i] === duplicateCheck[j]) {
+            for (let j = 0; j < pathList.length; j++) {
+                if (folders[i] === pathList[j]) {
                     throw err;
                 }
             }
@@ -81,24 +86,27 @@ document.addEventListener('dragover', (e) => {
 });
 
 const addFileItem = (__filepath) => {
-    duplicateCheck.push(__filepath);
+    pathList.push(__filepath);
     const container = document.querySelector("#file-list-container");
     const item = document.createElement('li');
+    item.classList.add('item')
     item.textContent = path.basename(__filepath);
-    addDelButton(item);
+    addDelButton(item, __filepath);
     container.appendChild(item);
 }
 
-const duplicateCheck = new Array();
+const pathList = new Array();
 
-function addDelButton(parent) {
+
+function addDelButton(parent, __filepath) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add('btn');
     const delIcon = document.createElement('i');
     delIcon.classList.add('fa');
     delIcon.classList.add('fa-trash');
     delBtn.appendChild(delIcon);
-    delBtn.onclick = function () {
+    delBtn.onclick = function (__filepath) {
+        pathList.splice(pathList.indexOf(__filepath), 1);
         this.parentElement.remove();
     }
 }
@@ -123,16 +131,30 @@ function getExtensionParam() {
 function getReplaceParam() {
     const params = document.querySelectorAll(`input[name="replace-parameter"]`);
     let values = [];
+    params.forEach((param) => {
+        values.push(param.value);
+    });
+    return values;
+}
+
+function getCounterParam() {
+    const params = document.querySelectorAll(`input[name="counter-parameter"]`);
+    let values = [];
+
     try {
+        if(parseInt(params[0].value) < 0 || parseInt(params[1].value) < 1 || parseInt(params[2].value) < 1) {
+            throw err;
+        }
         params.forEach((param) => {
-            if (param.value === '') {
-                throw err;
-            }
+            if(param.value === '') {
+                values.push(1);
+            } else {
             values.push(param.value);
+            }
         });
         return values;
-    } catch (err) {
-        emptyHandle();
+    } catch(err) {
+        invalidHandle();
     }
 }
 
@@ -173,9 +195,9 @@ let order = [];
         }
 
         if (checkbox.checked) {
-            order.push(rules[index].value);
+            order.push(rules[index].rulename);
         } else {
-            order.splice(order.indexOf(rules[index].value), 1);
+            order.splice(order.indexOf(rules[index].rulename), 1);
         }
 
         let result = document.getElementById('result');
@@ -187,35 +209,59 @@ const btn = document.querySelector('#btn');
 btn.addEventListener('click', () => {
     const rules = order;
     let factory = new RuleCreator();
-    let string = "hello world"
 
-    for (let i = 0; i < rules.length; i++) {
-        if (rules[i] === 'extension') {
-            const params = getExtensionParam();
-            if (params) {
-                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
+    const items = document.querySelectorAll(`li[class="item"]`);
+    for (let i = 0; i < pathList.length; i++) {
+
+        let name = path.parse(pathList[i]).name;
+        let extension = path.extname(pathList[i]);
+
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === 'extension') {
+                const params = getExtensionParam();
+                if (params) {
+                    extension = factory.invokeTransform(rules[j], extension, params[0], params[1]);
+                }
+            } else if (rules[j] === 'replace-characters') {
+                const params = getReplaceParam();
+                if (params) {
+                    name = factory.invokeTransform(rules[j], name, params[0], params[1]);
+                }
+            } else if (rules[j] === 'add-prefix') {
+                const prefix = getPrefixParam();
+                if (prefix) {
+                    name = factory.invokeTransform(rules[j], name, prefix);
+                }
+            } else if (rules[j] === 'add-suffix') {
+                const suffix = getSuffixParam();
+                if (suffix) {
+                    name = factory.invokeTransform(rules[j], name, suffix);
+                }
+            } else if (rules[j] === 'counter') {
+                const params = getCounterParam();
+                if (params) {
+                    let start = parseInt(params[0]);
+                    let steps = parseInt(params[1]) * i;
+                    let digits = parseInt(params[2]);
+
+                    let padding = start + steps;
+                    padding = padding.toString();
+                    while (padding.length < digits) padding = "0" + padding;
+
+                    name = factory.invokeTransform(rules[j], name, padding);
+                }
+            } else {
+                name = factory.invokeTransform(rules[j], name);
             }
-        } else if (rules[i] === 'replace-characters') {
-            const params = getReplaceParam();
-            if (params) {
-                string = factory.invokeTransform(rules[i], string, params[0], params[1]);
-            }
-        } else if (rules[i] === 'add-prefix') {
-            const prefix = getPrefixParam();
-            if (prefix) {
-                string = factory.invokeTransform(rules[i], string, prefix);
-            }
-        } else if (rules[i] === 'add-suffix') {
-            const suffix = getSuffixParam();
-            if (suffix) {
-                string = factory.invokeTransform(rules[i], string, suffix);
-            }
-        } else {
-            string = factory.invokeTransform(rules[i], string);
         }
-    }
 
-    console.log(string);
+        let newName = path.join(pathList[i], '..', `${name}${extension}`);
+        fs.rename(pathList[i], newName, function () {
+            pathList[i] = newName;
+            items[i].textContent = path.basename(newName);
+            addDelButton(items[i]);
+        });
+    }
 });
 
 function EnableDisableSuffixParam() {
@@ -226,6 +272,7 @@ function EnableDisableSuffixParam() {
         suffix.value = '';
     }
 }
+
 
 function EnableDisablePrefixParam() {
     const prefixChk = document.getElementById('add-prefix')
@@ -258,6 +305,17 @@ function EnableDisableReplaceParam() {
     });
 }
 
+function EnableDisableCounterParam() {
+    const replaceChk = document.getElementById('counter')
+    let params = document.querySelectorAll(`input[name="counter-parameter"]`);
+    params.forEach((param) => {
+        param.disabled = replaceChk.checked ? false : true;
+        if (param.disabled) {
+            param.value = '';
+        }
+    });
+}
+
 const suffixCheckBox = document.getElementById('add-suffix');
 suffixCheckBox.addEventListener('click', EnableDisableSuffixParam);
 
@@ -269,3 +327,6 @@ extensionCheckBox.addEventListener('click', EnableDisableExtensionParam);
 
 const replaceCheckBox = document.getElementById('replace-characters');
 replaceCheckBox.addEventListener('click', EnableDisableReplaceParam);
+
+const counterCheckBox = document.getElementById('counter');
+counterCheckBox.addEventListener('click', EnableDisableCounterParam);

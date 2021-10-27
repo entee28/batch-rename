@@ -32,7 +32,6 @@ class RenamingRule {
 class RemoveAllSpace extends RenamingRule {
     constructor() {
         super();
-        this.name = "Only one space";
     }
 
     Transform(original) {
@@ -43,7 +42,6 @@ class RemoveAllSpace extends RenamingRule {
 class ReplaceCharacters extends RenamingRule {
     constructor(needle, replacement) {
         super();
-        this.name = "Replace characters";
         this.needle = needle || '-';
         this.replacement = replacement || ' ';
     }
@@ -56,7 +54,6 @@ class ReplaceCharacters extends RenamingRule {
 class ReplaceExtension extends RenamingRule {
     constructor(needle, replacement) {
         super();
-        this.name = "Replace extension";
         this.needle = needle;
         this.replacement = replacement;
     }
@@ -67,21 +64,19 @@ class ReplaceExtension extends RenamingRule {
 }
 
 class AddCounter extends RenamingRule {
-    constructor(needle, replacement) {
+    constructor(padding) {
         super();
-        this.name = "Add counter";
-        this.count = '01';
+        this.padding = padding;
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.AddSuffix(original, this.padding);
     }
 }
 
 class AddPrefix extends RenamingRule {
     constructor(prefix) {
         super();
-        this.name = "Add prefix";
         this.prefix = prefix;
     }
 
@@ -93,7 +88,6 @@ class AddPrefix extends RenamingRule {
 class AddSuffix extends RenamingRule {
     constructor(suffix) {
         super();
-        this.name = "Add suffix";
         this.suffix = suffix;
     }
 
@@ -105,7 +99,6 @@ class AddSuffix extends RenamingRule {
 class LowerAll extends RenamingRule {
     constructor() {
         super();
-        this.name = "Convert lowercase";
     }
 
     Transform(original) {
@@ -116,7 +109,6 @@ class LowerAll extends RenamingRule {
 class PascalCase extends RenamingRule {
     constructor() {
         super();
-        this.name = "Convert to PascalCase";
     }
 
     Transform(original) {
