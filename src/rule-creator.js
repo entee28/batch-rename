@@ -41,8 +41,8 @@ class RuleCreator extends IRuleCreator {
             return new LowerAll();
         } else if (type === 'pascalcase') {
             return new PascalCase();
-        } else if (type === 'Add counter') {
-            return new AddCounter();
+        } else if (type === 'counter') {
+            return new AddCounter(arg1);
         } else return null;
     }
 }

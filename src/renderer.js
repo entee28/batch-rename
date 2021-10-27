@@ -17,6 +17,10 @@ const emptyHandle = (event) => {
     ipc.send('empty-handle');
 }
 
+const invalidHandle = (event) => {
+    ipc.send('invalid-handle');
+}
+
 const openFolderBtn = document.getElementById('openFolderBtn');
 openFolderBtn.addEventListener('click', function (event) {
     ipc.send('open-folder-dialog')
@@ -133,6 +137,27 @@ function getReplaceParam() {
     return values;
 }
 
+function getCounterParam() {
+    const params = document.querySelectorAll(`input[name="counter-parameter"]`);
+    let values = [];
+
+    try {
+        if(parseInt(params[0].value) < 0 || parseInt(params[1].value) < 1 || parseInt(params[2].value) < 1) {
+            throw err;
+        }
+        params.forEach((param) => {
+            if(param.value === '') {
+                values.push(1);
+            } else {
+            values.push(param.value);
+            }
+        });
+        return values;
+    } catch(err) {
+        invalidHandle();
+    }
+}
+
 function getPrefixParam() {
     try {
         const prefix = document.getElementById('prefix');
@@ -170,9 +195,9 @@ let order = [];
         }
 
         if (checkbox.checked) {
-            order.push(rules[index].value);
+            order.push(rules[index].rulename);
         } else {
-            order.splice(order.indexOf(rules[index].value), 1);
+            order.splice(order.indexOf(rules[index].rulename), 1);
         }
 
         let result = document.getElementById('result');
@@ -186,8 +211,8 @@ btn.addEventListener('click', () => {
     let factory = new RuleCreator();
 
     const items = document.querySelectorAll(`li[class="item"]`);
-    for(let i = 0; i < pathList.length; i++) {
-    
+    for (let i = 0; i < pathList.length; i++) {
+
         let name = path.parse(pathList[i]).name;
         let extension = path.extname(pathList[i]);
 
@@ -212,13 +237,26 @@ btn.addEventListener('click', () => {
                 if (suffix) {
                     name = factory.invokeTransform(rules[j], name, suffix);
                 }
+            } else if (rules[j] === 'counter') {
+                const params = getCounterParam();
+                if (params) {
+                    let start = parseInt(params[0]);
+                    let steps = parseInt(params[1]) * i;
+                    let digits = parseInt(params[2]);
+
+                    let padding = start + steps;
+                    padding = padding.toString();
+                    while (padding.length < digits) padding = "0" + padding;
+
+                    name = factory.invokeTransform(rules[j], name, padding);
+                }
             } else {
                 name = factory.invokeTransform(rules[j], name);
             }
         }
 
         let newName = path.join(pathList[i], '..', `${name}${extension}`);
-        fs.rename(pathList[i], newName, function() {
+        fs.rename(pathList[i], newName, function () {
             pathList[i] = newName;
             items[i].textContent = path.basename(newName);
             addDelButton(items[i]);
@@ -267,6 +305,17 @@ function EnableDisableReplaceParam() {
     });
 }
 
+function EnableDisableCounterParam() {
+    const replaceChk = document.getElementById('counter')
+    let params = document.querySelectorAll(`input[name="counter-parameter"]`);
+    params.forEach((param) => {
+        param.disabled = replaceChk.checked ? false : true;
+        if (param.disabled) {
+            param.value = '';
+        }
+    });
+}
+
 const suffixCheckBox = document.getElementById('add-suffix');
 suffixCheckBox.addEventListener('click', EnableDisableSuffixParam);
 
@@ -278,3 +327,6 @@ extensionCheckBox.addEventListener('click', EnableDisableExtensionParam);
 
 const replaceCheckBox = document.getElementById('replace-characters');
 replaceCheckBox.addEventListener('click', EnableDisableReplaceParam);
+
+const counterCheckBox = document.getElementById('counter');
+counterCheckBox.addEventListener('click', EnableDisableCounterParam);
