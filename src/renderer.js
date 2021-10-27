@@ -195,9 +195,9 @@ let order = [];
         }
 
         if (checkbox.checked) {
-            order.push(rules[index].rulename);
+            order.push(rules[index].value);
         } else {
-            order.splice(order.indexOf(rules[index].rulename), 1);
+            order.splice(order.indexOf(rules[index].value), 1);
         }
 
         let result = document.getElementById('result');
