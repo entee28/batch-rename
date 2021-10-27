@@ -87,21 +87,22 @@ const addFileItem = (__filepath) => {
     const item = document.createElement('li');
     item.classList.add('item')
     item.textContent = path.basename(__filepath);
-    addDelButton(item);
+    addDelButton(item, __filepath);
     container.appendChild(item);
 }
 
 const pathList = new Array();
 
 
-function addDelButton(parent) {
+function addDelButton(parent, __filepath) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add('btn');
     const delIcon = document.createElement('i');
     delIcon.classList.add('fa');
     delIcon.classList.add('fa-trash');
     delBtn.appendChild(delIcon);
-    delBtn.onclick = function () {
+    delBtn.onclick = function (__filepath) {
+        pathList.splice(pathList.indexOf(__filepath), 1);
         this.parentElement.remove();
     }
 }
@@ -187,34 +188,36 @@ btn.addEventListener('click', () => {
     const items = document.querySelectorAll(`li[class="item"]`);
     for(let i = 0; i < pathList.length; i++) {
     
-        let string = path.basename(pathList[i]);
+        let name = path.parse(pathList[i]).name;
+        let extension = path.extname(pathList[i]);
+
         for (let j = 0; j < rules.length; j++) {
             if (rules[j] === 'extension') {
                 const params = getExtensionParam();
                 if (params) {
-                    string = factory.invokeTransform(rules[j], string, params[0], params[1]);
+                    extension = factory.invokeTransform(rules[j], extension, params[0], params[1]);
                 }
             } else if (rules[j] === 'replace-characters') {
                 const params = getReplaceParam();
                 if (params) {
-                    string = factory.invokeTransform(rules[j], string, params[0], params[1]);
+                    name = factory.invokeTransform(rules[j], name, params[0], params[1]);
                 }
             } else if (rules[j] === 'add-prefix') {
                 const prefix = getPrefixParam();
                 if (prefix) {
-                    string = factory.invokeTransform(rules[j], string, prefix);
+                    name = factory.invokeTransform(rules[j], name, prefix);
                 }
             } else if (rules[j] === 'add-suffix') {
                 const suffix = getSuffixParam();
                 if (suffix) {
-                    string = factory.invokeTransform(rules[j], string, suffix);
+                    name = factory.invokeTransform(rules[j], name, suffix);
                 }
             } else {
-                string = factory.invokeTransform(rules[j], string);
+                name = factory.invokeTransform(rules[j], name);
             }
         }
 
-        let newName = path.join(pathList[i], '..', string);
+        let newName = path.join(pathList[i], '..', `${name}${extension}`);
         fs.rename(pathList[i], newName, function() {
             pathList[i] = newName;
             items[i].textContent = path.basename(newName);
@@ -232,18 +235,6 @@ function EnableDisableSuffixParam() {
     }
 }
 
-// const btn2 = document.querySelector('#btn2');
-// btn2.addEventListener('click', () => {
-//     const items = document.querySelectorAll(`li[class="item"]`);
-//     for(let i = 0; i < pathList.length; i++) {
-//         let newName = path.join(pathList[i], '..', `helloworld${i}.txt`);
-//         fs.rename(pathList[i], newName, function() {
-//             pathList[i] = newName;
-//             items[i].textContent = path.basename(newName);
-//             addDelButton(items[i]);
-//         });
-//     }
-// })
 
 function EnableDisablePrefixParam() {
     const prefixChk = document.getElementById('add-prefix')
