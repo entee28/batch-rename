@@ -19,6 +19,11 @@ class IRuleCreator {
         let rule = this.createRule(type, arg1, arg2);
         return rule.Transform(original);
     }
+
+    toJSON(type, arg1, arg2) {
+        let rule = this.createRule(type, arg1, arg2);
+        return JSON.stringify(rule);
+    }
 }
 
 class RuleCreator extends IRuleCreator {
