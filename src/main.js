@@ -41,7 +41,8 @@ app.whenReady().then(() => {
           label: "Open Folder...",
           click() {
             const folders = openFolder();
-            if (folders) win.webContents.send('selected-folder', folders)          }
+            if (folders) win.webContents.send('selected-folder', folders)
+          }
         },
         {
           type: 'separator'
@@ -161,8 +162,8 @@ ipc.on('open-folder-dialog', function (event) {
   if (folders) event.sender.send('selected-folder', folders);
 })
 
-ipc.on('save-preset-dialog', function (event) {
-  const file = savePreset();
+ipc.on('save-preset-dialog', function (event, myJSON) {
+  const file = savePreset(myJSON);
 })
 
 ipc.on('error-handle', function (event, file) {
@@ -206,7 +207,7 @@ const openFolder = () => {
   return folders;
 }
 
-const savePreset = () => {
+const savePreset = (myJSON) => {
   const file = dialog.showSaveDialogSync({
     title: "Save Rule Preset",
     defaultPath: path.join(__dirname, '../assets/preset.json'),
@@ -218,14 +219,12 @@ const savePreset = () => {
   });
 
   if (file) {
-    console.log(file);
     try {
       // Creating and Writing to the preset.json file
-      fs.writeFile(file,
-        'This is a Sample File', function (err) {
-          if (err) throw err;
-          console.log('Saved!');
-        });
+      fs.writeFile(file, myJSON, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
     } catch (err) {
       console.log(err)
     }

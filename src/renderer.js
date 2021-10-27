@@ -28,7 +28,45 @@ openFolderBtn.addEventListener('click', function (event) {
 
 const savePresetBtn = document.getElementById('savePresetBtn');
 savePresetBtn.addEventListener('click', function (event) {
-    ipc.send('save-preset-dialog')
+    const rules = order;
+    let factory = new RuleCreator();
+    
+    let JSONObj = [];
+    let JSONStr = null;
+
+    for (let j = 0; j < rules.length; j++) {
+        if (rules[j] === 'extension') {
+            const params = getExtensionParam();
+            if (params) {
+                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                JSONObj.push(JSONStr);
+            }
+        } else if (rules[j] === 'replace-characters') {
+            const params = getReplaceParam();
+            if (params) {
+                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                JSONObj.push(JSONStr);
+            }
+        } else if (rules[j] === 'add-prefix') {
+            const prefix = getPrefixParam();
+            if (prefix) {
+                JSONStr = factory.toJSON(rules[j], prefix);
+                JSONObj.push(JSONStr);
+            }
+        } else if (rules[j] === 'add-suffix') {
+            const suffix = getSuffixParam();
+            if (suffix) {
+                JSONStr = factory.toJSON(rules[j], suffix);
+                JSONObj.push(JSONStr);
+            }
+        } else {
+            JSONStr = factory.toJSON(rules[j]);
+            JSONObj.push(JSONStr);
+        }
+    }
+
+    const myJSON = JSON.stringify(JSONObj);
+    ipc.send('save-preset-dialog', myJSON);
 })
 
 const loadPresetBtn = document.getElementById('loadPresetBtn');
@@ -75,8 +113,17 @@ document.addEventListener('drop', (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    for (const f of event.dataTransfer.files) {
-        addFileItem(f.path);
+    try {
+        for (const f of event.dataTransfer.files) {
+            for (let j = 0; j < pathList.length; j++) {
+                if (f.path === pathList[j]) {
+                    throw err;
+                }
+            }
+            addFileItem(f.path);
+        }
+    } catch(err) {
+        duplicateHandle();
     }
 });
 
@@ -142,18 +189,18 @@ function getCounterParam() {
     let values = [];
 
     try {
-        if(parseInt(params[0].value) < 0 || parseInt(params[1].value) < 1 || parseInt(params[2].value) < 1) {
+        if (parseInt(params[0].value) < 0 || parseInt(params[1].value) < 1 || parseInt(params[2].value) < 1) {
             throw err;
         }
         params.forEach((param) => {
-            if(param.value === '') {
+            if (param.value === '') {
                 values.push(1);
             } else {
-            values.push(param.value);
+                values.push(param.value);
             }
         });
         return values;
-    } catch(err) {
+    } catch (err) {
         invalidHandle();
     }
 }
@@ -209,8 +256,10 @@ const btn = document.querySelector('#btn');
 btn.addEventListener('click', () => {
     const rules = order;
     let factory = new RuleCreator();
-
     const items = document.querySelectorAll(`li[class="item"]`);
+
+    console.log(JSONObj);
+
     for (let i = 0; i < pathList.length; i++) {
 
         let name = path.parse(pathList[i]).name;
