@@ -28,7 +28,45 @@ openFolderBtn.addEventListener('click', function (event) {
 
 const savePresetBtn = document.getElementById('savePresetBtn');
 savePresetBtn.addEventListener('click', function (event) {
-    ipc.send('save-preset-dialog')
+    const rules = order;
+    let factory = new RuleCreator();
+
+    let JSONObj = [];
+    let JSONStr = null;
+
+    for (let j = 0; j < rules.length; j++) {
+        if (rules[j] === 'extension') {
+            const params = getExtensionParam();
+            if (params) {
+                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                JSONObj.push(JSONStr);
+            }
+        } else if (rules[j] === 'replace-characters') {
+            const params = getReplaceParam();
+            if (params) {
+                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                JSONObj.push(JSONStr);
+            }
+        } else if (rules[j] === 'add-prefix') {
+            const prefix = getPrefixParam();
+            if (prefix) {
+                JSONStr = factory.toJSON(rules[j], prefix);
+                JSONObj.push(JSONStr);
+            }
+        } else if (rules[j] === 'add-suffix') {
+            const suffix = getSuffixParam();
+            if (suffix) {
+                JSONStr = factory.toJSON(rules[j], suffix);
+                JSONObj.push(JSONStr);
+            }
+        } else {
+            JSONStr = factory.toJSON(rules[j]);
+            JSONObj.push(JSONStr);
+        }
+    }
+
+    const myJSON = JSON.stringify(JSONObj);
+    ipc.send('save-preset-dialog', myJSON);
 })
 
 const loadPresetBtn = document.getElementById('loadPresetBtn');
@@ -52,7 +90,59 @@ ipc.on('selected-file', function (event, files) {
 })
 
 ipc.on('selected-preset', function (event, preset) {
-    //received files from main process, need handle
+    const rulePreset = JSON.parse(preset);
+
+    for (let i = 0; i < rulePreset.length; i++) {
+        const obj = JSON.parse(rulePreset[i]);
+
+        if (obj.name === 'Remove all space') {
+            const cb = document.querySelector('input[id="remove-space"]');
+            cb.checked = true;
+        } else if (obj.name === 'Replace characters') {
+            const cb = document.querySelector('input[id="replace-characters"]');
+            cb.checked = true;
+            const params = document.querySelectorAll(`input[name="replace-parameter"]`);
+            params[0].value = obj.needle;
+            params[1].value = obj.replacement;
+
+            params[0].disabled = false;
+            params[1].disabled = false;
+        } else if (obj.name === 'Replace extension') {
+            const cb = document.querySelector('input[id="extension"]');
+            cb.checked = true;
+            const params = document.querySelectorAll(`input[name="extension-parameter"]`);
+            params[0].value = obj.needle;
+            params[1].value = obj.replacement;
+
+            params[0].disabled = false;
+            params[1].disabled = false;
+        } else if (obj.name === 'Add prefix') {
+            const cb = document.querySelector('input[id="add-prefix"]');
+            cb.checked = true;
+            const prefix = document.getElementById('prefix');
+            prefix.value = obj.prefix;
+            prefix.disabled = false;
+        } else if (obj.name === 'Add suffix') {
+            const cb = document.querySelector('input[id="add-suffix"]');
+            cb.checked = true;
+            const suffix = document.getElementById('suffix');
+            suffix.value = obj.suffix;
+            suffix.disabled = false;
+        } else if (obj.name === 'Convert lowercase') {
+            const cb = document.querySelector('input[id="lowercase"]');
+            cb.checked = true;
+        } else if (obj.name === 'Convert to PascalCase') {
+            const cb = document.querySelector('input[id="pascalcase"]');
+            cb.checked = true;
+        } else if (obj.name === 'Add counter') {
+            const cb = document.querySelector('input[id="counter"]');
+            cb.checked = true;
+            let params = document.querySelectorAll(`input[name="counter-parameter"]`);
+            params.forEach((param) => {
+                param.disabled = false;
+            });
+        }
+    }
 })
 
 ipc.on('selected-folder', function (event, folders) {
@@ -75,8 +165,17 @@ document.addEventListener('drop', (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    for (const f of event.dataTransfer.files) {
-        addFileItem(f.path);
+    try {
+        for (const f of event.dataTransfer.files) {
+            for (let j = 0; j < pathList.length; j++) {
+                if (f.path === pathList[j]) {
+                    throw err;
+                }
+            }
+            addFileItem(f.path);
+        }
+    } catch (err) {
+        duplicateHandle();
     }
 });
 
@@ -142,18 +241,18 @@ function getCounterParam() {
     let values = [];
 
     try {
-        if(parseInt(params[0].value) < 0 || parseInt(params[1].value) < 1 || parseInt(params[2].value) < 1) {
+        if (parseInt(params[0].value) < 0 || parseInt(params[1].value) < 1 || parseInt(params[2].value) < 1) {
             throw err;
         }
         params.forEach((param) => {
-            if(param.value === '') {
+            if (param.value === '') {
                 values.push(1);
             } else {
-            values.push(param.value);
+                values.push(param.value);
             }
         });
         return values;
-    } catch(err) {
+    } catch (err) {
         invalidHandle();
     }
 }
@@ -195,9 +294,9 @@ let order = [];
         }
 
         if (checkbox.checked) {
-            order.push(rules[index].rulename);
+            order.push(rules[index].value);
         } else {
-            order.splice(order.indexOf(rules[index].rulename), 1);
+            order.splice(order.indexOf(rules[index].value), 1);
         }
 
         let result = document.getElementById('result');
@@ -209,8 +308,10 @@ const btn = document.querySelector('#btn');
 btn.addEventListener('click', () => {
     const rules = order;
     let factory = new RuleCreator();
-
     const items = document.querySelectorAll(`li[class="item"]`);
+
+    console.log(JSONObj);
+
     for (let i = 0; i < pathList.length; i++) {
 
         let name = path.parse(pathList[i]).name;
