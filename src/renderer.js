@@ -30,7 +30,7 @@ const savePresetBtn = document.getElementById('savePresetBtn');
 savePresetBtn.addEventListener('click', function (event) {
     const rules = order;
     let factory = new RuleCreator();
-    
+
     let JSONObj = [];
     let JSONStr = null;
 
@@ -90,7 +90,59 @@ ipc.on('selected-file', function (event, files) {
 })
 
 ipc.on('selected-preset', function (event, preset) {
-    //received files from main process, need handle
+    const rulePreset = JSON.parse(preset);
+
+    for (let i = 0; i < rulePreset.length; i++) {
+        const obj = JSON.parse(rulePreset[i]);
+
+        if (obj.name === 'Remove all space') {
+            const cb = document.querySelector('input[id="remove-space"]');
+            cb.checked = true;
+        } else if (obj.name === 'Replace characters') {
+            const cb = document.querySelector('input[id="replace-characters"]');
+            cb.checked = true;
+            const params = document.querySelectorAll(`input[name="replace-parameter"]`);
+            params[0].value = obj.needle;
+            params[1].value = obj.replacement;
+
+            params[0].disabled = false;
+            params[1].disabled = false;
+        } else if (obj.name === 'Replace extension') {
+            const cb = document.querySelector('input[id="extension"]');
+            cb.checked = true;
+            const params = document.querySelectorAll(`input[name="extension-parameter"]`);
+            params[0].value = obj.needle;
+            params[1].value = obj.replacement;
+
+            params[0].disabled = false;
+            params[1].disabled = false;
+        } else if (obj.name === 'Add prefix') {
+            const cb = document.querySelector('input[id="add-prefix"]');
+            cb.checked = true;
+            const prefix = document.getElementById('prefix');
+            prefix.value = obj.prefix;
+            prefix.disabled = false;
+        } else if (obj.name === 'Add suffix') {
+            const cb = document.querySelector('input[id="add-suffix"]');
+            cb.checked = true;
+            const suffix = document.getElementById('suffix');
+            suffix.value = obj.suffix;
+            suffix.disabled = false;
+        } else if (obj.name === 'Convert lowercase') {
+            const cb = document.querySelector('input[id="lowercase"]');
+            cb.checked = true;
+        } else if (obj.name === 'Convert to PascalCase') {
+            const cb = document.querySelector('input[id="pascalcase"]');
+            cb.checked = true;
+        } else if (obj.name === 'Add counter') {
+            const cb = document.querySelector('input[id="counter"]');
+            cb.checked = true;
+            let params = document.querySelectorAll(`input[name="counter-parameter"]`);
+            params.forEach((param) => {
+                param.disabled = false;
+            });
+        }
+    }
 })
 
 ipc.on('selected-folder', function (event, folders) {
@@ -122,7 +174,7 @@ document.addEventListener('drop', (event) => {
             }
             addFileItem(f.path);
         }
-    } catch(err) {
+    } catch (err) {
         duplicateHandle();
     }
 });

@@ -197,7 +197,8 @@ const loadPreset = () => {
   });
 
   if (!preset) { return; }
-  return preset;
+  const content = fs.readFileSync(preset[0]).toString(); 
+  return content;
 }
 
 const openFolder = () => {
