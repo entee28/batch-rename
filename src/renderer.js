@@ -65,6 +65,9 @@ savePresetBtn.addEventListener('click', function (event) {
         }
     }
 
+    JSONStr = JSON.stringify(order);
+    JSONObj.push(JSONStr);
+
     const myJSON = JSON.stringify(JSONObj);
     ipc.send('save-preset-dialog', myJSON);
 })
@@ -92,7 +95,7 @@ ipc.on('selected-file', function (event, files) {
 ipc.on('selected-preset', function (event, preset) {
     const rulePreset = JSON.parse(preset);
 
-    for (let i = 0; i < rulePreset.length; i++) {
+    for (let i = 0; i < rulePreset.length - 1; i++) {
         const obj = JSON.parse(rulePreset[i]);
 
         if (obj.name === 'Remove all space') {
@@ -143,6 +146,10 @@ ipc.on('selected-preset', function (event, preset) {
             });
         }
     }
+
+    order = JSON.parse(rulePreset[rulePreset.length - 1])
+    let result = document.getElementById('result');
+        result.textContent = order;
 })
 
 ipc.on('selected-folder', function (event, folders) {
@@ -310,8 +317,6 @@ btn.addEventListener('click', () => {
     let factory = new RuleCreator();
     const items = document.querySelectorAll(`li[class="item"]`);
 
-    console.log(JSONObj);
-
     for (let i = 0; i < pathList.length; i++) {
 
         let name = path.parse(pathList[i]).name;
@@ -431,3 +436,52 @@ replaceCheckBox.addEventListener('click', EnableDisableReplaceParam);
 
 const counterCheckBox = document.getElementById('counter');
 counterCheckBox.addEventListener('click', EnableDisableCounterParam);
+
+function check(checked = true) {
+    const cbs = document.querySelectorAll('input[type="checkbox"]');
+    cbs.forEach((cb) => {
+        cb.checked = checked;
+    });
+}
+
+const selectBtn = document.querySelector('#select');
+selectBtn.onclick = checkAll;
+
+function checkAll() {
+    check();
+    EnableDisableCounterParam();
+    EnableDisableExtensionParam();
+    EnableDisablePrefixParam();
+    EnableDisableReplaceParam();
+    EnableDisableSuffixParam();
+    
+    // reassign click event handler
+    this.onclick = uncheckAll;
+
+    order = getSelectedRules();
+    let result = document.getElementById('result');
+        result.textContent = order;
+}
+
+function uncheckAll() {
+    check(false);
+    EnableDisableCounterParam();
+    EnableDisableExtensionParam();
+    EnableDisablePrefixParam();
+    EnableDisableReplaceParam();
+    EnableDisableSuffixParam();
+    // reassign click event handler
+    this.onclick = checkAll;
+    order = getSelectedRules();
+    let result = document.getElementById('result');
+        result.textContent = order;
+}
+
+function getSelectedRules() {
+    const checkboxes = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
+    let values = [];
+    checkboxes.forEach((checkbox) => {
+        values.push(checkbox.value);
+    });
+    return values;
+}
