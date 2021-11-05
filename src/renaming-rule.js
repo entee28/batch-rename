@@ -1,3 +1,14 @@
+const ffi = require('ffi-napi');
+
+const Rules = ffi.Library(__dirname + '\\RenamingRulesLibrary.dll', {
+    'AddSuffix': ['string', ['string', 'string']],
+    'AddPrefix': ['string', ['string', 'string']],
+    'RemoveAllSpace': ['string', ['string']],
+    'PascalCase': ['string', ['string']],
+    'LowerAll': ['string', ['string']],
+    'Replace': ['string', ['string', 'string', 'string']],
+});
+
 //ABSTRACT PRODUCT CLASS
 class RenamingRule {
     constructor() {
@@ -18,14 +29,14 @@ class RenamingRule {
     }
 }
 
-class OnlyOneSpace extends RenamingRule {
+class RemoveAllSpace extends RenamingRule {
     constructor() {
         super();
-        this.name = "Only one space";
+        this.name = "Remove all space";
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.RemoveAllSpace(original);
     }
 }
 
@@ -33,13 +44,12 @@ class ReplaceCharacters extends RenamingRule {
     constructor(needle, replacement) {
         super();
         this.name = "Replace characters";
-        this.needle = needle || ['-', '_'];
+        this.needle = needle || '-';
         this.replacement = replacement || ' ';
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with needle ${this.needle}
-        and replacement ${this.replacement}!`);
+        return Rules.Replace(original, this.needle, this.replacement);
     }
 }
 
@@ -52,20 +62,19 @@ class ReplaceExtension extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with needle ${this.needle}
-        and replacement ${this.replacement}!`);
+        return Rules.Replace(original, this.needle, this.replacement);
     }
 }
 
 class AddCounter extends RenamingRule {
-    constructor(needle, replacement) {
+    constructor(padding) {
         super();
         this.name = "Add counter";
-        this.count = '01';
+        this.padding = padding;
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.AddSuffix(original, this.padding);
     }
 }
 
@@ -77,7 +86,7 @@ class AddPrefix extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with prefix ${this.prefix}!`);
+        return Rules.AddPrefix(original, this.prefix);
     }
 }
 
@@ -89,7 +98,7 @@ class AddSuffix extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule with suffix ${this.suffix}`);
+        return Rules.AddSuffix(original, this.suffix);
     }
 }
 
@@ -100,7 +109,7 @@ class LowerAll extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.LowerAll(original);
     }
 }
 
@@ -111,18 +120,17 @@ class PascalCase extends RenamingRule {
     }
 
     Transform(original) {
-        console.log(`This is ${this.name} rule!`);
+        return Rules.PascalCase(original);
     }
 }
 
 module.exports = {
-    OnlyOneSpace : OnlyOneSpace,
-    AddCounter : AddCounter,
+    RemoveAllSpace: RemoveAllSpace,
+    AddCounter: AddCounter,
     AddPrefix: AddPrefix,
     AddSuffix: AddSuffix,
     ReplaceCharacters: ReplaceCharacters,
     ReplaceExtension: ReplaceExtension,
     PascalCase: PascalCase,
     LowerAll: LowerAll,
-  }
-  
+}

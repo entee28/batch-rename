@@ -1,19 +1,13 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain;
 const dialog = require('electron').dialog;
-const menu = require('electron').Menu;
-const ffi = require('ffi-napi');
 const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
 require('electron-reloader')(module);
-
+require('electron').Menu;
 
 const isMac = process.platform === 'darwin';
-
-let o1 = new RuleCreator();
-o1.invokeTransform('Add prefix', '', 'google');
-o1.invokeTransform('Replace characters', '', 'google', 'facebook');
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
@@ -43,7 +37,8 @@ app.whenReady().then(() => {
           label: "Open Folder...",
           click() {
             const folders = openFolder();
-            if (folders) win.webContents.send('selected-folder', folders)          }
+            if (folders) win.webContents.send('selected-folder', folders)
+          }
         },
         {
           type: 'separator'
@@ -70,34 +65,34 @@ app.whenReady().then(() => {
     },
 
     //Edit menu
-    {
-      label: 'Edit',
-      submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
-        { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
-        ...(isMac ? [
-          { role: 'pasteAndMatchStyle' },
-          { role: 'delete' },
-          { role: 'selectAll' },
-          { type: 'separator' },
-          {
-            label: 'Speech',
-            submenu: [
-              { role: 'startSpeaking' },
-              { role: 'stopSpeaking' }
-            ]
-          }
-        ] : [
-          { role: 'delete' },
-          { type: 'separator' },
-          { role: 'selectAll' }
-        ])
-      ]
-    },
+    // {
+    //   label: 'Edit',
+    //   submenu: [
+    //     { role: 'undo' },
+    //     { role: 'redo' },
+    //     { type: 'separator' },
+    //     { role: 'cut' },
+    //     { role: 'copy' },
+    //     { role: 'paste' },
+    //     ...(isMac ? [
+    //       { role: 'pasteAndMatchStyle' },
+    //       { role: 'delete' },
+    //       { role: 'selectAll' },
+    //       { type: 'separator' },
+    //       {
+    //         label: 'Speech',
+    //         submenu: [
+    //           { role: 'startSpeaking' },
+    //           { role: 'stopSpeaking' }
+    //         ]
+    //       }
+    //     ] : [
+    //       { role: 'delete' },
+    //       { type: 'separator' },
+    //       { role: 'selectAll' }
+    //     ])
+    //   ]
+    // },
 
     //View menu
     {
@@ -120,7 +115,6 @@ app.whenReady().then(() => {
       label: 'Window',
       submenu: [
         { role: 'minimize' },
-        { role: 'zoom' },
         ...(isMac ? [
           { type: 'separator' },
           { role: 'front' },
@@ -164,8 +158,20 @@ ipc.on('open-folder-dialog', function (event) {
   if (folders) event.sender.send('selected-folder', folders);
 })
 
-ipc.on('save-preset-dialog', function (event) {
-  const file = savePreset();
+ipc.on('save-preset-dialog', function (event, myJSON) {
+  const file = savePreset(myJSON);
+})
+
+ipc.on('error-handle', function (event, file) {
+  dialog.showErrorBox('Error', `Duplicate files detected!`)
+})
+
+ipc.on('empty-handle', function (event, file) {
+  dialog.showErrorBox('Error', `Empty parameter!`)
+})
+
+ipc.on('invalid-handle', function (event, file) {
+  dialog.showErrorBox('Error', `Invalid counter parameter!`)
 })
 
 const openFile = () => {
@@ -187,7 +193,8 @@ const loadPreset = () => {
   });
 
   if (!preset) { return; }
-  return preset;
+  const content = fs.readFileSync(preset[0]).toString(); 
+  return content;
 }
 
 const openFolder = () => {
@@ -197,7 +204,7 @@ const openFolder = () => {
   return folders;
 }
 
-const savePreset = () => {
+const savePreset = (myJSON) => {
   const file = dialog.showSaveDialogSync({
     title: "Save Rule Preset",
     defaultPath: path.join(__dirname, '../assets/preset.json'),
@@ -209,23 +216,14 @@ const savePreset = () => {
   });
 
   if (file) {
-    console.log(file);
     try {
       // Creating and Writing to the preset.json file
-      fs.writeFile(file,
-        'This is a Sample File', function (err) {
-          if (err) throw err;
-          console.log('Saved!');
-        });
+      fs.writeFile(file, myJSON, function (err) {
+        if (err) throw err;
+        console.log('Saved!');
+      });
     } catch (err) {
       console.log(err)
     }
   }
 }
-
-//DLL DEMO
-const libm = ffi.Library(__dirname + '\\DemoDll.dll', {
-  'add': ['int', ['int', 'int']]
-});
-const result = libm.add(2, 3);
-console.log(result);

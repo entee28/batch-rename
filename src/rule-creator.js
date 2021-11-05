@@ -1,4 +1,4 @@
-const {AddCounter, AddPrefix, AddSuffix, LowerAll, PascalCase, OnlyOneSpace, ReplaceCharacters, ReplaceExtension} = require('./renaming-rule');
+const {AddCounter, AddPrefix, AddSuffix, LowerAll, PascalCase, RemoveAllSpace, ReplaceCharacters, ReplaceExtension} = require('./renaming-rule');
 
 //ABSTRACT CREATOR CLASS
 class IRuleCreator {
@@ -17,7 +17,12 @@ class IRuleCreator {
 
     invokeTransform(type, original, arg1, arg2) {
         let rule = this.createRule(type, arg1, arg2);
-        rule.Transform(original);
+        return rule.Transform(original);
+    }
+
+    toJSON(type, arg1, arg2) {
+        let rule = this.createRule(type, arg1, arg2);
+        return JSON.stringify(rule);
     }
 }
 
@@ -27,22 +32,22 @@ class RuleCreator extends IRuleCreator {
     }
 
     createRule(type, arg1, arg2) {
-        if(type === 'Only one space') {
-            return new OnlyOneSpace();
-        } else if(type === 'Replace characters') {
+        if(type === 'remove-space') {
+            return new RemoveAllSpace();
+        } else if(type === 'replace-characters') {
             return new ReplaceCharacters(arg1, arg2);
-        } else if (type === 'Replace extension') {
+        } else if (type === 'extension') {
             return new ReplaceExtension(arg1, arg2);
-        } else if (type === 'Add prefix') {
+        } else if (type === 'add-prefix') {
             return new AddPrefix(arg1);
-        } else if (type === 'Add suffix') {
+        } else if (type === 'add-suffix') {
             return new AddSuffix(arg1);
-        } else if (type === 'Convert lowercase') {
+        } else if (type === 'lowercase') {
             return new LowerAll();
-        } else if (type === 'Convert PascalCase') {
+        } else if (type === 'pascalcase') {
             return new PascalCase();
-        } else if (type === 'Add counter') {
-            return new AddCounter();
+        } else if (type === 'counter') {
+            return new AddCounter(arg1);
         } else return null;
     }
 }
