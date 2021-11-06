@@ -149,7 +149,7 @@ ipc.on('selected-preset', function (event, preset) {
 
     order = JSON.parse(rulePreset[rulePreset.length - 1])
     let result = document.getElementById('result');
-        result.textContent = order;
+        result.textContent = convertOrderToName();
 })
 
 ipc.on('selected-folder', function (event, folders) {
@@ -307,7 +307,7 @@ let order = [];
         }
 
         let result = document.getElementById('result');
-        result.textContent = order;
+        result.textContent = convertOrderToName();
     });
 });
 
@@ -460,7 +460,7 @@ function checkAll() {
 
     order = getSelectedRules();
     let result = document.getElementById('result');
-        result.textContent = order;
+        result.textContent = convertOrderToName();
 }
 
 function uncheckAll() {
@@ -474,7 +474,7 @@ function uncheckAll() {
     this.onclick = checkAll;
     order = getSelectedRules();
     let result = document.getElementById('result');
-        result.textContent = order;
+    result.textContent = convertOrderToName();
 }
 
 function getSelectedRules() {
@@ -485,3 +485,22 @@ function getSelectedRules() {
     });
     return values;
 }
+
+function convertOrderToName() {
+    let properNames = [];
+    for(let i = 0; i < order.length; i++) {
+        properNames.push(ruleMap.get(order[i]));
+    }
+
+    return properNames;
+}
+
+const ruleMap = new Map();
+ruleMap.set('extension', 'Change File Extension');
+ruleMap.set('replace-characters', 'Replace Characters');
+ruleMap.set('add-prefix', 'Add Prefix');
+ruleMap.set('add-suffix', 'Add Suffix');
+ruleMap.set('counter', 'Add Counter');
+ruleMap.set('remove-space', 'Remove All Space');
+ruleMap.set('lowercase', 'Convert To Lower Case And No Space');
+ruleMap.set('pascalcase', 'Convert To PascalCase');
