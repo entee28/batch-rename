@@ -148,8 +148,10 @@ ipc.on('selected-preset', function (event, preset) {
     }
 
     order = JSON.parse(rulePreset[rulePreset.length - 1])
-    let result = document.getElementById('result');
-        result.textContent = convertOrderToName();
+    // let result = document.getElementById('result');
+    //     result.textContent = convertOrderToName();
+    createList();
+    addEventListener();
 })
 
 ipc.on('selected-folder', function (event, folders) {
@@ -290,6 +292,9 @@ function getSuffixParam() {
     }
 }
 
+const draggable_list = document.getElementById('draggable-list');
+let dragStartIndex;
+
 let order = [];
 [].forEach.call(document.querySelectorAll('input[type="checkbox"]'), function (checkbox) {
     'use strict';
@@ -304,14 +309,101 @@ let order = [];
 
         if (checkbox.checked) {
             order.push(rules[index].value);
+            // const listItem = document.createElement('li');
+
+            // listItem.setAttribute('data-index', index);
+
+            // listItem.innerHTML = `
+            //     <span class="number">${index + 1}</span>
+            //     <div class="draggable" draggable="true">
+            //         <p class="rule-name">${ruleMap.get(rules[index].value)}</p>
+            //         <span class="material-icons">reorder</span>
+            //     </div>
+            // `;
+
+            // draggable_list.appendChild(listItem);
         } else {
             order.splice(order.indexOf(rules[index].value), 1);
+            // const listItem = document.querySelector(`li[data-index='${index}']`);
+            // listItem.remove();
         }
 
-        let result = document.getElementById('result');
-        result.textContent = convertOrderToName();
+        createList();
+        addEventListener();
+        // let result = document.getElementById('result');
+        // result.textContent = convertOrderToName();
     });
 });
+
+function createList() {
+    draggable_list.innerHTML = '';
+    const properNames = convertOrderToName();
+    [...properNames].forEach((rule, index) => {
+        const listItem = document.createElement('li');
+        
+        listItem.setAttribute('data-index', index);
+        listItem.innerHTML = `
+        <span class="number">${index + 1}</span>
+        <div class="draggable" draggable="true">
+            <p class="rule-name">${properNames[index]}</p>
+            <span class="material-icons">reorder</span>
+        </div>
+        `;
+
+        draggable_list.appendChild(listItem);
+    });
+}
+
+function dragStart() {
+    dragStartIndex = +this.closest('li').getAttribute('data-index');
+    console.log(dragStartIndex);
+}
+function dragEnter() {
+    this.classList.add('over');
+}
+function dragLeave() {
+    this.classList.remove('over');
+}
+function dragOver(e) {
+    e.preventDefault();
+}
+function dragDrop() {
+    const dragEndIndex = +this.getAttribute('data-index');
+    swapItems(dragStartIndex, dragEndIndex);
+
+    this.classList.remove('over');
+}
+
+function swapItems(fromIndex, toIndex) {
+    const itemOne = document.querySelector(`li[data-index='${fromIndex}']`);
+    const itemTwo = document.querySelector(`li[data-index='${toIndex}']`);
+
+    const draggableOne = itemOne.querySelector('.draggable');
+    const draggableTwo = itemTwo.querySelector('.draggable');
+
+    itemOne.appendChild(draggableTwo);
+    itemTwo.appendChild(draggableOne);
+
+    [order[fromIndex], order[toIndex]] = [order[toIndex], order[fromIndex]];
+    // let result = document.getElementById('result');
+    // result.textContent = convertOrderToName();
+}
+
+function addEventListener() {
+    const draggables = document.querySelectorAll('.draggable');
+    const dragListItems = document.querySelectorAll('.draggable-list li');
+
+    draggables.forEach(draggable => {
+        draggable.addEventListener('dragstart', dragStart);
+    })
+
+    dragListItems.forEach(item => {
+        item.addEventListener('dragover', dragOver);
+        item.addEventListener('drop', dragDrop);
+        item.addEventListener('dragenter', dragEnter);
+        item.addEventListener('dragleave', dragLeave);
+    })
+}
 
 const btn = document.querySelector('#btn');
 btn.addEventListener('click', () => {
@@ -461,8 +553,10 @@ function checkAll() {
     this.onclick = uncheckAll;
 
     order = getSelectedRules();
-    let result = document.getElementById('result');
-        result.textContent = convertOrderToName();
+    createList();
+    addEventListener();
+    // let result = document.getElementById('result');
+    //     result.textContent = convertOrderToName();
 }
 
 function uncheckAll() {
@@ -475,8 +569,10 @@ function uncheckAll() {
     // reassign click event handler
     this.onclick = checkAll;
     order = getSelectedRules();
-    let result = document.getElementById('result');
-    result.textContent = convertOrderToName();
+    createList();
+    addEventListener();
+    // let result = document.getElementById('result');
+    // result.textContent = convertOrderToName();
 }
 
 function getSelectedRules() {
