@@ -149,7 +149,7 @@ ipc.on('selected-preset', function (event, preset) {
 
     order = JSON.parse(rulePreset[rulePreset.length - 1])
     let result = document.getElementById('result');
-        result.textContent = order;
+        result.textContent = convertOrderToName();
 })
 
 ipc.on('selected-folder', function (event, folders) {
@@ -197,22 +197,24 @@ const addFileItem = (__filepath) => {
     const item = document.createElement('li');
     item.classList.add('item')
     item.textContent = path.basename(__filepath);
-    addDelButton(item, __filepath);
+    item.setAttribute("path", __filepath);
+    addDelButton(item);
     container.appendChild(item);
 }
 
 const pathList = new Array();
 
 
-function addDelButton(parent, __filepath) {
+function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add('btn');
     const delIcon = document.createElement('i');
     delIcon.classList.add('fa');
     delIcon.classList.add('fa-trash');
     delBtn.appendChild(delIcon);
-    delBtn.onclick = function (__filepath) {
-        pathList.splice(pathList.indexOf(__filepath), 1);
+    delBtn.onclick = function () {
+        const path = this.parentElement.getAttribute("path");
+        pathList.splice(pathList.indexOf(path), 1);
         this.parentElement.remove();
     }
 }
@@ -307,7 +309,7 @@ let order = [];
         }
 
         let result = document.getElementById('result');
-        result.textContent = order;
+        result.textContent = convertOrderToName();
     });
 });
 
@@ -460,7 +462,7 @@ function checkAll() {
 
     order = getSelectedRules();
     let result = document.getElementById('result');
-        result.textContent = order;
+        result.textContent = convertOrderToName();
 }
 
 function uncheckAll() {
@@ -474,7 +476,7 @@ function uncheckAll() {
     this.onclick = checkAll;
     order = getSelectedRules();
     let result = document.getElementById('result');
-        result.textContent = order;
+    result.textContent = convertOrderToName();
 }
 
 function getSelectedRules() {
@@ -485,3 +487,22 @@ function getSelectedRules() {
     });
     return values;
 }
+
+function convertOrderToName() {
+    let properNames = [];
+    for(let i = 0; i < order.length; i++) {
+        properNames.push(ruleMap.get(order[i]));
+    }
+
+    return properNames;
+}
+
+const ruleMap = new Map();
+ruleMap.set('extension', 'Change File Extension');
+ruleMap.set('replace-characters', 'Replace Characters');
+ruleMap.set('add-prefix', 'Add Prefix');
+ruleMap.set('add-suffix', 'Add Suffix');
+ruleMap.set('counter', 'Add Counter');
+ruleMap.set('remove-space', 'Remove All Space');
+ruleMap.set('lowercase', 'Convert To Lower Case And No Space');
+ruleMap.set('pascalcase', 'Convert To PascalCase');
