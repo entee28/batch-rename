@@ -197,22 +197,24 @@ const addFileItem = (__filepath) => {
     const item = document.createElement('li');
     item.classList.add('item')
     item.textContent = path.basename(__filepath);
-    addDelButton(item, __filepath);
+    item.setAttribute("path", __filepath);
+    addDelButton(item);
     container.appendChild(item);
 }
 
 const pathList = new Array();
 
 
-function addDelButton(parent, __filepath) {
+function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add('btn');
     const delIcon = document.createElement('i');
     delIcon.classList.add('fa');
     delIcon.classList.add('fa-trash');
     delBtn.appendChild(delIcon);
-    delBtn.onclick = function (__filepath) {
-        pathList.splice(pathList.indexOf(__filepath), 1);
+    delBtn.onclick = function () {
+        const path = this.parentElement.getAttribute("path");
+        pathList.splice(pathList.indexOf(path), 1);
         this.parentElement.remove();
     }
 }
