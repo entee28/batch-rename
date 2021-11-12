@@ -28,7 +28,7 @@ app.whenReady().then(() => {
         {
           label: "Open File...",
           accelerator: "Ctrl+O",
-          click(event) {
+          click() {
             const files = openFile();
             if (files) win.webContents.send('selected-file', files)
           }
@@ -54,7 +54,8 @@ app.whenReady().then(() => {
           label: "Load Preset",
           accelerator: "Ctrl+L",
           click() {
-            loadPreset();
+            const preset = loadPreset();
+            if (preset) win.webContents.send('selected-preset', preset)
           }
         },
         {
