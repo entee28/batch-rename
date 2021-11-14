@@ -1,4 +1,3 @@
-//include modules
 const path = require("path");
 const ipc = require("electron").ipcRenderer;
 const { RuleCreator } = require("./rule-creator");
@@ -54,7 +53,10 @@ ipc.on("selected-folder", function (event, folders) {
 
 //Handle save preset button click event
 const savePresetBtn = document.getElementById("savePresetBtn");
-savePresetBtn.addEventListener("click", function (event) {
+savePresetBtn.addEventListener("click", savePreset);
+ipc.on('save-preset', savePreset);
+
+function savePreset() {
     const rules = order; //reference to the rule order array
     let factory = new RuleCreator();
 
@@ -97,7 +99,7 @@ savePresetBtn.addEventListener("click", function (event) {
 
     const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
     ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
-});
+}
 
 //Handle save preset button event
 const loadPresetBtn = document.getElementById("loadPresetBtn");
