@@ -17,13 +17,8 @@
 <body>
   <section>
 
-    <div class="container-fluid border" id="file-list-container">
-      <ul id="item-list">
-      </ul>
-    </div>
-
     <div class="row" id="rule-list-container">
-      <div class="col-lg-4">
+      <div class="col-lg-5">
         <div id="sideBar" class="sidebar">
           <a href="javascript:void(0)" class="closebtn" id="close">&times;</a>
           <ul class="container-fluid" id="rule-list">
@@ -95,8 +90,14 @@
               <input type="number" id="digits" name="counter-parameter" placeholder="Number of digits..." min="1" disabled>
             </li>
           </ul>
+
+          <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
+          <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
+          <button id="select" class="btn btn-primary">Select / Unselect All Rules</button>
   
           <p id="result"></p>
+
+          <hr>
   
           <section id="draggable-list-container">
             <ul class="draggable-list" id="draggable-list"></ul>
@@ -110,27 +111,34 @@
 
       </div>
 
-      <div class="col-lg-8">
+      <div class="col-lg-7">
+        <section>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>File name</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody id="file-list-container">
+            </tbody>
+          </table>
+        </section>
+
         <section>
           <footer>
             <div class="container-fluid">
               <h1>Batch Rename</h1>
               <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
               <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
-              <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
-              <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
               <button id="btn" class="btn btn-primary">Convert</button>
-              <button id="select" class="btn btn-primary">Select / Unselect All Rules</button>
               <script src="./renderer.js"></script>
             </div>
           </footer>
         </section>
       </div>
-
     </div>
   </section>
-
-
 
 </body>
 

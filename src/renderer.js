@@ -211,10 +211,12 @@ document.addEventListener("dragover", (e) => {
 const addFileItem = (__filepath) => {
     pathList.push(__filepath);
     const container = document.querySelector("#file-list-container");
-    const item = document.createElement("li");
-    item.classList.add("item");
-    item.textContent = path.basename(__filepath);
+    const item = document.createElement("tr");
     item.setAttribute("path", __filepath);
+    item.innerHTML = `
+    <td>${path.parse(__filepath).name}</td>
+    <td>${path.extname(__filepath)}</td>
+    `;
     addDelButton(item);
     container.appendChild(item);
 };

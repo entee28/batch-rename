@@ -64,6 +64,11 @@ li {
     flex: 1;
 }
 
+.col-lg-5{
+    position: relative;
+    align-items: center;
+}
+
 .sidebar{
     height: 100%; 
     width: 0;
@@ -108,4 +113,6 @@ li {
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+    background-color: #111;
+    color: white;
   }
