@@ -64,42 +64,58 @@ function savePreset() {
     let JSONObj = []; //an array of JSON string, contains every thing we need to recreate a rule
     let JSONStr = null;
 
-    for (let j = 0; j < rules.length; j++) {
-        if (rules[j] === "extension") {
-            const params = getExtensionParam(); //get rule parameters
-            if (params) {
-                JSONStr = factory.toJSON(rules[j], params[0], params[1]); //call toJSON function from factory, convert rule to JSON string
-                JSONObj.push(JSONStr); //push JSON string into an array
+    try {
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === "extension") {
+                getExtensionParam();
+            } else if (rules[j] === "add-prefix") {
+                getPrefixParam();
+            } else if (rules[j] === "add-suffix") {
+                getSuffixParam();
+            } else if (rules[j] === "counter") {
+                getCounterParam();
             }
-        } else if (rules[j] === "replace-characters") {
-            const params = getReplaceParam();
-            if (params) {
-                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
-                JSONObj.push(JSONStr);
-            }
-        } else if (rules[j] === "add-prefix") {
-            const prefix = getPrefixParam();
-            if (prefix) {
-                JSONStr = factory.toJSON(rules[j], prefix);
-                JSONObj.push(JSONStr);
-            }
-        } else if (rules[j] === "add-suffix") {
-            const suffix = getSuffixParam();
-            if (suffix) {
-                JSONStr = factory.toJSON(rules[j], suffix);
-                JSONObj.push(JSONStr);
-            }
-        } else {
-            JSONStr = factory.toJSON(rules[j]);
-            JSONObj.push(JSONStr);
         }
+
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === "extension") {
+                const params = getExtensionParam(); //get rule parameters
+                if (params) {
+                    JSONStr = factory.toJSON(rules[j], params[0], params[1]); //call toJSON function from factory, convert rule to JSON string
+                    JSONObj.push(JSONStr); //push JSON string into an array
+                }
+            } else if (rules[j] === "replace-characters") {
+                const params = getReplaceParam();
+                if (params) {
+                    JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                    JSONObj.push(JSONStr);
+                }
+            } else if (rules[j] === "add-prefix") {
+                const prefix = getPrefixParam();
+                if (prefix) {
+                    JSONStr = factory.toJSON(rules[j], prefix);
+                    JSONObj.push(JSONStr);
+                }
+            } else if (rules[j] === "add-suffix") {
+                const suffix = getSuffixParam();
+                if (suffix) {
+                    JSONStr = factory.toJSON(rules[j], suffix);
+                    JSONObj.push(JSONStr);
+                }
+            } else {
+                JSONStr = factory.toJSON(rules[j]);
+                JSONObj.push(JSONStr);
+            }
+        }
+
+        JSONStr = JSON.stringify(order); //convert the rule order array to JSON string
+        JSONObj.push(JSONStr);
+
+        const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
+        ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
+    } catch(err) {
+        errorHandle(err);
     }
-
-    JSONStr = JSON.stringify(order); //convert the rule order array to JSON string
-    JSONObj.push(JSONStr);
-
-    const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
-    ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
 }
 
 //Handle save preset button event
@@ -298,7 +314,7 @@ function getPrefixParam() {
 function getSuffixParam() {
     const suffix = document.getElementById("suffix");
     if (suffix.value === "") {
-        throw "Empty parameters for add prefix rule!";
+        throw "Empty parameters for add suffix rule!";
     }
     return suffix.value;
 
@@ -419,6 +435,18 @@ btn.addEventListener("click", () => {
         let extension = path.extname(pathList[i]);
 
         try {
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    getExtensionParam();
+                } else if (rules[j] === "add-prefix") {
+                    getPrefixParam();
+                } else if (rules[j] === "add-suffix") {
+                    getSuffixParam();
+                } else if (rules[j] === "counter") {
+                    getCounterParam();
+                }
+            }
+
             for (let j = 0; j < rules.length; j++) {
                 if (rules[j] === "extension") {
                     const params = getExtensionParam();
