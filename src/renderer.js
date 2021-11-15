@@ -241,7 +241,7 @@ const addFileItem = (__filepath) => {
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add("btn");
-    const delIcon = document.createElement("i");
+    const delIcon = document.createElement("td");
     delIcon.classList.add("fa");
     delIcon.classList.add("fa-trash");
     delBtn.appendChild(delIcon);

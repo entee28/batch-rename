@@ -88,6 +88,7 @@ h5{
     overflow-x: hidden;
     padding-top: 60px;
     transition: 0.5s;
+    background-color: aliceblue;
 }
 
 .sidebar .closebtn {
@@ -148,15 +149,28 @@ h5{
   }
 
   #ruleBtn{
-    margin-left: 60px;
+    padding-top: 6px;
+    height: 35px;
+    text-align: center;
+    align-items: center;
+    background-color: #fb742d;
+    color: #000000;
+    font-size: 16px;
+    text-decoration: solid;
   }
 
   #rulelistBtn{
-    margin-left: 80px;
+    padding-top: 6px;
+    height: 35px;
+    text-align: center;
+    align-items: center;
+    background-color: #fb742d;
+    color: #000000;
+    font-size: 16px;
+    text-decoration: solid;
   }
 
   .fa-trash{
       align-items: center;
       text-align: center;
-      margin-left: 10px;
   }
