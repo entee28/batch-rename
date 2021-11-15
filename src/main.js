@@ -147,8 +147,8 @@ ipc.on('save-preset-dialog', function (event, myJSON) {
 })
 
 //show error box when received message from renderer process
-ipc.on('error-handle', function (event, file) {
-  dialog.showErrorBox('Error', `Duplicate files detected!`)
+ipc.on('error-handle', function (event, message) {
+  dialog.showErrorBox('Error', `${message}`)
 })
 
 ipc.on('empty-handle', function (event, file) {

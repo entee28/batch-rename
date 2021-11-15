@@ -15,17 +15,18 @@ openFileBtn.addEventListener("click", function (event) {
 
 //this listen "selected-file" channel, when new files are selected listener would load these files into the program 
 ipc.on("selected-file", function (event, files) {
-    try {
-        for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
+        try {
+
             for (let j = 0; j < pathList.length; j++) {
                 if (files[i] === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(files[i])} already existed!`;
                 }
             }
             addFileItem(files[i]);
+        } catch (err) {
+            duplicateHandle(err);
         }
-    } catch (err) {
-        duplicateHandle();
     }
 });
 
@@ -37,17 +38,17 @@ openFolderBtn.addEventListener("click", function (event) {
 
 //listener when folders are selected
 ipc.on("selected-folder", function (event, folders) {
-    try {
-        for (let i = 0; i < folders.length; i++) {
+    for (let i = 0; i < folders.length; i++) {
+        try {
             for (let j = 0; j < pathList.length; j++) {
                 if (folders[i] === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(folders[i])} already existed!`;
                 }
             }
             addFileItem(folders[i]);
+        } catch (err) {
+            duplicateHandle(err);
         }
-    } catch (err) {
-        duplicateHandle();
     }
 });
 
@@ -173,8 +174,8 @@ ipc.on("selected-preset", function (event, preset) {
 });
 
 //Error handles
-const duplicateHandle = (event) => {
-    ipc.send("error-handle");
+const duplicateHandle = (message) => {
+    ipc.send("error-handle", message);
 };
 
 const emptyHandle = (event) => {
