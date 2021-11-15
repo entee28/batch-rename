@@ -65,6 +65,10 @@ function savePreset() {
     let JSONStr = null;
 
     try {
+        if(rules.length === 0) {
+            throw "No rules have been chosen!"
+        }
+
         for (let j = 0; j < rules.length; j++) {
             if (rules[j] === "extension") {
                 getExtensionParam();
