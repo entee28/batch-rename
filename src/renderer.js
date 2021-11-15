@@ -15,17 +15,18 @@ openFileBtn.addEventListener("click", function (event) {
 
 //this listen "selected-file" channel, when new files are selected listener would load these files into the program 
 ipc.on("selected-file", function (event, files) {
-    try {
-        for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
+        try {
+
             for (let j = 0; j < pathList.length; j++) {
                 if (files[i] === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(files[i])} already existed!`;
                 }
             }
             addFileItem(files[i]);
+        } catch (err) {
+            errorHandle(err);
         }
-    } catch (err) {
-        duplicateHandle();
     }
 });
 
@@ -37,17 +38,17 @@ openFolderBtn.addEventListener("click", function (event) {
 
 //listener when folders are selected
 ipc.on("selected-folder", function (event, folders) {
-    try {
-        for (let i = 0; i < folders.length; i++) {
+    for (let i = 0; i < folders.length; i++) {
+        try {
             for (let j = 0; j < pathList.length; j++) {
                 if (folders[i] === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(folders[i])} already existed!`;
                 }
             }
             addFileItem(folders[i]);
+        } catch (err) {
+            errorHandle(err);
         }
-    } catch (err) {
-        duplicateHandle();
     }
 });
 
@@ -63,42 +64,62 @@ function savePreset() {
     let JSONObj = []; //an array of JSON string, contains every thing we need to recreate a rule
     let JSONStr = null;
 
-    for (let j = 0; j < rules.length; j++) {
-        if (rules[j] === "extension") {
-            const params = getExtensionParam(); //get rule parameters
-            if (params) {
-                JSONStr = factory.toJSON(rules[j], params[0], params[1]); //call toJSON function from factory, convert rule to JSON string
-                JSONObj.push(JSONStr); //push JSON string into an array
-            }
-        } else if (rules[j] === "replace-characters") {
-            const params = getReplaceParam();
-            if (params) {
-                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
-                JSONObj.push(JSONStr);
-            }
-        } else if (rules[j] === "add-prefix") {
-            const prefix = getPrefixParam();
-            if (prefix) {
-                JSONStr = factory.toJSON(rules[j], prefix);
-                JSONObj.push(JSONStr);
-            }
-        } else if (rules[j] === "add-suffix") {
-            const suffix = getSuffixParam();
-            if (suffix) {
-                JSONStr = factory.toJSON(rules[j], suffix);
-                JSONObj.push(JSONStr);
-            }
-        } else {
-            JSONStr = factory.toJSON(rules[j]);
-            JSONObj.push(JSONStr);
+    try {
+        if(rules.length === 0) {
+            throw "No rules have been chosen!"
         }
+
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === "extension") {
+                getExtensionParam();
+            } else if (rules[j] === "add-prefix") {
+                getPrefixParam();
+            } else if (rules[j] === "add-suffix") {
+                getSuffixParam();
+            } else if (rules[j] === "counter") {
+                getCounterParam();
+            }
+        }
+
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === "extension") {
+                const params = getExtensionParam(); //get rule parameters
+                if (params) {
+                    JSONStr = factory.toJSON(rules[j], params[0], params[1]); //call toJSON function from factory, convert rule to JSON string
+                    JSONObj.push(JSONStr); //push JSON string into an array
+                }
+            } else if (rules[j] === "replace-characters") {
+                const params = getReplaceParam();
+                if (params) {
+                    JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                    JSONObj.push(JSONStr);
+                }
+            } else if (rules[j] === "add-prefix") {
+                const prefix = getPrefixParam();
+                if (prefix) {
+                    JSONStr = factory.toJSON(rules[j], prefix);
+                    JSONObj.push(JSONStr);
+                }
+            } else if (rules[j] === "add-suffix") {
+                const suffix = getSuffixParam();
+                if (suffix) {
+                    JSONStr = factory.toJSON(rules[j], suffix);
+                    JSONObj.push(JSONStr);
+                }
+            } else {
+                JSONStr = factory.toJSON(rules[j]);
+                JSONObj.push(JSONStr);
+            }
+        }
+
+        JSONStr = JSON.stringify(order); //convert the rule order array to JSON string
+        JSONObj.push(JSONStr);
+
+        const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
+        ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
+    } catch(err) {
+        errorHandle(err);
     }
-
-    JSONStr = JSON.stringify(order); //convert the rule order array to JSON string
-    JSONObj.push(JSONStr);
-
-    const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
-    ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
 }
 
 //Handle save preset button event
@@ -173,17 +194,17 @@ ipc.on("selected-preset", function (event, preset) {
 });
 
 //Error handles
-const duplicateHandle = (event) => {
-    ipc.send("error-handle");
+const errorHandle = (message) => {
+    ipc.send("error-handle", message);
 };
 
-const emptyHandle = (event) => {
-    ipc.send("empty-handle");
-};
+// const emptyHandle = (event) => {
+//     ipc.send("empty-handle");
+// };
 
-const invalidHandle = (event) => {
-    ipc.send("invalid-handle");
-};
+// const invalidHandle = (event) => {
+//     ipc.send("invalid-handle");
+// };
 
 //Drag and drop handle
 document.addEventListener("drop", (event) => {
@@ -194,13 +215,13 @@ document.addEventListener("drop", (event) => {
         for (const f of event.dataTransfer.files) {
             for (let j = 0; j < pathList.length; j++) {
                 if (f.path === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(f.path)} already existed!`;
                 }
             }
             addFileItem(f.path);
         }
     } catch (err) {
-        duplicateHandle();
+        errorHandle(err);
     }
 });
 
@@ -243,17 +264,15 @@ function addDelButton(parent) {
 function getExtensionParam() {
     const params = document.querySelectorAll(`input[name="extension-parameter"]`);
     let values = [];
-    try {
-        params.forEach((param) => {
-            if (param.value === "") {
-                throw err;
-            }
-            values.push(param.value);
-        });
-        return values;
-    } catch (err) {
-        emptyHandle();
-    }
+
+    params.forEach((param) => {
+        if (param.value === "") {
+            throw 'Empty parameters for change extension rule!';
+        }
+        values.push(param.value);
+    });
+    return values;
+
 }
 
 //FUNCTIONS GETTING RULES' PARAMETERS
@@ -270,49 +289,39 @@ function getCounterParam() {
     const params = document.querySelectorAll(`input[name="counter-parameter"]`);
     let values = [];
 
-    try {
-        if (
-            parseInt(params[0].value) < 0 ||
-            parseInt(params[1].value) < 1 ||
-            parseInt(params[2].value) < 1
-        ) {
-            throw err;
-        }
-        params.forEach((param) => {
-            if (param.value === "") {
-                values.push(1);
-            } else {
-                values.push(param.value);
-            }
-        });
-        return values;
-    } catch (err) {
-        invalidHandle();
+    if (
+        parseInt(params[0].value) < 0 ||
+        parseInt(params[1].value) < 1 ||
+        parseInt(params[2].value) < 1
+    ) {
+        throw "Invalid parameters for add counter rule!";
     }
+    params.forEach((param) => {
+        if (param.value === "") {
+            values.push(1);
+        } else {
+            values.push(param.value);
+        }
+    });
+    return values;
 }
 
 function getPrefixParam() {
-    try {
-        const prefix = document.getElementById("prefix");
-        if (prefix.value === "") {
-            throw err;
-        }
-        return prefix.value;
-    } catch (err) {
-        emptyHandle();
+    const prefix = document.getElementById("prefix");
+    if (prefix.value === "") {
+        throw "Empty parameters for add prefix rule!";
     }
+    return prefix.value;
+
 }
 
 function getSuffixParam() {
-    try {
-        const suffix = document.getElementById("suffix");
-        if (suffix.value === "") {
-            throw err;
-        }
-        return suffix.value;
-    } catch (err) {
-        emptyHandle();
+    const suffix = document.getElementById("suffix");
+    if (suffix.value === "") {
+        throw "Empty parameters for add suffix rule!";
     }
+    return suffix.value;
+
 }
 
 let order = []; //an array contains rule order
@@ -429,48 +438,64 @@ btn.addEventListener("click", () => {
         let name = path.parse(pathList[i]).name;
         let extension = path.extname(pathList[i]);
 
-        for (let j = 0; j < rules.length; j++) {
-            if (rules[j] === "extension") {
-                const params = getExtensionParam();
-                if (params) {
-                    extension = factory.invokeTransform(
-                        rules[j],
-                        extension,
-                        params[0],
-                        params[1]
-                    );
+        try {
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    getExtensionParam();
+                } else if (rules[j] === "add-prefix") {
+                    getPrefixParam();
+                } else if (rules[j] === "add-suffix") {
+                    getSuffixParam();
+                } else if (rules[j] === "counter") {
+                    getCounterParam();
                 }
-            } else if (rules[j] === "replace-characters") {
-                const params = getReplaceParam();
-                if (params) {
-                    name = factory.invokeTransform(rules[j], name, params[0], params[1]);
-                }
-            } else if (rules[j] === "add-prefix") {
-                const prefix = getPrefixParam();
-                if (prefix) {
-                    name = factory.invokeTransform(rules[j], name, prefix);
-                }
-            } else if (rules[j] === "add-suffix") {
-                const suffix = getSuffixParam();
-                if (suffix) {
-                    name = factory.invokeTransform(rules[j], name, suffix);
-                }
-            } else if (rules[j] === "counter") {
-                const params = getCounterParam();
-                if (params) {
-                    let start = parseInt(params[0]);
-                    let steps = parseInt(params[1]) * i;
-                    let digits = parseInt(params[2]);
-
-                    let padding = start + steps;
-                    padding = padding.toString();
-                    while (padding.length < digits) padding = "0" + padding;
-
-                    name = factory.invokeTransform(rules[j], name, padding);
-                }
-            } else {
-                name = factory.invokeTransform(rules[j], name);
             }
+
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    const params = getExtensionParam();
+                    if (params) {
+                        extension = factory.invokeTransform(
+                            rules[j],
+                            extension,
+                            params[0],
+                            params[1]
+                        );
+                    }
+                } else if (rules[j] === "replace-characters") {
+                    const params = getReplaceParam();
+                    if (params) {
+                        name = factory.invokeTransform(rules[j], name, params[0], params[1]);
+                    }
+                } else if (rules[j] === "add-prefix") {
+                    const prefix = getPrefixParam();
+                    if (prefix) {
+                        name = factory.invokeTransform(rules[j], name, prefix);
+                    }
+                } else if (rules[j] === "add-suffix") {
+                    const suffix = getSuffixParam();
+                    if (suffix) {
+                        name = factory.invokeTransform(rules[j], name, suffix);
+                    }
+                } else if (rules[j] === "counter") {
+                    const params = getCounterParam();
+                    if (params) {
+                        let start = parseInt(params[0]);
+                        let steps = parseInt(params[1]) * i;
+                        let digits = parseInt(params[2]);
+
+                        let padding = start + steps;
+                        padding = padding.toString();
+                        while (padding.length < digits) padding = "0" + padding;
+
+                        name = factory.invokeTransform(rules[j], name, padding);
+                    }
+                } else {
+                    name = factory.invokeTransform(rules[j], name);
+                }
+            }
+        } catch (err) {
+            errorHandle(err);
         }
 
         let newPath = path.join(pathList[i], "..", `${name}${extension}`);
@@ -618,6 +643,7 @@ function convertOrderToName() {
 }
 
 const ruleMap = new Map();
+
 ruleMap.set("extension", "Change File Extension");
 ruleMap.set("replace-characters", "Replace Characters");
 ruleMap.set("add-prefix", "Add Prefix");
