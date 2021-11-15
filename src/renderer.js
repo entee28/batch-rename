@@ -619,6 +619,7 @@ function convertOrderToName() {
 }
 
 const ruleMap = new Map();
+
 ruleMap.set("extension", "Change File Extension");
 ruleMap.set("replace-characters", "Replace Characters");
 ruleMap.set("add-prefix", "Add Prefix");
