@@ -147,16 +147,8 @@ ipc.on('save-preset-dialog', function (event, myJSON) {
 })
 
 //show error box when received message from renderer process
-ipc.on('error-handle', function (event, file) {
-  dialog.showErrorBox('Error', `Duplicate files detected!`)
-})
-
-ipc.on('empty-handle', function (event, file) {
-  dialog.showErrorBox('Error', `Empty parameter!`)
-})
-
-ipc.on('invalid-handle', function (event, file) {
-  dialog.showErrorBox('Error', `Invalid counter parameter!`)
+ipc.on('error-handle', function (event, message) {
+  dialog.showErrorBox('Error', `${message}`)
 })
 
 //function handle opening file dialog, return an array of selected files
