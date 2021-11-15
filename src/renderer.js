@@ -363,7 +363,6 @@ function createList() {
             <h5 class="material-icons">&#9776;</h5>
         </div>
         `;
-
         draggable_list.appendChild(listItem);
     });
 }
@@ -420,7 +419,7 @@ function addEventListener() {
 }
 
 //convert button handle
-const btn = document.querySelector("#btn");
+const btn = document.querySelector("#btnConvert");
 btn.addEventListener("click", () => {
     const rules = order;
     let factory = new RuleCreator();
@@ -661,10 +660,26 @@ const closeMenu = document.getElementById("close");
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
 
-$('.majorpoints').click(function(){
-    $(this).find('.hider').toggle();
-});
+// $('.majorpoints').click(function(){
+//     $(this).find('.hider').toggle();
+// });
 
-$('.listmajor').click(function(){
-    $(this).find('.hiders').toggle();
-});
+// $('.listmajor').click(function(){
+//     $(this).find('.hiders').toggle();
+// });
+
+var acc = document.getElementsByClassName("accordion-collapse");
+var i;
+
+for (i = 0; i<acc.length;i++){
+    acc[i].addEventListener("click",function(){
+        this.classList.toggle("active");
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
+          }
+    });
+}

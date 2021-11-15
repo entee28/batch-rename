@@ -24,8 +24,8 @@
           <a href="javascript:void(0)" class="closebtn" id="close">&times;</a>
           <h5>Batch rename final</h5>
             <div class="majorpoints">
-              <button id="ruleBtn" class="container-fluid">Expand rule</button>
-              <div class="hider accordion-collapse collapse" style="display:none" >
+              <button id="ruleBtn" class="accordion-collapse container-fluid">Expand rule</button>
+              <div class="rulebox" style="display: none;">
                 <ul class="container-fluid" id="rule-list">
                   <li>
                     <label for="extension">
@@ -108,8 +108,8 @@
             </div>
 
           <div class="listmajor">
-            <button id="rulelistBtn" class="container-fluid">Rule list</button>
-            <div class="hiders" style="display:none" >
+            <button id="rulelistBtn" class="accordion-collapse container-fluid">Rule list</button>
+            <div class="ruleList" style="display:none" >
               <section id="draggable-list-container">
                 <ul class="draggable-list container-fluid" id="draggable-list"></ul>
               </section>
@@ -144,7 +144,7 @@
             <div class="container-fluid">
               <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
               <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
-              <button id="btn" class="btn btn-primary">Convert</button>
+              <button id="btnConvert" class="btn btn-primary">Convert</button>
             </div>
           </footer>
         </section>
