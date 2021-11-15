@@ -151,14 +151,6 @@ ipc.on('error-handle', function (event, message) {
   dialog.showErrorBox('Error', `${message}`)
 })
 
-ipc.on('empty-handle', function (event, file) {
-  dialog.showErrorBox('Error', `Empty parameter!`)
-})
-
-ipc.on('invalid-handle', function (event, file) {
-  dialog.showErrorBox('Error', `Invalid counter parameter!`)
-})
-
 //function handle opening file dialog, return an array of selected files
 const openFile = () => {
   const files = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });

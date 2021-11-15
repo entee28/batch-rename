@@ -25,7 +25,7 @@ ipc.on("selected-file", function (event, files) {
             }
             addFileItem(files[i]);
         } catch (err) {
-            duplicateHandle(err);
+            errorHandle(err);
         }
     }
 });
@@ -47,7 +47,7 @@ ipc.on("selected-folder", function (event, folders) {
             }
             addFileItem(folders[i]);
         } catch (err) {
-            duplicateHandle(err);
+            errorHandle(err);
         }
     }
 });
@@ -174,17 +174,17 @@ ipc.on("selected-preset", function (event, preset) {
 });
 
 //Error handles
-const duplicateHandle = (message) => {
+const errorHandle = (message) => {
     ipc.send("error-handle", message);
 };
 
-const emptyHandle = (event) => {
-    ipc.send("empty-handle");
-};
+// const emptyHandle = (event) => {
+//     ipc.send("empty-handle");
+// };
 
-const invalidHandle = (event) => {
-    ipc.send("invalid-handle");
-};
+// const invalidHandle = (event) => {
+//     ipc.send("invalid-handle");
+// };
 
 //Drag and drop handle
 document.addEventListener("drop", (event) => {
@@ -195,13 +195,13 @@ document.addEventListener("drop", (event) => {
         for (const f of event.dataTransfer.files) {
             for (let j = 0; j < pathList.length; j++) {
                 if (f.path === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(f.path)} already existed!`;
                 }
             }
             addFileItem(f.path);
         }
     } catch (err) {
-        duplicateHandle();
+        errorHandle(err);
     }
 });
 
@@ -244,17 +244,15 @@ function addDelButton(parent) {
 function getExtensionParam() {
     const params = document.querySelectorAll(`input[name="extension-parameter"]`);
     let values = [];
-    try {
-        params.forEach((param) => {
-            if (param.value === "") {
-                throw err;
-            }
-            values.push(param.value);
-        });
-        return values;
-    } catch (err) {
-        emptyHandle();
-    }
+
+    params.forEach((param) => {
+        if (param.value === "") {
+            throw 'Empty parameters for change extension rule!';
+        }
+        values.push(param.value);
+    });
+    return values;
+
 }
 
 //FUNCTIONS GETTING RULES' PARAMETERS
@@ -271,49 +269,39 @@ function getCounterParam() {
     const params = document.querySelectorAll(`input[name="counter-parameter"]`);
     let values = [];
 
-    try {
-        if (
-            parseInt(params[0].value) < 0 ||
-            parseInt(params[1].value) < 1 ||
-            parseInt(params[2].value) < 1
-        ) {
-            throw err;
-        }
-        params.forEach((param) => {
-            if (param.value === "") {
-                values.push(1);
-            } else {
-                values.push(param.value);
-            }
-        });
-        return values;
-    } catch (err) {
-        invalidHandle();
+    if (
+        parseInt(params[0].value) < 0 ||
+        parseInt(params[1].value) < 1 ||
+        parseInt(params[2].value) < 1
+    ) {
+        throw "Invalid parameters for add counter rule!";
     }
+    params.forEach((param) => {
+        if (param.value === "") {
+            values.push(1);
+        } else {
+            values.push(param.value);
+        }
+    });
+    return values;
 }
 
 function getPrefixParam() {
-    try {
-        const prefix = document.getElementById("prefix");
-        if (prefix.value === "") {
-            throw err;
-        }
-        return prefix.value;
-    } catch (err) {
-        emptyHandle();
+    const prefix = document.getElementById("prefix");
+    if (prefix.value === "") {
+        throw "Empty parameters for add prefix rule!";
     }
+    return prefix.value;
+
 }
 
 function getSuffixParam() {
-    try {
-        const suffix = document.getElementById("suffix");
-        if (suffix.value === "") {
-            throw err;
-        }
-        return suffix.value;
-    } catch (err) {
-        emptyHandle();
+    const suffix = document.getElementById("suffix");
+    if (suffix.value === "") {
+        throw "Empty parameters for add prefix rule!";
     }
+    return suffix.value;
+
 }
 
 let order = []; //an array contains rule order
@@ -430,48 +418,52 @@ btn.addEventListener("click", () => {
         let name = path.parse(pathList[i]).name;
         let extension = path.extname(pathList[i]);
 
-        for (let j = 0; j < rules.length; j++) {
-            if (rules[j] === "extension") {
-                const params = getExtensionParam();
-                if (params) {
-                    extension = factory.invokeTransform(
-                        rules[j],
-                        extension,
-                        params[0],
-                        params[1]
-                    );
-                }
-            } else if (rules[j] === "replace-characters") {
-                const params = getReplaceParam();
-                if (params) {
-                    name = factory.invokeTransform(rules[j], name, params[0], params[1]);
-                }
-            } else if (rules[j] === "add-prefix") {
-                const prefix = getPrefixParam();
-                if (prefix) {
-                    name = factory.invokeTransform(rules[j], name, prefix);
-                }
-            } else if (rules[j] === "add-suffix") {
-                const suffix = getSuffixParam();
-                if (suffix) {
-                    name = factory.invokeTransform(rules[j], name, suffix);
-                }
-            } else if (rules[j] === "counter") {
-                const params = getCounterParam();
-                if (params) {
-                    let start = parseInt(params[0]);
-                    let steps = parseInt(params[1]) * i;
-                    let digits = parseInt(params[2]);
+        try {
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    const params = getExtensionParam();
+                    if (params) {
+                        extension = factory.invokeTransform(
+                            rules[j],
+                            extension,
+                            params[0],
+                            params[1]
+                        );
+                    }
+                } else if (rules[j] === "replace-characters") {
+                    const params = getReplaceParam();
+                    if (params) {
+                        name = factory.invokeTransform(rules[j], name, params[0], params[1]);
+                    }
+                } else if (rules[j] === "add-prefix") {
+                    const prefix = getPrefixParam();
+                    if (prefix) {
+                        name = factory.invokeTransform(rules[j], name, prefix);
+                    }
+                } else if (rules[j] === "add-suffix") {
+                    const suffix = getSuffixParam();
+                    if (suffix) {
+                        name = factory.invokeTransform(rules[j], name, suffix);
+                    }
+                } else if (rules[j] === "counter") {
+                    const params = getCounterParam();
+                    if (params) {
+                        let start = parseInt(params[0]);
+                        let steps = parseInt(params[1]) * i;
+                        let digits = parseInt(params[2]);
 
-                    let padding = start + steps;
-                    padding = padding.toString();
-                    while (padding.length < digits) padding = "0" + padding;
+                        let padding = start + steps;
+                        padding = padding.toString();
+                        while (padding.length < digits) padding = "0" + padding;
 
-                    name = factory.invokeTransform(rules[j], name, padding);
+                        name = factory.invokeTransform(rules[j], name, padding);
+                    }
+                } else {
+                    name = factory.invokeTransform(rules[j], name);
                 }
-            } else {
-                name = factory.invokeTransform(rules[j], name);
             }
+        } catch (err) {
+            errorHandle(err);
         }
 
         let newPath = path.join(pathList[i], "..", `${name}${extension}`);
