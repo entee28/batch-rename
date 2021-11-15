@@ -641,9 +641,9 @@ ruleMap.set("replace-characters", "Replace Characters");
 ruleMap.set("add-prefix", "Add Prefix");
 ruleMap.set("add-suffix", "Add Suffix");
 ruleMap.set("counter", "Add Counter");
-ruleMap.set("remove-space", "Remove All Space");
-ruleMap.set("lowercase", "Convert To Lower Case And No Space");
-ruleMap.set("pascalcase", "Convert To PascalCase");
+ruleMap.set("remove-space", "No Space");
+ruleMap.set("lowercase", "Lower Case & No Space");
+ruleMap.set("pascalcase", "PascalCase");
 
 function openNav() {
     document.getElementById("sideBar").style.width = "250px";
