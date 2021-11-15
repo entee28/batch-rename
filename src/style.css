@@ -176,3 +176,17 @@ h5{
       align-items: center;
       text-align: center;
   }
+
+  .active, .accordion-collapse:hover {
+    background-color: #fb752dab;
+  }
+
+  .rulebox{
+      display: none;
+      overflow: hidden;
+  }
+
+  .ruleList{
+    display: none;
+    overflow: hidden;
+  }
