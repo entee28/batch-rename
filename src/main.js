@@ -1,25 +1,27 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const ipc = require('electron').ipcMain;
 const dialog = require('electron').dialog;
-const { RuleCreator } = require('./rule-creator');
 const path = require('path');
 const fs = require('fs');
 require('electron-reloader')(module);
 require('electron').Menu;
 
+//check if program is run on MacOS
 const isMac = process.platform === 'darwin';
 
+//create window
 app.whenReady().then(() => {
   const win = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     }
   })
-  win.loadFile('src/index.html');
+  win.loadFile('src/index.html'); //load html
 
+  //create app menu
   const template = [
     //File menu
     {
@@ -28,7 +30,7 @@ app.whenReady().then(() => {
         {
           label: "Open File...",
           accelerator: "Ctrl+O",
-          click(event) {
+          click() {
             const files = openFile();
             if (files) win.webContents.send('selected-file', files)
           }
@@ -47,14 +49,15 @@ app.whenReady().then(() => {
           label: "Save Preset",
           accelerator: "Ctrl+S",
           click() {
-            savePreset();
+            win.webContents.send('save-preset');
           }
         },
         {
           label: "Load Preset",
           accelerator: "Ctrl+L",
           click() {
-            loadPreset();
+            const preset = loadPreset();
+            if (preset) win.webContents.send('selected-preset', preset)
           }
         },
         {
@@ -65,64 +68,43 @@ app.whenReady().then(() => {
     },
 
     //Edit menu
-    // {
-    //   label: 'Edit',
-    //   submenu: [
-    //     { role: 'undo' },
-    //     { role: 'redo' },
-    //     { type: 'separator' },
-    //     { role: 'cut' },
-    //     { role: 'copy' },
-    //     { role: 'paste' },
-    //     ...(isMac ? [
-    //       { role: 'pasteAndMatchStyle' },
-    //       { role: 'delete' },
-    //       { role: 'selectAll' },
-    //       { type: 'separator' },
-    //       {
-    //         label: 'Speech',
-    //         submenu: [
-    //           { role: 'startSpeaking' },
-    //           { role: 'stopSpeaking' }
-    //         ]
-    //       }
-    //     ] : [
-    //       { role: 'delete' },
-    //       { type: 'separator' },
-    //       { role: 'selectAll' }
-    //     ])
-    //   ]
-    // },
-
-    //View menu
     {
-      label: 'View',
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        ...(isMac ? [
+          { role: 'pasteAndMatchStyle' },
+          { role: 'delete' },
+          { role: 'selectAll' },
+          { type: 'separator' },
+          {
+            label: 'Speech',
+            submenu: [
+              { role: 'startSpeaking' },
+              { role: 'stopSpeaking' }
+            ]
+          }
+        ] : [
+          { role: 'delete' },
+          { type: 'separator' },
+          { role: 'selectAll' }
+        ])
+      ]
+    },
+
+    //Help menu
+    {
+      label: 'Help',
       submenu: [
         { role: 'reload' },
         { role: 'forceReload' },
         { role: 'toggleDevTools' },
         { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
-        { type: 'separator' },
-        { role: 'togglefullscreen' }
-      ]
-    },
-
-    //Window menu
-    {
-      label: 'Window',
-      submenu: [
-        { role: 'minimize' },
-        ...(isMac ? [
-          { type: 'separator' },
-          { role: 'front' },
-          { type: 'separator' },
-          { role: 'window' }
-        ] : [
-          { role: 'close' }
-        ])
       ]
     },
   ]
@@ -137,12 +119,14 @@ app.whenReady().then(() => {
   })
 })
 
+//handle closing app behavior on Windows & Linux
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 })
 
+//Open dialogs when received message from renderer process, then send the selected items back to renderer process 
 ipc.on('open-file-dialog', function (event) {
   const files = openFile();
   if (files) event.sender.send('selected-file', files);
@@ -162,6 +146,7 @@ ipc.on('save-preset-dialog', function (event, myJSON) {
   const file = savePreset(myJSON);
 })
 
+//show error box when received message from renderer process
 ipc.on('error-handle', function (event, file) {
   dialog.showErrorBox('Error', `Duplicate files detected!`)
 })
@@ -174,6 +159,7 @@ ipc.on('invalid-handle', function (event, file) {
   dialog.showErrorBox('Error', `Invalid counter parameter!`)
 })
 
+//function handle opening file dialog, return an array of selected files
 const openFile = () => {
   const files = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });
 
@@ -181,6 +167,7 @@ const openFile = () => {
   return files;
 }
 
+//function opening a JSON preset file, read then return a JSON string
 const loadPreset = () => {
   const preset = dialog.showOpenDialogSync({
     title: "Load Existing Preset",
@@ -197,6 +184,7 @@ const loadPreset = () => {
   return content;
 }
 
+//function handle opening folder dialog, return an array of selected folders
 const openFolder = () => {
   const folders = dialog.showOpenDialogSync({ properties: ['openDirectory', 'multiSelections'] });
 
@@ -204,6 +192,7 @@ const openFolder = () => {
   return folders;
 }
 
+//function handle save preset dialog
 const savePreset = (myJSON) => {
   const file = dialog.showSaveDialogSync({
     title: "Save Rule Preset",
