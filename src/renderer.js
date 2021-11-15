@@ -645,8 +645,15 @@ ruleMap.set("lowercase", "Lower Case & No Space");
 ruleMap.set("pascalcase", "PascalCase");
 
 function openNav() {
-    document.getElementById("sideBar").style.width = "250px";
-    document.getElementById("menu").style.marginLeft = "250px";
+    var e = document.getElementById("sideBar");
+    var f = document.getElementById("menu");
+    if(e.style.width == '250px'){
+        e.style.width = '0px';
+        f.style.marginLeft = '0px';
+    } else{
+        e.style.width = '250px'
+        f.style.marginLeft = '250px'
+    }
 }
 
 function closeNav() {
@@ -656,6 +663,8 @@ function closeNav() {
 
 const openMenu = document.getElementById("open");
 const closeMenu = document.getElementById("close");
+
+
 
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
@@ -683,3 +692,17 @@ for (i = 0; i<acc.length;i++){
           }
     });
 }
+
+$(".btn_body").click(function () {
+    $(this).find('i').toggleClass('fa-minus-circle fa-plus-circle');
+    if ($(".btn_body").not(this).find("i").hasClass("fa-minus-circle")) {
+        $(".btn_body").not(this).find("i").toggleClass('fa-minus-circle fa-plus-circle');
+    }
+});
+
+$(".btn_rule").click(function () {
+    $(this).find('i').toggleClass('fa-minus-circle fa-plus-circle');
+    if ($(".btn_rule").not(this).find("i").hasClass("fa-minus-circle")) {
+        $(".btn_rule").not(this).find("i").toggleClass('fa-minus-circle fa-plus-circle');
+    }
+});
