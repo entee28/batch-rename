@@ -558,7 +558,7 @@ function check(checked = true) {
     });
 }
 
-const selectBtn = document.querySelector("#select");
+const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
 
 function checkAll() {
