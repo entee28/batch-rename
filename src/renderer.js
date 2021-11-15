@@ -356,10 +356,10 @@ function createList() {
 
         listItem.setAttribute("data-index", index);
         listItem.innerHTML = `
-        <span class="number">${index + 1}</span>
+        <h5 class="number">${index + 1}</h5>
         <div class="draggable" draggable="true">
             <p class="rule-name">${properNames[index]}</p>
-            <span class="material-icons">reorder</span>
+            <h5 class="material-icons">&#9776;</h5>
         </div>
         `;
 
@@ -642,3 +642,11 @@ const closeMenu = document.getElementById("close");
 
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
+
+$('.majorpoints').click(function(){
+    $(this).find('.hider').toggle();
+});
+
+$('.listmajor').click(function(){
+    $(this).find('.hiders').toggle();
+});
