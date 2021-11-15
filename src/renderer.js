@@ -215,6 +215,7 @@ const addFileItem = (__filepath) => {
     const container = document.querySelector("#file-list-container");
     const item = document.createElement("tr");
     item.setAttribute("path", __filepath);
+    item.classList.add("item");
     item.innerHTML = `
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
@@ -422,7 +423,7 @@ const btn = document.querySelector("#btn");
 btn.addEventListener("click", () => {
     const rules = order;
     let factory = new RuleCreator();
-    const items = document.querySelectorAll(`li[class="item"]`);
+    const items = document.querySelectorAll(`tr[class="item"]`);
 
     for (let i = 0; i < pathList.length; i++) {
         let name = path.parse(pathList[i]).name;
@@ -472,10 +473,13 @@ btn.addEventListener("click", () => {
             }
         }
 
-        let newName = path.join(pathList[i], "..", `${name}${extension}`);
-        fs.rename(pathList[i], newName, function () {
-            pathList[i] = newName;
-            items[i].textContent = path.basename(newName);
+        let newPath = path.join(pathList[i], "..", `${name}${extension}`);
+        fs.rename(pathList[i], newPath, function () {
+            pathList[i] = newPath;
+            items[i].innerHTML = `
+            <td>${path.parse(newPath).name}</td>
+            <td>${path.extname(newPath)}</td>
+            `;
             addDelButton(items[i]);
         });
     }
