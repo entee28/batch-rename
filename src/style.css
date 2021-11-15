@@ -63,3 +63,81 @@ li {
     padding: 15px;
     flex: 1;
 }
+
+.col-lg-5{
+    position: relative;
+    align-items: center;
+}
+
+h5{
+    position: relative;
+    text-align: center;
+}
+
+.sidebar{
+    height: 100%; 
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+.openbtn {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+  }
+
+  .openbtn:hover {
+    background-color: #444;
+  }
+
+  #menu{
+    transition: margin-left .5s;
+    padding: 20px;
+  }
+
+  .sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+    background-color: #111;
+    color: white;
+  }
+
+  #savePresetBtn{
+      margin-right: 5px;
+      margin-left: 5px;
+  }
+
+  #selectall{
+      margin-left: 15px;
+      margin-top: 10px;
+  }
+
+  .table-striped{
+      position: relative;
+      margin-right: 10px;
+      width: 70%;
+  }
+
+  td,th{
+    text-align: center;
+  }
