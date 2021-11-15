@@ -198,14 +198,6 @@ const errorHandle = (message) => {
     ipc.send("error-handle", message);
 };
 
-// const emptyHandle = (event) => {
-//     ipc.send("empty-handle");
-// };
-
-// const invalidHandle = (event) => {
-//     ipc.send("invalid-handle");
-// };
-
 //Drag and drop handle
 document.addEventListener("drop", (event) => {
     event.preventDefault();
