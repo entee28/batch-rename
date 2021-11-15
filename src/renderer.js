@@ -694,15 +694,15 @@ for (i = 0; i<acc.length;i++){
 }
 
 $(".btn_body").click(function () {
-    $(this).find('i').toggleClass('fa-minus-circle fa-plus-circle');
-    if ($(".btn_body").not(this).find("i").hasClass("fa-minus-circle")) {
-        $(".btn_body").not(this).find("i").toggleClass('fa-minus-circle fa-plus-circle');
+    $(this).find('i').toggleClass('fa-minus fa-plus');
+    if ($(".btn_body").not(this).find("i").hasClass("fa-minus")) {
+        $(".btn_body").not(this).find("i").toggleClass('fa-minus fa-plus');
     }
 });
 
 $(".btn_rule").click(function () {
-    $(this).find('i').toggleClass('fa-minus-circle fa-plus-circle');
-    if ($(".btn_rule").not(this).find("i").hasClass("fa-minus-circle")) {
-        $(".btn_rule").not(this).find("i").toggleClass('fa-minus-circle fa-plus-circle');
+    $(this).find('i').toggleClass('fa-minus fa-plus');
+    if ($(".btn_rule").not(this).find("i").hasClass("fa-minus")) {
+        $(".btn_rule").not(this).find("i").toggleClass('fa-minus fa-plus');
     }
 });
