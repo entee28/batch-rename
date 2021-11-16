@@ -647,7 +647,7 @@ ruleMap.set("pascalcase", "PascalCase");
 function openNav() {
     var e = document.getElementById("sideBar");
     var f = document.getElementById("menu");
-    if(e.style.width == '250px'){
+    if(f.style.marginLeft == '250px'){
         e.style.width = '0px';
         f.style.marginLeft = '0px';
     } else{
@@ -677,7 +677,7 @@ closeMenu.addEventListener("click", closeNav);
 //     $(this).find('.hiders').toggle();
 // });
 
-var acc = document.getElementsByClassName("accordion-collapse");
+var acc = document.getElementsByClassName("btn_rule");
 var i;
 
 for (i = 0; i<acc.length;i++){
@@ -689,6 +689,22 @@ for (i = 0; i<acc.length;i++){
             panel.style.display = "block";
           } else {
             panel.style.display = "none";
+          }
+    });
+}
+
+var lol = document.getElementsByClassName("btn_body");
+var j;
+
+for (j = 0; j<lol.length;j++){
+    lol[j].addEventListener("click",function(){
+        this.classList.toggle("active");
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
           }
     });
 }
