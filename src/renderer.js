@@ -15,17 +15,18 @@ openFileBtn.addEventListener("click", function (event) {
 
 //this listen "selected-file" channel, when new files are selected listener would load these files into the program 
 ipc.on("selected-file", function (event, files) {
-    try {
-        for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < files.length; i++) {
+        try {
+
             for (let j = 0; j < pathList.length; j++) {
                 if (files[i] === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(files[i])} already existed!`;
                 }
             }
             addFileItem(files[i]);
+        } catch (err) {
+            errorHandle(err);
         }
-    } catch (err) {
-        duplicateHandle();
     }
 });
 
@@ -37,17 +38,17 @@ openFolderBtn.addEventListener("click", function (event) {
 
 //listener when folders are selected
 ipc.on("selected-folder", function (event, folders) {
-    try {
-        for (let i = 0; i < folders.length; i++) {
+    for (let i = 0; i < folders.length; i++) {
+        try {
             for (let j = 0; j < pathList.length; j++) {
                 if (folders[i] === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(folders[i])} already existed!`;
                 }
             }
             addFileItem(folders[i]);
+        } catch (err) {
+            errorHandle(err);
         }
-    } catch (err) {
-        duplicateHandle();
     }
 });
 
@@ -63,42 +64,62 @@ function savePreset() {
     let JSONObj = []; //an array of JSON string, contains every thing we need to recreate a rule
     let JSONStr = null;
 
-    for (let j = 0; j < rules.length; j++) {
-        if (rules[j] === "extension") {
-            const params = getExtensionParam(); //get rule parameters
-            if (params) {
-                JSONStr = factory.toJSON(rules[j], params[0], params[1]); //call toJSON function from factory, convert rule to JSON string
-                JSONObj.push(JSONStr); //push JSON string into an array
-            }
-        } else if (rules[j] === "replace-characters") {
-            const params = getReplaceParam();
-            if (params) {
-                JSONStr = factory.toJSON(rules[j], params[0], params[1]);
-                JSONObj.push(JSONStr);
-            }
-        } else if (rules[j] === "add-prefix") {
-            const prefix = getPrefixParam();
-            if (prefix) {
-                JSONStr = factory.toJSON(rules[j], prefix);
-                JSONObj.push(JSONStr);
-            }
-        } else if (rules[j] === "add-suffix") {
-            const suffix = getSuffixParam();
-            if (suffix) {
-                JSONStr = factory.toJSON(rules[j], suffix);
-                JSONObj.push(JSONStr);
-            }
-        } else {
-            JSONStr = factory.toJSON(rules[j]);
-            JSONObj.push(JSONStr);
+    try {
+        if(rules.length === 0) {
+            throw "No rules have been chosen!"
         }
+
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === "extension") {
+                getExtensionParam();
+            } else if (rules[j] === "add-prefix") {
+                getPrefixParam();
+            } else if (rules[j] === "add-suffix") {
+                getSuffixParam();
+            } else if (rules[j] === "counter") {
+                getCounterParam();
+            }
+        }
+
+        for (let j = 0; j < rules.length; j++) {
+            if (rules[j] === "extension") {
+                const params = getExtensionParam(); //get rule parameters
+                if (params) {
+                    JSONStr = factory.toJSON(rules[j], params[0], params[1]); //call toJSON function from factory, convert rule to JSON string
+                    JSONObj.push(JSONStr); //push JSON string into an array
+                }
+            } else if (rules[j] === "replace-characters") {
+                const params = getReplaceParam();
+                if (params) {
+                    JSONStr = factory.toJSON(rules[j], params[0], params[1]);
+                    JSONObj.push(JSONStr);
+                }
+            } else if (rules[j] === "add-prefix") {
+                const prefix = getPrefixParam();
+                if (prefix) {
+                    JSONStr = factory.toJSON(rules[j], prefix);
+                    JSONObj.push(JSONStr);
+                }
+            } else if (rules[j] === "add-suffix") {
+                const suffix = getSuffixParam();
+                if (suffix) {
+                    JSONStr = factory.toJSON(rules[j], suffix);
+                    JSONObj.push(JSONStr);
+                }
+            } else {
+                JSONStr = factory.toJSON(rules[j]);
+                JSONObj.push(JSONStr);
+            }
+        }
+
+        JSONStr = JSON.stringify(order); //convert the rule order array to JSON string
+        JSONObj.push(JSONStr);
+
+        const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
+        ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
+    } catch(err) {
+        errorHandle(err);
     }
-
-    JSONStr = JSON.stringify(order); //convert the rule order array to JSON string
-    JSONObj.push(JSONStr);
-
-    const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
-    ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
 }
 
 //Handle save preset button event
@@ -173,16 +194,8 @@ ipc.on("selected-preset", function (event, preset) {
 });
 
 //Error handles
-const duplicateHandle = (event) => {
-    ipc.send("error-handle");
-};
-
-const emptyHandle = (event) => {
-    ipc.send("empty-handle");
-};
-
-const invalidHandle = (event) => {
-    ipc.send("invalid-handle");
+const errorHandle = (message) => {
+    ipc.send("error-handle", message);
 };
 
 //Drag and drop handle
@@ -194,13 +207,13 @@ document.addEventListener("drop", (event) => {
         for (const f of event.dataTransfer.files) {
             for (let j = 0; j < pathList.length; j++) {
                 if (f.path === pathList[j]) {
-                    throw err;
+                    throw `${path.basename(f.path)} already existed!`;
                 }
             }
             addFileItem(f.path);
         }
     } catch (err) {
-        duplicateHandle();
+        errorHandle(err);
     }
 });
 
@@ -213,10 +226,13 @@ document.addEventListener("dragover", (e) => {
 const addFileItem = (__filepath) => {
     pathList.push(__filepath);
     const container = document.querySelector("#file-list-container");
-    const item = document.createElement("li");
-    item.classList.add("item");
-    item.textContent = path.basename(__filepath);
+    const item = document.createElement("tr");
     item.setAttribute("path", __filepath);
+    item.classList.add("item");
+    item.innerHTML = `
+    <td>${path.parse(__filepath).name}</td>
+    <td>${path.extname(__filepath)}</td>
+    `;
     addDelButton(item);
     container.appendChild(item);
 };
@@ -225,7 +241,7 @@ const addFileItem = (__filepath) => {
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add("btn");
-    const delIcon = document.createElement("i");
+    const delIcon = document.createElement("td");
     delIcon.classList.add("fa");
     delIcon.classList.add("fa-trash");
     delBtn.appendChild(delIcon);
@@ -240,17 +256,15 @@ function addDelButton(parent) {
 function getExtensionParam() {
     const params = document.querySelectorAll(`input[name="extension-parameter"]`);
     let values = [];
-    try {
-        params.forEach((param) => {
-            if (param.value === "") {
-                throw err;
-            }
-            values.push(param.value);
-        });
-        return values;
-    } catch (err) {
-        emptyHandle();
-    }
+
+    params.forEach((param) => {
+        if (param.value === "") {
+            throw 'Empty parameters for change extension rule!';
+        }
+        values.push(param.value);
+    });
+    return values;
+
 }
 
 //FUNCTIONS GETTING RULES' PARAMETERS
@@ -267,49 +281,39 @@ function getCounterParam() {
     const params = document.querySelectorAll(`input[name="counter-parameter"]`);
     let values = [];
 
-    try {
-        if (
-            parseInt(params[0].value) < 0 ||
-            parseInt(params[1].value) < 1 ||
-            parseInt(params[2].value) < 1
-        ) {
-            throw err;
-        }
-        params.forEach((param) => {
-            if (param.value === "") {
-                values.push(1);
-            } else {
-                values.push(param.value);
-            }
-        });
-        return values;
-    } catch (err) {
-        invalidHandle();
+    if (
+        parseInt(params[0].value) < 0 ||
+        parseInt(params[1].value) < 1 ||
+        parseInt(params[2].value) < 1
+    ) {
+        throw "Invalid parameters for add counter rule!";
     }
+    params.forEach((param) => {
+        if (param.value === "") {
+            values.push(1);
+        } else {
+            values.push(param.value);
+        }
+    });
+    return values;
 }
 
 function getPrefixParam() {
-    try {
-        const prefix = document.getElementById("prefix");
-        if (prefix.value === "") {
-            throw err;
-        }
-        return prefix.value;
-    } catch (err) {
-        emptyHandle();
+    const prefix = document.getElementById("prefix");
+    if (prefix.value === "") {
+        throw "Empty parameters for add prefix rule!";
     }
+    return prefix.value;
+
 }
 
 function getSuffixParam() {
-    try {
-        const suffix = document.getElementById("suffix");
-        if (suffix.value === "") {
-            throw err;
-        }
-        return suffix.value;
-    } catch (err) {
-        emptyHandle();
+    const suffix = document.getElementById("suffix");
+    if (suffix.value === "") {
+        throw "Empty parameters for add suffix rule!";
     }
+    return suffix.value;
+
 }
 
 let order = []; //an array contains rule order
@@ -353,13 +357,12 @@ function createList() {
 
         listItem.setAttribute("data-index", index);
         listItem.innerHTML = `
-        <span class="number">${index + 1}</span>
+        <h5 class="number">${index + 1}</h5>
         <div class="draggable" draggable="true">
             <p class="rule-name">${properNames[index]}</p>
-            <span class="material-icons">reorder</span>
+            <h5 class="material-icons">&#9776;</h5>
         </div>
         `;
-
         draggable_list.appendChild(listItem);
     });
 }
@@ -416,64 +419,83 @@ function addEventListener() {
 }
 
 //convert button handle
-const btn = document.querySelector("#btn");
+const btn = document.querySelector("#btnConvert");
 btn.addEventListener("click", () => {
     const rules = order;
     let factory = new RuleCreator();
-    const items = document.querySelectorAll(`li[class="item"]`);
+    const items = document.querySelectorAll(`tr[class="item"]`);
 
     for (let i = 0; i < pathList.length; i++) {
         let name = path.parse(pathList[i]).name;
         let extension = path.extname(pathList[i]);
 
-        for (let j = 0; j < rules.length; j++) {
-            if (rules[j] === "extension") {
-                const params = getExtensionParam();
-                if (params) {
-                    extension = factory.invokeTransform(
-                        rules[j],
-                        extension,
-                        params[0],
-                        params[1]
-                    );
+        try {
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    getExtensionParam();
+                } else if (rules[j] === "add-prefix") {
+                    getPrefixParam();
+                } else if (rules[j] === "add-suffix") {
+                    getSuffixParam();
+                } else if (rules[j] === "counter") {
+                    getCounterParam();
                 }
-            } else if (rules[j] === "replace-characters") {
-                const params = getReplaceParam();
-                if (params) {
-                    name = factory.invokeTransform(rules[j], name, params[0], params[1]);
-                }
-            } else if (rules[j] === "add-prefix") {
-                const prefix = getPrefixParam();
-                if (prefix) {
-                    name = factory.invokeTransform(rules[j], name, prefix);
-                }
-            } else if (rules[j] === "add-suffix") {
-                const suffix = getSuffixParam();
-                if (suffix) {
-                    name = factory.invokeTransform(rules[j], name, suffix);
-                }
-            } else if (rules[j] === "counter") {
-                const params = getCounterParam();
-                if (params) {
-                    let start = parseInt(params[0]);
-                    let steps = parseInt(params[1]) * i;
-                    let digits = parseInt(params[2]);
-
-                    let padding = start + steps;
-                    padding = padding.toString();
-                    while (padding.length < digits) padding = "0" + padding;
-
-                    name = factory.invokeTransform(rules[j], name, padding);
-                }
-            } else {
-                name = factory.invokeTransform(rules[j], name);
             }
+
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    const params = getExtensionParam();
+                    if (params) {
+                        extension = factory.invokeTransform(
+                            rules[j],
+                            extension,
+                            params[0],
+                            params[1]
+                        );
+                    }
+                } else if (rules[j] === "replace-characters") {
+                    const params = getReplaceParam();
+                    if (params) {
+                        name = factory.invokeTransform(rules[j], name, params[0], params[1]);
+                    }
+                } else if (rules[j] === "add-prefix") {
+                    const prefix = getPrefixParam();
+                    if (prefix) {
+                        name = factory.invokeTransform(rules[j], name, prefix);
+                    }
+                } else if (rules[j] === "add-suffix") {
+                    const suffix = getSuffixParam();
+                    if (suffix) {
+                        name = factory.invokeTransform(rules[j], name, suffix);
+                    }
+                } else if (rules[j] === "counter") {
+                    const params = getCounterParam();
+                    if (params) {
+                        let start = parseInt(params[0]);
+                        let steps = parseInt(params[1]) * i;
+                        let digits = parseInt(params[2]);
+
+                        let padding = start + steps;
+                        padding = padding.toString();
+                        while (padding.length < digits) padding = "0" + padding;
+
+                        name = factory.invokeTransform(rules[j], name, padding);
+                    }
+                } else {
+                    name = factory.invokeTransform(rules[j], name);
+                }
+            }
+        } catch (err) {
+            errorHandle(err);
         }
 
-        let newName = path.join(pathList[i], "..", `${name}${extension}`);
-        fs.rename(pathList[i], newName, function () {
-            pathList[i] = newName;
-            items[i].textContent = path.basename(newName);
+        let newPath = path.join(pathList[i], "..", `${name}${extension}`);
+        fs.rename(pathList[i], newPath, function () {
+            pathList[i] = newPath;
+            items[i].innerHTML = `
+            <td>${path.parse(newPath).name}</td>
+            <td>${path.extname(newPath)}</td>
+            `;
             addDelButton(items[i]);
         });
     }
@@ -556,7 +578,7 @@ function check(checked = true) {
     });
 }
 
-const selectBtn = document.querySelector("#select");
+const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
 
 function checkAll() {
@@ -612,18 +634,26 @@ function convertOrderToName() {
 }
 
 const ruleMap = new Map();
+
 ruleMap.set("extension", "Change File Extension");
 ruleMap.set("replace-characters", "Replace Characters");
 ruleMap.set("add-prefix", "Add Prefix");
 ruleMap.set("add-suffix", "Add Suffix");
 ruleMap.set("counter", "Add Counter");
-ruleMap.set("remove-space", "Remove All Space");
-ruleMap.set("lowercase", "Convert To Lower Case And No Space");
-ruleMap.set("pascalcase", "Convert To PascalCase");
+ruleMap.set("remove-space", "No Space");
+ruleMap.set("lowercase", "Lower Case & No Space");
+ruleMap.set("pascalcase", "PascalCase");
 
 function openNav() {
-    document.getElementById("sideBar").style.width = "250px";
-    document.getElementById("menu").style.marginLeft = "250px";
+    var e = document.getElementById("sideBar");
+    var f = document.getElementById("menu");
+    if(f.style.marginLeft == '250px'){
+        e.style.width = '0px';
+        f.style.marginLeft = '0px';
+    } else{
+        e.style.width = '250px'
+        f.style.marginLeft = '250px'
+    }
 }
 
 function closeNav() {
@@ -634,5 +664,77 @@ function closeNav() {
 const openMenu = document.getElementById("open");
 const closeMenu = document.getElementById("close");
 
+
+
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
+
+// $('.majorpoints').click(function(){
+//     $(this).find('.hider').toggle();
+// });
+
+// $('.listmajor').click(function(){
+//     $(this).find('.hiders').toggle();
+// });
+
+var acc = document.getElementsByClassName("btn_rule");
+var i;
+
+for (i = 0; i<acc.length;i++){
+    acc[i].addEventListener("click",function(){
+        this.classList.toggle("active");
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "none") {
+            panel.style.display = "block";
+          } else {
+            panel.style.display = "none";
+          }
+    });
+}
+
+var lol = document.getElementsByClassName("btn_body");
+var j;
+
+for (j = 0; j<lol.length;j++){
+    lol[j].addEventListener("click",function(){
+        this.classList.toggle("active");
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
+          }
+    });
+}
+
+document.getElementById("ruleBtn").addEventListener('click', function(){
+    const icon = this.querySelector("i");
+    const text = this.querySelector("span");
+
+    if (icon.classList.contains('fa-chevron-down')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+        text.innerHTML = 'Expand rule ';
+      } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        text.innerHTML = 'Retract rule ';
+      }
+})
+
+document.getElementById("rulelistBtn").addEventListener('click', function(){
+    const icon = this.querySelector("i");
+    const text = this.querySelector("span");
+
+    if (icon.classList.contains('fa-chevron-down')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+        text.innerHTML = 'Expand list rule ';
+      } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        text.innerHTML = 'Retract list rule ';
+      }
+})
