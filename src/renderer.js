@@ -198,14 +198,6 @@ const errorHandle = (message) => {
     ipc.send("error-handle", message);
 };
 
-// const emptyHandle = (event) => {
-//     ipc.send("empty-handle");
-// };
-
-// const invalidHandle = (event) => {
-//     ipc.send("invalid-handle");
-// };
-
 //Drag and drop handle
 document.addEventListener("drop", (event) => {
     event.preventDefault();
@@ -249,7 +241,7 @@ const addFileItem = (__filepath) => {
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("button"));
     delBtn.classList.add("btn");
-    const delIcon = document.createElement("i");
+    const delIcon = document.createElement("td");
     delIcon.classList.add("fa");
     delIcon.classList.add("fa-trash");
     delBtn.appendChild(delIcon);
@@ -365,13 +357,12 @@ function createList() {
 
         listItem.setAttribute("data-index", index);
         listItem.innerHTML = `
-        <span class="number">${index + 1}</span>
+        <h5 class="number">${index + 1}</h5>
         <div class="draggable" draggable="true">
             <p class="rule-name">${properNames[index]}</p>
-            <span class="material-icons">reorder</span>
+            <h5 class="material-icons">&#9776;</h5>
         </div>
         `;
-
         draggable_list.appendChild(listItem);
     });
 }
@@ -428,7 +419,7 @@ function addEventListener() {
 }
 
 //convert button handle
-const btn = document.querySelector("#btn");
+const btn = document.querySelector("#btnConvert");
 btn.addEventListener("click", () => {
     const rules = order;
     let factory = new RuleCreator();
@@ -649,13 +640,20 @@ ruleMap.set("replace-characters", "Replace Characters");
 ruleMap.set("add-prefix", "Add Prefix");
 ruleMap.set("add-suffix", "Add Suffix");
 ruleMap.set("counter", "Add Counter");
-ruleMap.set("remove-space", "Remove All Space");
-ruleMap.set("lowercase", "Convert To Lower Case And No Space");
-ruleMap.set("pascalcase", "Convert To PascalCase");
+ruleMap.set("remove-space", "No Space");
+ruleMap.set("lowercase", "Lower Case & No Space");
+ruleMap.set("pascalcase", "PascalCase");
 
 function openNav() {
-    document.getElementById("sideBar").style.width = "250px";
-    document.getElementById("menu").style.marginLeft = "250px";
+    var e = document.getElementById("sideBar");
+    var f = document.getElementById("menu");
+    if(f.style.marginLeft == '250px'){
+        e.style.width = '0px';
+        f.style.marginLeft = '0px';
+    } else{
+        e.style.width = '250px'
+        f.style.marginLeft = '250px'
+    }
 }
 
 function closeNav() {
@@ -666,5 +664,77 @@ function closeNav() {
 const openMenu = document.getElementById("open");
 const closeMenu = document.getElementById("close");
 
+
+
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
+
+// $('.majorpoints').click(function(){
+//     $(this).find('.hider').toggle();
+// });
+
+// $('.listmajor').click(function(){
+//     $(this).find('.hiders').toggle();
+// });
+
+var acc = document.getElementsByClassName("btn_rule");
+var i;
+
+for (i = 0; i<acc.length;i++){
+    acc[i].addEventListener("click",function(){
+        this.classList.toggle("active");
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "none") {
+            panel.style.display = "block";
+          } else {
+            panel.style.display = "none";
+          }
+    });
+}
+
+var lol = document.getElementsByClassName("btn_body");
+var j;
+
+for (j = 0; j<lol.length;j++){
+    lol[j].addEventListener("click",function(){
+        this.classList.toggle("active");
+
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
+          }
+    });
+}
+
+document.getElementById("ruleBtn").addEventListener('click', function(){
+    const icon = this.querySelector("i");
+    const text = this.querySelector("span");
+
+    if (icon.classList.contains('fa-chevron-down')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+        text.innerHTML = 'Expand rule ';
+      } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        text.innerHTML = 'Retract rule ';
+      }
+})
+
+document.getElementById("rulelistBtn").addEventListener('click', function(){
+    const icon = this.querySelector("i");
+    const text = this.querySelector("span");
+
+    if (icon.classList.contains('fa-chevron-down')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+        text.innerHTML = 'Expand list rule ';
+      } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        text.innerHTML = 'Retract list rule ';
+      }
+})

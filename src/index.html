@@ -10,6 +10,7 @@
   <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../node_modules/material-design-icons/iconfont/material-icons.css">
   <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="../node_modules/bootstrap/dist/js/bootstrap.min.js">
   <link rel="stylesheet" href="style.css">
   <title>Batch Rename</title>
 </head>
@@ -21,104 +22,109 @@
       <div class="col-lg-3">
         <div id="sideBar" class="sidebar">
           <a href="javascript:void(0)" class="closebtn" id="close">&times;</a>
-          <h5>Batch rename final</h5>
-          <ul class="container-fluid" id="rule-list">
-            <li>
-              <label for="extension">
-                <input type="checkbox" id="extension" name="renaming-rules" value="extension"> Change File Extension
-              </label>
-              <!-- <label for="extension-needle">Needle: </label> -->
-              <input type="text" id="extension-needle" name="extension-parameter" placeholder="Needle..." disabled>
-              <!-- <label for="extension-replacement">Replacement: </label> -->
-              <input type="text" id="extension-replacement" name="extension-parameter" placeholder="Replacement..."
-                disabled>
-            </li>
+            <div class="majorpoints">
+              <button id="ruleBtn" class="accordion-collapse container-fluid btn_rule">
+                <span>Retract rule </span><i class="fa fa-chevron-down"></i></button>
+              <div class="rulebox" style="display: none;">
+                <ul class="container-fluid" id="rule-list">
+                  <li>
+                    <label for="extension">
+                      <input type="checkbox" id="extension" name="renaming-rules" value="extension"> Change File Extension
+                    </label>
+                    <!-- <label for="extension-needle">Needle: </label> -->
+                    <input type="text" id="extension-needle" name="extension-parameter" placeholder="Needle..." disabled>
+                    <!-- <label for="extension-replacement">Replacement: </label> -->
+                    <input type="text" id="extension-replacement" name="extension-parameter" placeholder="Replacement..."
+                      disabled>
+                  </li>
+      
+                  <li>
+                    <label for="remove-space">
+                      <input type="checkbox" id="remove-space" name="renaming-rules" value="remove-space"> Remove All Space
+                    </label>
+                  </li>
+      
+                  <li>
+                    <label for="replace-characters">
+                      <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters"> Replace
+                      Characters
+                    </label>
+                    <!-- <label for="needle">Needle: </label> -->
+                    <input type="text" id="needle" name="replace-parameter" placeholder="Needle..." disabled>
+                    <!-- <label for="replacement">Replacement: </label> -->
+                    <input type="text" id="replacement" name="replace-parameter" placeholder="Replacement..." disabled>
+                  </li>
+      
+                  <li>
+                    <label for="add-prefix">
+                      <input type="checkbox" id="add-prefix" name="renaming-rules" value="add-prefix"> Add Prefix
+                    </label>
+                    <!-- <label for="prefix">Prefix: </label> -->
+                    <input type="text" id="prefix" name="prefix-parameter" placeholder="Prefix..." disabled>
+                  </li>
+      
+                  <li>
+                    <label for="add-suffix">
+                      <input type="checkbox" id="add-suffix" name="renaming-rules" value="add-suffix"> Add Suffix
+                    </label>
+                    <!-- <label for="suffix">Suffix: </label> -->
+                    <input type="text" id="suffix" name="suffix-parameter" placeholder="Suffix..." disabled>
+                  </li>
+      
+                  <li>
+                    <label for="lowercase">
+                      <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case And
+                      No
+                      Space
+                    </label>
+                  </li>
+      
+                  <li>
+                    <label for="pascalcase">
+                      <input type="checkbox" id="pascalcase" name="renaming-rules" value="pascalcase"> Convert To PascalCase
+                    </label>
+                  </li>
+      
+                  <li>
+                    <label for="counter">
+                      <input type="checkbox" id="counter" name="renaming-rules" value="counter"> Add Counter
+                    </label>
+                    <!-- <label for="start">Start: </label> -->
+                    <input type="number" id="start" name="counter-parameter" placeholder="Start value..." min="0" disabled>
+                    <!-- <label for="step">Steps: </label> -->
+                    <input type="number" id="step" name="counter-parameter" placeholder="Steps..." min="1" disabled>
+                    <!-- <label for="digits">Number of digits: </label> -->
+                    <input type="number" id="digits" name="counter-parameter" placeholder="Number of digits..." min="1"
+                      disabled>
+                  </li>
+                </ul>
+      
+                <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
+                <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
+                <button id="selectall" class="btn btn-primary">Select / Unselect All Rules</button>
+              </div>
+            </div>
 
-            <li>
-              <label for="remove-space">
-                <input type="checkbox" id="remove-space" name="renaming-rules" value="remove-space"> Remove All Space
-              </label>
-            </li>
-
-            <li>
-              <label for="replace-characters">
-                <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters"> Replace
-                Characters
-              </label>
-              <!-- <label for="needle">Needle: </label> -->
-              <input type="text" id="needle" name="replace-parameter" placeholder="Needle..." disabled>
-              <!-- <label for="replacement">Replacement: </label> -->
-              <input type="text" id="replacement" name="replace-parameter" placeholder="Replacement..." disabled>
-            </li>
-
-            <li>
-              <label for="add-prefix">
-                <input type="checkbox" id="add-prefix" name="renaming-rules" value="add-prefix"> Add Prefix
-              </label>
-              <!-- <label for="prefix">Prefix: </label> -->
-              <input type="text" id="prefix" name="prefix-parameter" placeholder="Prefix..." disabled>
-            </li>
-
-            <li>
-              <label for="add-suffix">
-                <input type="checkbox" id="add-suffix" name="renaming-rules" value="add-suffix"> Add Suffix
-              </label>
-              <!-- <label for="suffix">Suffix: </label> -->
-              <input type="text" id="suffix" name="suffix-parameter" placeholder="Suffix..." disabled>
-            </li>
-
-            <li>
-              <label for="lowercase">
-                <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case And
-                No
-                Space
-              </label>
-            </li>
-
-            <li>
-              <label for="pascalcase">
-                <input type="checkbox" id="pascalcase" name="renaming-rules" value="pascalcase"> Convert To PascalCase
-              </label>
-            </li>
-
-            <li>
-              <label for="counter">
-                <input type="checkbox" id="counter" name="renaming-rules" value="counter"> Add Counter
-              </label>
-              <!-- <label for="start">Start: </label> -->
-              <input type="number" id="start" name="counter-parameter" placeholder="Start value..." min="0" disabled>
-              <!-- <label for="step">Steps: </label> -->
-              <input type="number" id="step" name="counter-parameter" placeholder="Steps..." min="1" disabled>
-              <!-- <label for="digits">Number of digits: </label> -->
-              <input type="number" id="digits" name="counter-parameter" placeholder="Number of digits..." min="1"
-                disabled>
-            </li>
-          </ul>
-
-          <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
-          <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
-          <button id="selectall" class="btn btn-primary">Select / Unselect All Rules</button>
-  
-          <p id="result"></p>
-
-          <hr>
-          
-          <h5>Rule list</h5>
-          <section id="draggable-list-container">
-            <ul class="draggable-list" id="draggable-list"></ul>
-          </section>
+          <div class="listmajor">
+            <button id="rulelistBtn" class="accordion-collapse container-fluid btn_body">
+              <span>Expand list rule </span><i class="fa fa-chevron-right"></i></button>
+            <div class="ruleList" style="display:none" >
+              <section id="draggable-list-container">
+                <ul class="draggable-list container-fluid" id="draggable-list"></ul>
+              </section>
+            </div>
+          </div>
         </div>
 
         <div id="menu">
           <button class="openbtn" id="open">&#9776;</button>
         </div>
-
-
       </div>
 
       <div class="col-lg-9">
         <section>
-          <table class="table table-striped table-bordered">
+          <h1>Batch Rename</h1>
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>File name</th>
@@ -133,10 +139,9 @@
         <section>
           <footer>
             <div class="container-fluid">
-              <h1>Batch Rename</h1>
               <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
               <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
-              <button id="btn" class="btn btn-primary">Convert</button>
+              <button id="btnConvert" class="btn btn-primary">Convert</button>
             </div>
           </footer>
         </section>
@@ -145,6 +150,7 @@
   </section>
 
   <script src="./renderer.js"></script>
+  
 
 </body>
 

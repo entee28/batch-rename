@@ -28,9 +28,12 @@ li {
 }
 
 .draggable-list li {
-    background-color: #fff;
+    background-color: #47464d;
+    color: #ffffff;
     display: flex;
     flex: 1;
+    height: 45px;
+    text-align: left center;
 }
 
 .draggable-list li:not(:last-of-type) {
@@ -38,13 +41,14 @@ li {
 }
 
 .draggable-list .number {
-    background-color: var(--background-color);
+    background-color: #fb742d;
+    color: #000000 ;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    height: 60px;
-    width: 60px;
+    height: 45px;
+    width: 40px;
 }
 
 .draggable-list li.over .draggable {
@@ -52,7 +56,7 @@ li {
 }
 
 .draggable-list .rule-name {
-    margin: 0 20px 0 0;
+    padding-top: 10px;
 }
 
 .draggable {
@@ -76,7 +80,7 @@ h5{
 
 .sidebar{
     height: 100%; 
-    width: 0;
+    width: 250px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -84,16 +88,8 @@ h5{
     overflow-x: hidden;
     padding-top: 60px;
     transition: 0.5s;
+    background-color: aliceblue;
 }
-
-.sidebar .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
 .openbtn {
     font-size: 20px;
     cursor: pointer;
@@ -108,7 +104,8 @@ h5{
   }
 
   #menu{
-    transition: margin-left .5s;
+    margin-left: 250px;
+    transition: margin-left .4s;
     padding: 20px;
   }
 
@@ -132,12 +129,44 @@ h5{
       margin-top: 10px;
   }
 
-  .table-striped{
+  .table-bordered{
       position: relative;
       margin-right: 10px;
       width: 70%;
+      border: 2px solid #fb742d;
   }
 
   td,th{
     text-align: center;
+  }
+
+  #ruleBtn{
+    padding-top: 6px;
+    height: 35px;
+    text-align: center;
+    align-items: center;
+    background-color: #fb742d;
+    color: #000000;
+    font-size: 16px;
+    text-decoration: solid;
+    cursor: pointer;
+  }
+
+  #rulelistBtn{
+    padding-top: 6px;
+    height: 35px;
+    text-align: center;
+    align-items: center;
+    background-color: #fb742d;
+    color: #000000;
+    font-size: 16px;
+    text-decoration: solid;
+  }
+  .active, .accordion-collapse:hover {
+    background-color: #fb742d;
+  }
+
+  .ruleList{
+    display: none;
+    overflow: hidden;
   }
