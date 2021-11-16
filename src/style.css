@@ -162,12 +162,6 @@ h5{
     font-size: 16px;
     text-decoration: solid;
   }
-
-  .fa-trash{
-      align-items: center;
-      text-align: center;
-  }
-
   .active, .accordion-collapse:hover {
     background-color: #fb742d;
   }

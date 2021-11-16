@@ -685,24 +685,40 @@ for (i = 0; i<acc.length;i++){
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
-          } else {
+        if (panel.style.display === "none") {
             panel.style.display = "block";
+          } else {
+            panel.style.display = "none";
           }
     });
 }
 
-$(".btn_body").click(function () {
-    $(this).find('i').toggleClass('fa-chevron-down fa-chevron-right');
-    if ($(".btn_body").not(this).find("i").hasClass("fa-chevron-down")) {
-        $(".btn_body").not(this).find("i").toggleClass('fa-chevron-down fa-chevron-right');
-    }
-});
+document.getElementById("ruleBtn").addEventListener('click', function(){
+    const icon = this.querySelector("i");
+    const text = this.querySelector("span");
 
-$(".btn_rule").click(function () {
-    $(this).find('i').toggleClass('fa-chevron-down fa-chevron-right');
-    if ($(".btn_rule").not(this).find("i").hasClass("fa-chevron-down")) {
-        $(".btn_rule").not(this).find("i").toggleClass('fa-chevron-down fa-chevron-right');
-    }
-});
+    if (icon.classList.contains('fa-chevron-down')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+        text.innerHTML = 'Expand rule ';
+      } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        text.innerHTML = 'Retract rule ';
+      }
+})
+
+document.getElementById("rulelistBtn").addEventListener('click', function(){
+    const icon = this.querySelector("i");
+    const text = this.querySelector("span");
+
+    if (icon.classList.contains('fa-chevron-down')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+        text.innerHTML = 'Expand list rule ';
+      } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        text.innerHTML = 'Retract list rule ';
+      }
+})
