@@ -716,11 +716,11 @@ document.getElementById("ruleBtn").addEventListener('click', function(){
     if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
-        text.innerHTML = 'Expand rule ';
+        // text.innerHTML = 'Expand rule ';
       } else {
         icon.classList.remove('fa-chevron-right');
         icon.classList.add('fa-chevron-down');
-        text.innerHTML = 'Retract rule ';
+        // text.innerHTML = 'Retract rule ';
       }
 })
 
@@ -731,10 +731,10 @@ document.getElementById("rulelistBtn").addEventListener('click', function(){
     if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
-        text.innerHTML = 'Expand list rule ';
+        // text.innerHTML = 'Expand list rule ';
       } else {
         icon.classList.remove('fa-chevron-right');
         icon.classList.add('fa-chevron-down');
-        text.innerHTML = 'Retract list rule ';
+        // text.innerHTML = 'Retract list rule ';
       }
 })
