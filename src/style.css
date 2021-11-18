@@ -98,6 +98,7 @@ h5{
     color: white;
     padding: 10px 15px;
     border: none;
+    opacity: 0;
   }
 
   .openbtn:hover {
@@ -180,3 +181,4 @@ h5{
     display: none;
     overflow: hidden;
   }
+  

@@ -654,12 +654,13 @@ function openNav() {
         e.style.width = '250px'
         f.style.marginLeft = '250px'
     }
-
+    document.getElementById("open").style.opacity = "0";
 }
 
 function closeNav() {
     document.getElementById("sideBar").style.width = "0";
     document.getElementById("menu").style.marginLeft = "0";
+    document.getElementById("open").style.opacity = "1";
 }
 
 const openMenu = document.getElementById("open");
