@@ -132,10 +132,13 @@ h5{
 
   .table-bordered{
       position: flex;
-      margin-right: 10px;
-      width: 100%;
+      width: 80%;
       height: 100%;
       border: 2px solid #fb742d;
+  }
+
+  #batchtable{
+      margin-left: 100px;
   }
 
   td,th{
