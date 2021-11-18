@@ -126,35 +126,43 @@
       </div>
 
       <div class="col-lg-9">
-        <!-- <div class="row" id="row9">
-          <div class="col-lg-7 container-fluid">
-            
+        <div class="row" id="rowdrop">
+          <div class="container" id="dropbackground">
+            <div class="container" id="dropzone">
+              <h3 id="droptitle">Drop the file here</h3>
+              <div class="dropdown">
+                <button type="button" class="btn dropbtn" id="dropmenu">Please select</button>
+                <div id="myDropdown" class="dropdown-content">
+                  <button type="button" class="btn" id="openFilemenu">Open File</button>
+                  <button type="button" class="btn" id="openFolderMenu">Open Folder</button>
+                </div>
+              </div> 
+            </div>
           </div>
-          <div class="col-lg-2 container-fluid">
-           
-          </div>
-        </div> -->
-        <section id="batchtable">
-          <h1>Batch Rename</h1>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>File name</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody id="file-list-container">
-            </tbody>
-          </table>
+        </div>
+        <div class="row" id="rowtable">
+          <section id="batchtable">
+            <h1>Batch Rename</h1>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>File name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody id="file-list-container">
+              </tbody>
+            </table>
+          </section>
+  
+          <section>
+            <div class="container-fluid">
+              <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
+              <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
+              <button id="btnConvert" class="btn btn-primary">Convert</button>
+            </div>
         </section>
-
-        <section>
-          <div class="container-fluid">
-            <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
-            <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
-            <button id="btnConvert" class="btn btn-primary">Convert</button>
-          </div>
-      </section>
+        </div>
       </div>
     </div>
   </section>

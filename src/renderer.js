@@ -663,13 +663,18 @@ function closeNav() {
     document.getElementById("open").style.opacity = "1";
 }
 
+function openDropdown(){
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
 const openMenu = document.getElementById("open");
 const closeMenu = document.getElementById("close");
-
+const openDropMenu = document.getElementById("dropmenu");
 
 
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
+openDropMenu.addEventListener("click",openDropdown);
 
 // $('.majorpoints').click(function(){
 //     $(this).find('.hider').toggle();
