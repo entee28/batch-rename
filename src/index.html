@@ -127,22 +127,24 @@
 
       <div class="col-lg-9">
         <div class="row" id="rowdrop">
-          <div class="container" id="dropbackground">
-            <div class="container" id="dropzone">
-              <h3 id="droptitle">Drop the file here</h3>
+          <h1>Batch Rename</h1>
+          <div class="drag-back">
+            <div class="drag-area">
+              <header>Drag & Drop to Upload File</header>
+              <span>OR</span>
               <div class="dropdown">
-                <button type="button" class="btn dropbtn" id="dropmenu">Please select</button>
-                <div id="myDropdown" class="dropdown-content">
-                  <button type="button" class="btn" id="openFilemenu">Open File</button>
-                  <button type="button" class="btn" id="openFolderMenu">Open Folder</button>
+                <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
+                <div class="menu pointerCursor hide">
+                  <div class="option" id="option1">Open file</div>
+                  <div class="option" id="option2">Open folder</div>
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>
+        <br>
         <div class="row" id="rowtable">
           <section id="batchtable">
-            <h1>Batch Rename</h1>
             <table class="table table-bordered">
               <thead>
                 <tr>

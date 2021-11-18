@@ -13,6 +13,11 @@ openFileBtn.addEventListener("click", function (event) {
     ipc.send("open-file-dialog"); //this send an asynchronous message from renderer process to main process
 });
 
+const openFileMenu = document.getElementById("option1");
+openFileMenu.addEventListener("click", function (event) {
+    ipc.send("open-file-dialog"); //this send an asynchronous message from renderer process to main process
+});
+
 //this listen "selected-file" channel, when new files are selected listener would load these files into the program 
 ipc.on("selected-file", function (event, files) {
     for (let i = 0; i < files.length; i++) {
@@ -33,6 +38,11 @@ ipc.on("selected-file", function (event, files) {
 //Handle open folder button click event
 const openFolderBtn = document.getElementById("openFolderBtn");
 openFolderBtn.addEventListener("click", function (event) {
+    ipc.send("open-folder-dialog");
+});
+
+const openFolderMenu = document.getElementById("option2");
+openFolderMenu.addEventListener("click", function (event) {
     ipc.send("open-folder-dialog");
 });
 
@@ -663,18 +673,12 @@ function closeNav() {
     document.getElementById("open").style.opacity = "1";
 }
 
-function openDropdown(){
-    document.getElementById("myDropdown").classList.toggle("show");
-}
-
 const openMenu = document.getElementById("open");
 const closeMenu = document.getElementById("close");
-const openDropMenu = document.getElementById("dropmenu");
 
 
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
-openDropMenu.addEventListener("click",openDropdown);
 
 // $('.majorpoints').click(function(){
 //     $(this).find('.hider').toggle();
@@ -745,3 +749,64 @@ document.getElementById("rulelistBtn").addEventListener('click', function(){
         // text.innerHTML = 'Retract list rule ';
       }
 })
+
+function toggleClass(elem,className){
+    if (elem.className.indexOf(className) !== -1){
+      elem.className = elem.className.replace(className,'');
+    }
+    else{
+      elem.className = elem.className.replace(/\s+/g,' ') + 	' ' + className;
+    }
+  
+    return elem;
+  }
+  
+  function toggleDisplay(elem){
+    const curDisplayStyle = elem.style.display;			
+  
+    if (curDisplayStyle === 'none' || curDisplayStyle === ''){
+      elem.style.display = 'block';
+    }
+    else{
+      elem.style.display = 'none';
+    }
+  
+  }
+  
+  function toggleMenuDisplay(e){
+    const dropdown = e.currentTarget.parentNode;
+    const menu = dropdown.querySelector('.menu');
+    const icon = dropdown.querySelector('.fa-angle-right');
+  
+    toggleClass(menu,'hide');
+    toggleClass(icon,'rotate-90');
+  }
+  
+  function handleOptionSelected(e){
+    toggleClass(e.target.parentNode, 'hide');			
+  
+    const id = e.target.id;
+    const newValue = e.target.textContent + ' ';
+    const titleElem = document.querySelector('.dropdown .title');
+    const icon = document.querySelector('.dropdown .title .fa');
+  
+  
+    titleElem.textContent = newValue;
+    titleElem.appendChild(icon);
+  
+    //trigger custom event
+    document.querySelector('.dropdown .title').dispatchEvent(new Event('change'));
+      //setTimeout is used so transition is properly shown
+    setTimeout(() => toggleClass(icon,'rotate-90',0));
+  }
+  
+  //get elements
+  const dropdownTitle = document.querySelector('.dropdown .title');
+  const dropdownOptions = document.querySelectorAll('.dropdown .option');
+  
+  //bind listeners to these elements
+  dropdownTitle.addEventListener('click', toggleMenuDisplay);
+  
+  dropdownOptions.forEach(option => option.addEventListener('click',handleOptionSelected));
+  
+  document.querySelector('.dropdown .title').addEventListener('change',handleTitleChange);
