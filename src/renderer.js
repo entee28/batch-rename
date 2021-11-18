@@ -647,13 +647,14 @@ ruleMap.set("pascalcase", "PascalCase");
 function openNav() {
     var e = document.getElementById("sideBar");
     var f = document.getElementById("menu");
-    if(f.style.marginLeft == '250px'){
+    if(e.style.width == '250px'){
         e.style.width = '0px';
-        f.style.marginLeft = '0px';
-    } else{
+        f.style.marginLeft = e.style.width;
+    } else {
         e.style.width = '250px'
         f.style.marginLeft = '250px'
     }
+
 }
 
 function closeNav() {
