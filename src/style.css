@@ -115,10 +115,18 @@ h5{
     position: absolute;
     top: 0;
     right: 0;
-    font-size: 36px;
-    margin-left: 50px;
-    background-color: #111;
-    color: white;
+    font-size: 35px;
+    border-style: double;
+    border-color: black;
+    color: black;
+    font-weight: bold;
+    width: 45px;
+    text-align: center;
+  }
+
+  .sidebar .closebtn:hover {
+    background-color: #fb742d;
+    cursor: pointer;
   }
 
   #savePresetBtn{
