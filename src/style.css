@@ -363,3 +363,20 @@ h5{
 #batchtitle{
     margin-left: 350px;
 }
+
+.martop-250{
+  margin-top: 250px;
+}
+
+.marleft-333{
+  margin-left: 333px;
+}
+
+.btn-shadow{
+  box-shadow: 0 3px 4px rgba(10, 20, 30, 4);
+}
+
+.mar-lr-5{
+  margin-left: 2.5px;
+  margin-right: 2.5px;
+}
