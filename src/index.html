@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/js/bootstrap.min.js">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Batch Rename</title>
 </head>
 
@@ -21,11 +22,21 @@
     <div class="row" id="rule-list-container">
       <div class="col-lg-3">
         <div id="sideBar" class="sidebar">
-          <a href="javascript:void(0)" class="closebtn" id="close">&times;</a>
+          <i href="javascript:void(0)" class="closebtn" id="close">&times;</i>
             <div class="majorpoints">
               <button id="ruleBtn" class="accordion-collapse container-fluid btn_rule">
-                <span>Retract rule </span><i class="fa fa-chevron-down"></i></button>
+                <span>RENAMING RULES</span>
+                <i class="fa fa-chevron-down"></i>
+              </button>
+
               <div class="rulebox" style="display: none;">
+               
+                <div class="btn-group" role="group" id="groupBtn" aria-label="...">
+                  <button type="button" class="btn-success focus-visible" id="savePresetBtn" title="Save Preset"><i class="fa fa-file"></i></button>
+                  <button type="button" class="btn-danger focus-visible" id="loadPresetBtn"title="Load Preset"><i class="fa fa-download"></i></button>
+                  <button id="selectall" class="btn-primary focus-visible"title="Select/Unselect All Rules"><i class="fa fa-check-square"></i></button>
+                </div>
+                
                 <ul class="container-fluid" id="rule-list">
                   <li>
                     <label for="extension">
@@ -98,16 +109,15 @@
                       disabled>
                   </li>
                 </ul>
-      
-                <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
-                <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
-                <button id="selectall" class="btn btn-primary">Select / Unselect All Rules</button>
+
               </div>
             </div>
-
+            <hr>
           <div class="listmajor">
             <button id="rulelistBtn" class="accordion-collapse container-fluid btn_body">
-              <span>Expand list rule </span><i class="fa fa-chevron-right"></i></button>
+              <span>RULES ORDER</span>
+              <i class="fa fa-chevron-right"></i>
+            </button>
             <div class="ruleList" style="display:none" >
               <section id="draggable-list-container">
                 <ul class="draggable-list container-fluid" id="draggable-list"></ul>
@@ -122,29 +132,45 @@
       </div>
 
       <div class="col-lg-9">
-        <section>
-          <h1>Batch Rename</h1>
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>File name</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody id="file-list-container">
-            </tbody>
-          </table>
-        </section>
-
-        <section>
-          <footer>
+        <div class="row" id="rowdrop">
+          <h1 id="batchtitle">Batch Rename</h1>
+          <div class="drag-back">
+            <div class="drag-area">
+              <header>Drag & Drop to Upload File</header>
+              <span>OR</span>
+              <div class="dropdown">
+                <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
+                <div class="menu pointerCursor hide">
+                  <div class="option" id="option1">Open file</div>
+                  <div class="option" id="option2">Open folder</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row" id="rowtable">
+          <section id="batchtable">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>File name</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody id="file-list-container">
+              </tbody>
+            </table>
+          </section>
+  
+          <section>
             <div class="container-fluid">
               <button type="button" class="btn btn-dark" id="openFileBtn">Open File</button>
               <button type="button" class="btn btn-warning" id="openFolderBtn">Open Folder</button>
               <button id="btnConvert" class="btn btn-primary">Convert</button>
             </div>
-          </footer>
         </section>
+        </div>
       </div>
     </div>
   </section>
