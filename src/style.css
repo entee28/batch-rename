@@ -14,6 +14,7 @@ li {
 
 #draggable-list-container {
     display: flex;
+    border: none;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
@@ -129,15 +130,63 @@ h5{
     cursor: pointer;
   }
 
-  #savePresetBtn{
-      margin-right: 5px;
-      margin-left: 5px;
+  #groupBtn{
+    border: none; 
   }
 
-  #selectall{
-      margin-left: 15px;
-      margin-top: 10px;
+  #savePresetBtn{
+    background-color: #fb742d;
+    border: none; 
+    padding: 6px 34px;
+    color: black;
+    cursor: pointer;
   }
+
+  #savePresetBtn:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+
+  #savePresetBtn:focus{
+      outline: none;
+  }
+
+  #loadPresetBtn{
+    background-color: #fb742d;
+    border: none; 
+    padding: 6px 35px;
+    color: black;
+    cursor: pointer;
+  }
+
+  #loadPresetBtn:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+
+  #loadPresetBtn:focus{
+    outline: none;
+}
+
+  #selectall{
+    background-color: #fb742d;
+    border: none; 
+    padding: 6px 35px;
+    color: black;
+    cursor: pointer;
+  }
+
+  #selectall:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+  }
+
+  #savePresetBtn:focus{
+    outline-color:#fb742d;
+}
 
   .table-bordered{
       position: flex;
@@ -162,6 +211,7 @@ h5{
   #ruleBtn{
     padding-top: 6px;
     height: 35px;
+    border: none;
     text-align: center;
     align-items: center;
     background-color: #fb742d;
@@ -174,6 +224,7 @@ h5{
   #rulelistBtn{
     padding-top: 6px;
     height: 35px;
+    border: none;
     text-align: center;
     align-items: center;
     background-color: #fb742d;
