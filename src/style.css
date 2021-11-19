@@ -93,6 +93,20 @@ h5{
     transition: 0.5s;
     background-color: aliceblue;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(122, 251, 255, 0.568);
+}
+
+::-webkit-scrollbar-track {
+  background: none;
+}
+
 .openbtn {
     font-size: 20px;
     cursor: pointer;
