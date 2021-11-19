@@ -235,6 +235,12 @@ document.addEventListener("dragover", (e) => {
 //Function handle adding files/folders to program
 const addFileItem = (__filepath) => {
     pathList.push(__filepath);
+
+    const area = document.getElementById('drag-back');
+    if(pathList.length === 1) {
+        area.innerHTML = ''
+    }
+
     const container = document.querySelector("#file-list-container");
     const item = document.createElement("tr");
     item.setAttribute("path", __filepath);
@@ -259,6 +265,22 @@ function addDelButton(parent) {
         const path = this.parentElement.getAttribute("path");
         pathList.splice(pathList.indexOf(path), 1);
         this.parentElement.remove();
+        const area = document.getElementById('drag-back');
+        
+        if(pathList.length === 0) {
+            area.innerHTML = `
+            <div class="drag-area" id="drag-area">
+            <header>Drag & Drop to Upload File</header>
+            <span>OR</span>
+            <div class="dropdown">
+              <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
+              <div class="menu pointerCursor hide">
+                <div class="option" id="option1">Open file</div>
+                <div class="option" id="option2">Open folder</div>
+              </div>
+            </div>
+          </div>`
+        }
     };
 }
 
