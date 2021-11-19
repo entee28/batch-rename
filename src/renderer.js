@@ -780,8 +780,9 @@ function toggleClass(elem,className){
   
     toggleClass(menu,'hide');
     toggleClass(icon,'rotate-90');
+
   }
-  
+    
   function handleOptionSelected(e){
     toggleClass(e.target.parentNode, 'hide');			
   
