@@ -708,12 +708,25 @@ function openNav() {
         f.style.marginLeft = '250px'
     }
     document.getElementById("open").style.opacity = "0";
+    document.getElementById("close").style.opacity = "1";
+    document.getElementById("open").style.transition = "0s";
+    document.getElementById("open").disabled = true;
+    document.getElementById("open").style.cursor = "default";
 }
 
 function closeNav() {
     document.getElementById("sideBar").style.width = "0";
     document.getElementById("menu").style.marginLeft = "0";
-    document.getElementById("open").style.opacity = "1";
+    document.getElementById("open").disabled = false;
+    document.getElementById("open").style.cursor = "pointer";
+    document.getElementById("open").style.transition = "0s";
+    document.getElementById("menu").addEventListener("transitionend",
+    function() {
+        if (document.getElementById("sideBar").style.width == '0px') {
+            document.getElementById("open").style.opacity = "1";
+        }
+    });
+        
 }
 
 const openMenu = document.getElementById("open");
