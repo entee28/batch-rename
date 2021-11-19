@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/js/bootstrap.min.js">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>Batch Rename</title>
 </head>
 
@@ -27,7 +28,15 @@
                 <i class="fa fa-chevron-down"></i>
                 <span>RENAMING RULES</span>
               </button>
+
               <div class="rulebox" style="display: none;">
+               
+                <div class="btn-group" role="group" id="groupBtn" aria-label="...">
+                  <button type="button" class="btn-success" id="savePresetBtn" title="Save Preset"><i class="fa fa-file"></i></button>
+                  <button type="button" class="btn-danger" id="loadPresetBtn"title="Load Preset"><i class="fa fa-download"></i></button>
+                  <button id="selectall" class="btn-primary"title="Select/Unselect All Rules"><i class="fa fa-check-square"></i></button>
+                </div>
+                
                 <ul class="container-fluid" id="rule-list">
                   <li>
                     <label for="extension">
@@ -100,10 +109,7 @@
                       disabled>
                   </li>
                 </ul>
-      
-                <button type="button" class="btn btn-success" id="savePresetBtn">Save Preset</button>
-                <button type="button" class="btn btn-danger" id="loadPresetBtn">Load Preset</button>
-                <button id="selectall" class="btn btn-primary">Select / Unselect All Rules</button>
+
               </div>
             </div>
             <hr>
