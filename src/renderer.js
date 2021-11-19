@@ -281,6 +281,16 @@ function addDelButton(parent) {
                 </div>
             </div>`;
 
+            const openFileMenu = document.getElementById("option1");
+            openFileMenu.addEventListener("click", function (event) {
+                ipc.send("open-file-dialog"); //this send an asynchronous message from renderer process to main process
+            });
+
+            const openFolderMenu = document.getElementById("option2");
+            openFolderMenu.addEventListener("click", function (event) {
+                ipc.send("open-folder-dialog");
+            });
+
             //get elements
             const dropdownTitle = document.querySelector('.dropdown .title');
             const dropdownOptions = document.querySelectorAll('.dropdown .option');
