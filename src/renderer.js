@@ -75,7 +75,7 @@ function savePreset() {
     let JSONStr = null;
 
     try {
-        if(rules.length === 0) {
+        if (rules.length === 0) {
             throw "No rules have been chosen!"
         }
 
@@ -127,7 +127,7 @@ function savePreset() {
 
         const myJSON = JSON.stringify(JSONObj); //convert the array of JSON string into a JSON PRESET
         ipc.send("save-preset-dialog", myJSON); //send the JSON PRESET to the main process
-    } catch(err) {
+    } catch (err) {
         errorHandle(err);
     }
 }
@@ -237,7 +237,7 @@ const addFileItem = (__filepath) => {
     pathList.push(__filepath);
 
     const area = document.getElementById('drag-back');
-    if(pathList.length === 1) {
+    if (pathList.length === 1) {
         area.innerHTML = ''
     }
 
@@ -266,20 +266,31 @@ function addDelButton(parent) {
         pathList.splice(pathList.indexOf(path), 1);
         this.parentElement.remove();
         const area = document.getElementById('drag-back');
-        
-        if(pathList.length === 0) {
+
+        if (pathList.length === 0) {
             area.innerHTML = `
             <div class="drag-area" id="drag-area">
-            <header>Drag & Drop to Upload File</header>
-            <span>OR</span>
-            <div class="dropdown">
-              <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
-              <div class="menu pointerCursor hide">
-                <div class="option" id="option1">Open file</div>
-                <div class="option" id="option2">Open folder</div>
-              </div>
-            </div>
-          </div>`
+                <header>Drag & Drop to Load Files / Folders</header>
+                <span>OR</span>
+                <div class="dropdown">
+                    <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
+                    <div class="menu pointerCursor hide">
+                        <div class="option" id="option1">Open file</div>
+                        <div class="option" id="option2">Open folder</div>
+                    </div>
+                </div>
+            </div>`;
+
+            //get elements
+            const dropdownTitle = document.querySelector('.dropdown .title');
+            const dropdownOptions = document.querySelectorAll('.dropdown .option');
+
+            //bind listeners to these elements
+            dropdownTitle.addEventListener('click', toggleMenuDisplay);
+
+            dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
+
+            document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
         }
     };
 }
@@ -679,7 +690,7 @@ ruleMap.set("pascalcase", "PascalCase");
 function openNav() {
     var e = document.getElementById("sideBar");
     var f = document.getElementById("menu");
-    if(e.style.width == '250px'){
+    if (e.style.width == '250px') {
         e.style.width = '0px';
         f.style.marginLeft = e.style.width;
     } else {
@@ -713,36 +724,36 @@ closeMenu.addEventListener("click", closeNav);
 var acc = document.getElementsByClassName("btn_rule");
 var i;
 
-for (i = 0; i<acc.length;i++){
-    acc[i].addEventListener("click",function(){
+for (i = 0; i < acc.length; i++) {
+    acc[i].addEventListener("click", function () {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
         if (panel.style.display === "none") {
             panel.style.display = "block";
-          } else {
+        } else {
             panel.style.display = "none";
-          }
+        }
     });
 }
 
 var lol = document.getElementsByClassName("btn_body");
 var j;
 
-for (j = 0; j<lol.length;j++){
-    lol[j].addEventListener("click",function(){
+for (j = 0; j < lol.length; j++) {
+    lol[j].addEventListener("click", function () {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
         if (panel.style.display === "block") {
             panel.style.display = "none";
-          } else {
+        } else {
             panel.style.display = "block";
-          }
+        }
     });
 }
 
-document.getElementById("ruleBtn").addEventListener('click', function(){
+document.getElementById("ruleBtn").addEventListener('click', function () {
     const icon = this.querySelector("i");
     const text = this.querySelector("span");
 
@@ -750,14 +761,14 @@ document.getElementById("ruleBtn").addEventListener('click', function(){
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
         // text.innerHTML = 'Expand rule ';
-      } else {
+    } else {
         icon.classList.remove('fa-chevron-right');
         icon.classList.add('fa-chevron-down');
         // text.innerHTML = 'Retract rule ';
-      }
+    }
 })
 
-document.getElementById("rulelistBtn").addEventListener('click', function(){
+document.getElementById("rulelistBtn").addEventListener('click', function () {
     const icon = this.querySelector("i");
     const text = this.querySelector("span");
 
@@ -765,71 +776,71 @@ document.getElementById("rulelistBtn").addEventListener('click', function(){
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
         // text.innerHTML = 'Expand list rule ';
-      } else {
+    } else {
         icon.classList.remove('fa-chevron-right');
         icon.classList.add('fa-chevron-down');
         // text.innerHTML = 'Retract list rule ';
-      }
+    }
 })
 
-function toggleClass(elem,className){
-    if (elem.className.indexOf(className) !== -1){
-      elem.className = elem.className.replace(className,'');
+function toggleClass(elem, className) {
+    if (elem.className.indexOf(className) !== -1) {
+        elem.className = elem.className.replace(className, '');
     }
-    else{
-      elem.className = elem.className.replace(/\s+/g,' ') + 	' ' + className;
+    else {
+        elem.className = elem.className.replace(/\s+/g, ' ') + ' ' + className;
     }
-  
+
     return elem;
-  }
-  
-  function toggleDisplay(elem){
-    const curDisplayStyle = elem.style.display;			
-  
-    if (curDisplayStyle === 'none' || curDisplayStyle === ''){
-      elem.style.display = 'block';
+}
+
+function toggleDisplay(elem) {
+    const curDisplayStyle = elem.style.display;
+
+    if (curDisplayStyle === 'none' || curDisplayStyle === '') {
+        elem.style.display = 'block';
     }
-    else{
-      elem.style.display = 'none';
+    else {
+        elem.style.display = 'none';
     }
-  
-  }
-  
-  function toggleMenuDisplay(e){
+
+}
+
+function toggleMenuDisplay(e) {
     const dropdown = e.currentTarget.parentNode;
     const menu = dropdown.querySelector('.menu');
     const icon = dropdown.querySelector('.fa-angle-right');
-  
-    toggleClass(menu,'hide');
-    toggleClass(icon,'rotate-90');
 
-  }
-    
-  function handleOptionSelected(e){
-    toggleClass(e.target.parentNode, 'hide');			
-  
+    toggleClass(menu, 'hide');
+    toggleClass(icon, 'rotate-90');
+
+}
+
+function handleOptionSelected(e) {
+    toggleClass(e.target.parentNode, 'hide');
+
     const id = e.target.id;
     const newValue = e.target.textContent + ' ';
     const titleElem = document.querySelector('.dropdown .title');
     const icon = document.querySelector('.dropdown .title .fa');
-  
-  
+
+
     titleElem.textContent = newValue;
     titleElem.appendChild(icon);
-  
+
     //trigger custom event
     document.querySelector('.dropdown .title').dispatchEvent(new Event('change'));
-      //setTimeout is used so transition is properly shown
-    setTimeout(() => toggleClass(icon,'rotate-90',0));
-  }
-  
-  //get elements
-  const dropdownTitle = document.querySelector('.dropdown .title');
-  const dropdownOptions = document.querySelectorAll('.dropdown .option');
-  
-  //bind listeners to these elements
-  dropdownTitle.addEventListener('click', toggleMenuDisplay);
-  
-  dropdownOptions.forEach(option => option.addEventListener('click',handleOptionSelected));
-  
-  document.querySelector('.dropdown .title').addEventListener('change',handleTitleChange);
+    //setTimeout is used so transition is properly shown
+    setTimeout(() => toggleClass(icon, 'rotate-90', 0));
+}
+
+//get elements
+const dropdownTitle = document.querySelector('.dropdown .title');
+const dropdownOptions = document.querySelectorAll('.dropdown .option');
+
+//bind listeners to these elements
+dropdownTitle.addEventListener('click', toggleMenuDisplay);
+
+dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
+
+document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
