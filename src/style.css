@@ -184,9 +184,11 @@ h5{
     cursor: pointer;
   }
 
-  #savePresetBtn:focus{
-    outline-color:#fb742d;
-}
+  .focus, .focus-visible:focus:not(:focus-visible){
+    outline: 0;
+    box-shadow:none;
+  }
+
 
   .table-bordered{
       position: flex;
