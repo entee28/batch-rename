@@ -140,6 +140,13 @@ loadPresetBtn.addEventListener("click", function (event) {
 
 //function handle loaded preset
 function handlePreset(preset) {
+    const checkboxes = document.querySelectorAll(
+        `input[name="renaming-rules"]:checked`
+    );
+    for(let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = false;
+    }
+
     const rulePreset = JSON.parse(preset); //parse the JSON PRESET to an array of rules
 
     for (let i = 0; i < rulePreset.length - 1; i++) {
