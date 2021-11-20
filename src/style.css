@@ -89,8 +89,8 @@ h5{
     left: 0;
     overflow-x: hidden;
     overflow-y: overlay;
-    padding-top: 60px;
-    transition: 0.5s;
+    padding-top: 90px;
+    transition: ease-out 0.2s;
     background-color: aliceblue;
 }
 
@@ -129,15 +129,16 @@ h5{
 
   .sidebar .closebtn {
     position: absolute;
-    top: 0;
-    right: 0;
-    font-size: 35px;
-    border-style: double;
-    border-color: black;
-    color: black;
-    font-weight: bold;
-    width: 45px;
-    text-align: center;
+    top: 20px;
+    right: 182px;
+    font-size: 25px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    padding: 4px 15px;
+    padding-bottom: 9px;
+    border: none;
+    opacity: 1;
   }
 
   .sidebar .closebtn:hover {
@@ -236,6 +237,8 @@ h5{
     font-size: 16px;
     text-decoration: solid;
     cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: bold;
   }
 
   #rulelistBtn{
@@ -248,12 +251,15 @@ h5{
     color: #000000;
     font-size: 16px;
     text-decoration: solid;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: bold;
   }
   .active, .accordion-collapse:hover {
     background-color: #fb742d;
   }
 
   .ruleList{
+    font-family: 'Mulish', sans-serif;
     display: none;
     overflow: hidden;
   }
