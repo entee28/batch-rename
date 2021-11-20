@@ -222,6 +222,8 @@ const errorHandle = (message) => {
 
 //files/folders drag and drop handle
 const area = document.getElementById('drag-back');
+const datatable = document.getElementById('batchtable');
+const buttontable = document.getElementById('tablebutton');
 area.addEventListener("drop", (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -264,7 +266,10 @@ const addFileItem = (__filepath) => {
     pathList.push(__filepath);
 
     if (pathList.length === 1) {
-        area.innerHTML = ''
+        area.innerHTML = '';
+        area.style.background = 'white';
+        $(datatable).appendTo(area);
+        $(buttontable).appendTo(area);
     }
 
     const container = document.querySelector("#file-list-container");
@@ -305,6 +310,9 @@ function addDelButton(parent) {
                     </div>
                 </div>
             </div>`;
+            area.style.background = '#4e80cc';
+            $(datatable).appendTo('#rowtable');
+            $(buttontable).appendTo('#rowtable');
 
             const openFileMenu = document.getElementById("option1");
             openFileMenu.addEventListener("click", function (event) {
