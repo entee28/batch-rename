@@ -42,8 +42,8 @@ li {
 }
 
 .draggable-list .number {
-    background-color: #fb742d;
-    color: #000000 ;
+  background-color: aliceblue;
+  color: #1b3344;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -53,7 +53,8 @@ li {
 }
 
 .draggable-list li.over .draggable {
-    background-color: #eaeaea;
+    background-color: #f9cb6a;
+    color: #1b3344;
 }
 
 .draggable-list .rule-name {
@@ -110,15 +111,16 @@ h5{
 .openbtn {
     font-size: 20px;
     cursor: pointer;
-    background-color: #111;
-    color: white;
+    background-color: #1b3344;
+    color: 	aliceblue;
     padding: 10px 15px;
     border: none;
     opacity: 0;
   }
 
   .openbtn:hover {
-    background-color: #444;
+    background-color: #f9cb6a;
+    color: #1b3344;
   }
 
   #menu{
@@ -133,8 +135,8 @@ h5{
     right: 182px;
     font-size: 25px;
     cursor: pointer;
-    background-color: black;
-    color: white;
+    background-color: #1b3344;
+    color: aliceblue;
     padding: 4px 15px;
     padding-bottom: 9px;
     border: none;
@@ -142,7 +144,8 @@ h5{
   }
 
   .sidebar .closebtn:hover {
-    background-color: #fb742d;
+    background-color: #f9cb6a;
+    color: #1b3344;
     cursor: pointer;
   }
 
@@ -150,58 +153,31 @@ h5{
     border: none; 
   }
 
-  #savePresetBtn{
-    background-color: #fb742d;
+  .renamelistfuncBtn{
+    background-color: #1b3344;
+    color: aliceblue;
     border: none; 
-    padding: 6px 34px;
-    color: black;
+    padding: 6px 35px;
     cursor: pointer;
   }
 
-  #savePresetBtn:hover{
-    background-color: black;
-    color: white;
+  .renamelistfuncBtn:hover{
+    background-color: #f9cb6a;
+    color: #1b3344;
     cursor: pointer;
   }
 
-  #savePresetBtn:focus{
+  .renamelistfuncBtn:focus{
       outline: none;
   }
 
-  #loadPresetBtn{
-    background-color: #fb742d;
-    border: none; 
-    padding: 6px 35px;
-    color: black;
-    cursor: pointer;
-  }
-
-  #loadPresetBtn:hover{
-    background-color: black;
-    color: white;
-    cursor: pointer;
-  }
-
-  #loadPresetBtn:focus{
-    outline: none;
-}
-
   #selectall{
-    background-color: #fb742d;
-    border: none; 
-    padding: 6px 35px;
-    color: black;
-    cursor: pointer;
-  }
-
-  #selectall:hover{
-    background-color: black;
-    color: white;
-    cursor: pointer;
+    padding: 6px 34px;
   }
 
   .focus, .focus-visible:focus:not(:focus-visible){
     outline: 0;
+    background-color: #1b3344;
     box-shadow:none;
   }
 
@@ -232,8 +208,8 @@ h5{
     border: none;
     text-align: center;
     align-items: center;
-    background-color: #fb742d;
-    color: #000000;
+    background-color: #1b3344;
+    color: aliceblue;
     font-size: 16px;
     text-decoration: solid;
     cursor: pointer;
@@ -247,8 +223,8 @@ h5{
     border: none;
     text-align: center;
     align-items: center;
-    background-color: #fb742d;
-    color: #000000;
+    background-color: #1b3344;
+    color: aliceblue;
     font-size: 16px;
     text-decoration: solid;
     font-family: 'Bebas Neue', sans-serif;
@@ -369,6 +345,7 @@ h5{
 #batchtitle{
     margin-left: 350px;
 }
+<<<<<<< HEAD
 
 .martop-250{
   margin-top: 250px;
@@ -395,3 +372,5 @@ h5{
 .clm-tai-sao{
   background-color: goldenrod;
 }
+=======
+>>>>>>> bcd0a58ab9f02ba57d16cb592296abb8855d0ae4

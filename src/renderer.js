@@ -132,14 +132,21 @@ function savePreset() {
     }
 }
 
-//Handle save preset button event
+//Handle load preset button event
 const loadPresetBtn = document.getElementById("loadPresetBtn");
 loadPresetBtn.addEventListener("click", function (event) {
     ipc.send("load-preset-dialog");
 });
 
-//listener when a preset is selected
-ipc.on("selected-preset", function (event, preset) {
+//function handle loaded preset
+function handlePreset(preset) {
+    const checkboxes = document.querySelectorAll(
+        `input[name="renaming-rules"]:checked`
+    );
+    for(let i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].checked = false;
+    }
+
     const rulePreset = JSON.parse(preset); //parse the JSON PRESET to an array of rules
 
     for (let i = 0; i < rulePreset.length - 1; i++) {
@@ -201,6 +208,11 @@ ipc.on("selected-preset", function (event, preset) {
     order = JSON.parse(rulePreset[rulePreset.length - 1]);
     createList();
     addEventListener();
+}
+
+//listener when a preset is selected
+ipc.on("selected-preset", function (event, preset) {
+    handlePreset(preset);
 });
 
 //Error handles
@@ -208,8 +220,9 @@ const errorHandle = (message) => {
     ipc.send("error-handle", message);
 };
 
-//Drag and drop handle
-document.addEventListener("drop", (event) => {
+//files/folders drag and drop handle
+const area = document.getElementById('drag-back');
+area.addEventListener("drop", (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -232,11 +245,24 @@ document.addEventListener("dragover", (e) => {
     e.stopPropagation();
 });
 
+//rule preset drag and drop handle
+const ruleContainer = document.getElementById('rule-list-container');
+ruleContainer.addEventListener("drop", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    for (const f of event.dataTransfer.files) {
+        if (path.extname(f.path) === '.json') {
+            const JSONStr = fs.readFileSync(f.path).toString();
+            handlePreset(JSONStr);
+        }
+    }
+});
+
 //Function handle adding files/folders to program
 const addFileItem = (__filepath) => {
     pathList.push(__filepath);
 
-    const area = document.getElementById('drag-back');
     if (pathList.length === 1) {
         area.innerHTML = ''
     }
@@ -265,7 +291,6 @@ function addDelButton(parent) {
         const path = this.parentElement.getAttribute("path");
         pathList.splice(pathList.indexOf(path), 1);
         this.parentElement.remove();
-        const area = document.getElementById('drag-back');
 
         if (pathList.length === 0) {
             area.innerHTML = `
@@ -420,7 +445,7 @@ function createList() {
     });
 }
 
-//functions handle drag events
+//functions  events
 function dragStart() {
     dragStartIndex = +this.closest("li").getAttribute("data-index");
     console.log(dragStartIndex);
@@ -721,12 +746,12 @@ function closeNav() {
     document.getElementById("open").style.cursor = "pointer";
     document.getElementById("open").style.transition = "0s";
     document.getElementById("menu").addEventListener("transitionend",
-    function() {
-        if (document.getElementById("sideBar").style.width == '0px') {
-            document.getElementById("open").style.opacity = "1";
-        }
-    });
-        
+        function () {
+            if (document.getElementById("sideBar").style.width == '0px') {
+                document.getElementById("open").style.opacity = "1";
+            }
+        });
+
 }
 
 const openMenu = document.getElementById("open");
