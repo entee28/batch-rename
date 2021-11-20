@@ -207,6 +207,11 @@ h5{
     box-shadow:none;
   }
 
+  .focus, .focus-second-visible:focus:not(:focus-visible){
+    outline: 0;
+    box-shadow: 0 3px 4px rgba(10, 20, 30, 4);
+  }
+
 
   .table-bordered{
       position: flex;
