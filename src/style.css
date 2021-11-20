@@ -237,6 +237,8 @@ h5{
     font-size: 16px;
     text-decoration: solid;
     cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: bold;
   }
 
   #rulelistBtn{
@@ -249,12 +251,15 @@ h5{
     color: #000000;
     font-size: 16px;
     text-decoration: solid;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: bold;
   }
   .active, .accordion-collapse:hover {
     background-color: #fb742d;
   }
 
   .ruleList{
+    font-family: 'Mulish', sans-serif;
     display: none;
     overflow: hidden;
   }
