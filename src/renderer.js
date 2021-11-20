@@ -224,6 +224,7 @@ const errorHandle = (message) => {
 const area = document.getElementById('drag-back');
 const datatable = document.getElementById('batchtable');
 const buttontable = document.getElementById('tablebutton');
+const tablerow = document.getElementById('rowtable');
 area.addEventListener("drop", (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -270,6 +271,8 @@ const addFileItem = (__filepath) => {
         area.style.background = 'white';
         $(datatable).appendTo(area);
         $(buttontable).appendTo(area);
+        tablerow.display = 'initial';
+        tablerow.marginRight = '100px';
     }
 
     const container = document.querySelector("#file-list-container");
