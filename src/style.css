@@ -153,7 +153,7 @@ h5{
     border: none; 
   }
 
-  .renamelistfuncBtn{
+  #savePresetBtn{
     background-color: #1b3344;
     color: aliceblue;
     border: none; 
@@ -161,23 +161,49 @@ h5{
     cursor: pointer;
   }
 
-  .renamelistfuncBtn:hover{
+  #savePresetBtn:hover{
     background-color: #f9cb6a;
     color: #1b3344;
     cursor: pointer;
   }
 
-  .renamelistfuncBtn:focus{
+  #savePresetBtn:focus{
       outline: none;
   }
 
-  #selectall{
-    padding: 6px 34px;
+  #loadPresetBtn{
+    background-color: #1b3344;
+    color: aliceblue;
+    border: none; 
+    padding: 6px 35px;
+    cursor: pointer;
   }
 
+  #loadPresetBtn:hover{
+    background-color: #f9cb6a;
+    color: #1b3344;
+    cursor: pointer;
+  }
+
+  #loadPresetBtn:focus{
+    outline: none;
+}
+
+  #selectall{
+    background-color: #1b3344;
+    color: aliceblue;
+    border: none; 
+    padding: 6px 35px;
+    cursor: pointer;
+  }
+
+  #selectall:hover{
+    background-color: #f9cb6a;
+    color: #1b3344;
+    cursor: pointer;
+  }
   .focus, .focus-visible:focus:not(:focus-visible){
     outline: 0;
-    background-color: #1b3344;
     box-shadow:none;
   }
 
