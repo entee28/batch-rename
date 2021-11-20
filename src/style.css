@@ -268,9 +268,9 @@ h5{
 
   .ruleList{
     font-family: 'Mulish', sans-serif;
-    display: none;
+    /* display: none; */
     overflow: hidden;
-    padding-top: 10px;
+    padding-top: 3px;
   }
 
   .drag-area{
