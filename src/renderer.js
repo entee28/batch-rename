@@ -303,10 +303,10 @@ function addDelButton(parent) {
         if (pathList.length === 0) {
             area.innerHTML = `
             <div class="drag-area" id="drag-area">
-                <header>Drag & Drop to Load Files / Folders</header>
+                <header>Drop files / folders here</header>
                 <span>OR</span>
                 <div class="dropdown">
-                    <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
+                    <div class="title pointerCursor">Choose Files<i class="fa fa-angle-right"></i></div>
                     <div class="menu pointerCursor hide">
                         <div class="option" id="option1">Open file</div>
                         <div class="option" id="option2">Open folder</div>
