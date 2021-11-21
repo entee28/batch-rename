@@ -291,7 +291,7 @@ h5{
     height: 400px;
     width: 700px;
     background: #4e80cc    ;
-    margin-left: 150px;
+    margin-left: 450px;
     border-radius: 10px;
   }
 
@@ -376,11 +376,12 @@ h5{
 }
 
 #batchtitle{
-    margin-left: 350px;
+    margin-left: 668px;
+    margin-bottom: 30px;
 }
 
 .martop-250{
-  margin-top: 70px;
+  margin-top: 60px;
 }
 
 .marleft-333{
@@ -413,4 +414,12 @@ h5{
 
 #rowtable{
   display: none;
+}
+
+#rule-list-container{
+  max-width: min-content;
+}
+
+#rowdrop{
+  width: 900px;
 }
