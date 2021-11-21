@@ -5,7 +5,7 @@ window.$ = window.jQuery = require("jquery");
 const fs = require("fs");
 
 const pathList = new Array(); //an array of loaded files' path
-
+const invalidChars = /[~"#%&*:<>?/\\{|}]+/;
 
 //Handle open file button click event
 const openFileBtn = document.getElementById("openFileBtn");
@@ -348,7 +348,10 @@ function getExtensionParam() {
 
     params.forEach((param) => {
         if (param.value === "") {
-            throw 'Empty parameters for change extension rule!';
+            throw 'Change Extension: Empty parameters!';
+        }
+        if (invalidChars.test(param.value)) {
+            throw `Change Extension: A file name can't contain any of the following characters: \\/:*?"<>|`
         }
         values.push(param.value);
     });
@@ -361,6 +364,9 @@ function getReplaceParam() {
     const params = document.querySelectorAll(`input[name="replace-parameter"]`);
     let values = [];
     params.forEach((param) => {
+        if (invalidChars.test(param.value)) {
+            throw `Replace Rule: A file name can't contain any of the following characters: \\/:*?"<>|`
+        }
         values.push(param.value);
     });
     return values;
@@ -375,7 +381,7 @@ function getCounterParam() {
         parseInt(params[1].value) < 1 ||
         parseInt(params[2].value) < 1
     ) {
-        throw "Invalid parameters for add counter rule!";
+        throw "Add counter: Invalid parameters!";
     }
     params.forEach((param) => {
         if (param.value === "") {
@@ -390,7 +396,10 @@ function getCounterParam() {
 function getPrefixParam() {
     const prefix = document.getElementById("prefix");
     if (prefix.value === "") {
-        throw "Empty parameters for add prefix rule!";
+        throw "Add Prefix: Empty parameters!";
+    }
+    if (invalidChars.test(prefix.value)) {
+        throw `Add Prefix: A file name can't contain any of the following characters: \\/:*?"<>|`
     }
     return prefix.value;
 
@@ -399,7 +408,10 @@ function getPrefixParam() {
 function getSuffixParam() {
     const suffix = document.getElementById("suffix");
     if (suffix.value === "") {
-        throw "Empty parameters for add suffix rule!";
+        throw "Add Suffix: Empty parameters!";
+    }
+    if (invalidChars.test(suffix.value)) {
+        throw `Add Suffix: A file name can't contain any of the following characters: \\/:*?"<>|`
     }
     return suffix.value;
 
