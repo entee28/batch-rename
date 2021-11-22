@@ -688,7 +688,7 @@ function check(checked = true) {
 const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
 
-// to check if all the checkbox is checked or not
+// to check if all the checkbox is checked or not on click
 document.querySelector(`input[id="extension"]`).onclick = vibeCheck();
 function vibeCheck(){
     const allBoxesState = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
