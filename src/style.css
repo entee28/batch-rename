@@ -222,7 +222,20 @@ h5{
       border: 3px solid #fb742d;
       margin-left: -100px;
       border-collapse: separate;
-      border-radius: 15px;
+      border-radius: 10px;
+  }
+
+  th:first-of-type {
+    border-top-left-radius: 10px;
+  }
+  th:last-of-type {
+    border-top-right-radius: 10px;
+  }
+  tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 10px;
+  }
+  tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 10px;
   }
 
   #batchtable{
@@ -233,9 +246,22 @@ h5{
     text-align: center;
   }
 
+  thead{
+    background: #6c7ae0;
+  }
+
+  thead:hover{
+    background: #7dace65d;
+  }
+
   tr{
       height: 50px;
-      /* border: 5px solid #fb742d; */
+      border: white;
+  }
+
+  tr:hover{
+    background: #7dace6a1;
+    
   }
 
   #ruleBtn{
