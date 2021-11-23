@@ -283,12 +283,12 @@ const addFileItem = (__filepath) => {
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
     `;
-    var color = document.getElementsByTagName('tr');
-    for (var i = 0; i < color.length; i++) {
-        if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
-            color[i].style.backgroundColor = '#4e80cc';
-        }
-    }
+    // var color = document.getElementsByTagName('tr');
+    // for (var i = 0; i < color.length; i++) {
+    //     if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
+    //         color[i].style.backgroundColor = '#4e80cc';
+    //     }
+    // }
     addDelButton(item);
     container.appendChild(item);
 };
