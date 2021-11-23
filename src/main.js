@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 require('electron-reloader')(module);
 require('electron').Menu;
+const electron = require('electron');
 
 //check if program is run on MacOS
 const isMac = process.platform === 'darwin';
@@ -105,6 +106,18 @@ app.whenReady().then(() => {
         { role: 'forceReload' },
         { role: 'toggleDevTools' },
         { type: 'separator' },
+        {
+          label: "Documentation",
+          click: function() {
+            electron.shell.openExternal('https://github.com/entee28/batch-rename-final');
+          }
+        },
+        {
+          label: "Get Started",
+          click: function() {
+            electron.shell.openExternal('https://github.com/entee28/batch-rename-final');
+          }
+        },
       ]
     },
   ]

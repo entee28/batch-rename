@@ -5,7 +5,7 @@ window.$ = window.jQuery = require("jquery");
 const fs = require("fs");
 
 const pathList = new Array(); //an array of loaded files' path
-
+const invalidChars = /[~"#%&*:<>?/\\{|}]+/;
 
 //Handle open file button click event
 const openFileBtn = document.getElementById("openFileBtn");
@@ -143,7 +143,7 @@ function handlePreset(preset) {
     const checkboxes = document.querySelectorAll(
         `input[name="renaming-rules"]:checked`
     );
-    for(let i = 0; i < checkboxes.length; i++) {
+    for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
     }
 
@@ -222,6 +222,9 @@ const errorHandle = (message) => {
 
 //files/folders drag and drop handle
 const area = document.getElementById('drag-back');
+const datatable = document.getElementById('batchtable');
+const buttontable = document.getElementById('tablebutton');
+const tablerow = document.getElementById('rowtable');
 area.addEventListener("drop", (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -264,7 +267,12 @@ const addFileItem = (__filepath) => {
     pathList.push(__filepath);
 
     if (pathList.length === 1) {
-        area.innerHTML = ''
+        area.innerHTML = '';
+        area.style.background = 'white';
+        $(datatable).appendTo(area);
+        $(buttontable).appendTo(area);
+        tablerow.display = 'initial';
+        tablerow.marginRight = '100px';
     }
 
     const container = document.querySelector("#file-list-container");
@@ -275,15 +283,21 @@ const addFileItem = (__filepath) => {
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
     `;
+    var color = document.getElementsByTagName('tr');
+    for (var i = 0; i < color.length; i++) {
+        if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
+            color[i].style.backgroundColor = '#4e80cc';
+        }
+    }
     addDelButton(item);
     container.appendChild(item);
 };
 
 //Function handle adding delete button for each loaded file
 function addDelButton(parent) {
-    const delBtn = parent.appendChild(document.createElement("button"));
-    delBtn.classList.add("btn");
-    const delIcon = document.createElement("td");
+    const delBtn = parent.appendChild(document.createElement("td"));
+    // delBtn.classList.add("btn");
+    const delIcon = document.createElement("button");
     delIcon.classList.add("fa");
     delIcon.classList.add("fa-trash");
     delBtn.appendChild(delIcon);
@@ -295,16 +309,19 @@ function addDelButton(parent) {
         if (pathList.length === 0) {
             area.innerHTML = `
             <div class="drag-area" id="drag-area">
-                <header>Drag & Drop to Load Files / Folders</header>
+                <header>Drop files / folders here</header>
                 <span>OR</span>
                 <div class="dropdown">
-                    <div class="title pointerCursor">Select an option<i class="fa fa-angle-right"></i></div>
+                    <div class="title pointerCursor">Choose Files<i class="fa fa-angle-right"></i></div>
                     <div class="menu pointerCursor hide">
                         <div class="option" id="option1">Open file</div>
                         <div class="option" id="option2">Open folder</div>
                     </div>
                 </div>
             </div>`;
+            area.style.background = '#4e80cc';
+            $(datatable).appendTo('#rowtable');
+            $(buttontable).appendTo('#rowtable');
 
             const openFileMenu = document.getElementById("option1");
             openFileMenu.addEventListener("click", function (event) {
@@ -337,7 +354,10 @@ function getExtensionParam() {
 
     params.forEach((param) => {
         if (param.value === "") {
-            throw 'Empty parameters for change extension rule!';
+            throw 'Change Extension: Empty parameters!';
+        }
+        if (invalidChars.test(param.value)) {
+            throw `Change Extension: A file name can't contain any of the following characters: \\/:*?"<>|`
         }
         values.push(param.value);
     });
@@ -350,6 +370,9 @@ function getReplaceParam() {
     const params = document.querySelectorAll(`input[name="replace-parameter"]`);
     let values = [];
     params.forEach((param) => {
+        if (invalidChars.test(param.value)) {
+            throw `Replace Rule: A file name can't contain any of the following characters: \\/:*?"<>|`
+        }
         values.push(param.value);
     });
     return values;
@@ -364,7 +387,7 @@ function getCounterParam() {
         parseInt(params[1].value) < 1 ||
         parseInt(params[2].value) < 1
     ) {
-        throw "Invalid parameters for add counter rule!";
+        throw "Add counter: Invalid parameters!";
     }
     params.forEach((param) => {
         if (param.value === "") {
@@ -379,7 +402,10 @@ function getCounterParam() {
 function getPrefixParam() {
     const prefix = document.getElementById("prefix");
     if (prefix.value === "") {
-        throw "Empty parameters for add prefix rule!";
+        throw "Add Prefix: Empty parameters!";
+    }
+    if (invalidChars.test(prefix.value)) {
+        throw `Add Prefix: A file name can't contain any of the following characters: \\/:*?"<>|`
     }
     return prefix.value;
 
@@ -388,7 +414,10 @@ function getPrefixParam() {
 function getSuffixParam() {
     const suffix = document.getElementById("suffix");
     if (suffix.value === "") {
-        throw "Empty parameters for add suffix rule!";
+        throw "Add Suffix: Empty parameters!";
+    }
+    if (invalidChars.test(suffix.value)) {
+        throw `Add Suffix: A file name can't contain any of the following characters: \\/:*?"<>|`
     }
     return suffix.value;
 
@@ -659,6 +688,22 @@ function check(checked = true) {
 const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
 
+// to check if all the checkbox is checked or not on click
+document.querySelector(`input[id="extension"]`).onclick = vibeCheck();
+function vibeCheck(){
+    const allBoxesState = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
+    
+    if (allBoxesState.length == 0){
+        selectBtn.title = "Select All Rules";
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "aliceblue";});
+    }
+    else{
+        selectBtn.title = "Unselect All Rules";
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "#f9cb6a";});
+        selectBtn.addEventListener('mouseover',function(){selectBtn.style.color = "#1b3344";});
+    }
+}
+
 function checkAll() {
     check();
     EnableDisableCounterParam();
@@ -673,6 +718,7 @@ function checkAll() {
     order = getSelectedRules();
     createList();
     addEventListener();
+    vibeCheck()
 }
 
 function uncheckAll() {
@@ -687,6 +733,7 @@ function uncheckAll() {
     order = getSelectedRules();
     createList();
     addEventListener();
+    vibeCheck()
 }
 
 //function getting rules that are selected
@@ -793,10 +840,10 @@ for (j = 0; j < lol.length; j++) {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
-        if (panel.style.display === "block") {
-            panel.style.display = "none";
-        } else {
+        if (panel.style.display === "none") {
             panel.style.display = "block";
+        } else {
+            panel.style.display = "none";
         }
     });
 }
@@ -892,3 +939,4 @@ dropdownTitle.addEventListener('click', toggleMenuDisplay);
 dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
 
 document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
+
