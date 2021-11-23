@@ -625,11 +625,15 @@ btn.addEventListener("click", () => {
     let factory = new RuleCreator();
     const items = document.querySelectorAll(`tr[class="item"]`);
 
-    for (let i = 0; i < pathList.length; i++) {
-        let name = path.parse(pathList[i]).name;
-        let extension = path.extname(pathList[i]);
+    try {
+        if (rules.length === 0) {
+            throw "No rules have been chosen!"
+        }
 
-        try {
+        for (let i = 0; i < pathList.length; i++) {
+            let name = path.parse(pathList[i]).name;
+            let extension = path.extname(pathList[i]);
+
             for (let j = 0; j < rules.length; j++) {
                 if (rules[j] === "extension") {
                     getExtensionParam();
@@ -685,21 +689,42 @@ btn.addEventListener("click", () => {
                     name = factory.invokeTransform(rules[j], name);
                 }
             }
-        } catch (err) {
-            errorHandle(err);
-        }
 
-        let newPath = path.join(pathList[i], "..", `${name}${extension}`);
-        fs.rename(pathList[i], newPath, function () {
-            pathList[i] = newPath;
-            items[i].setAttribute("path", newPath);
-            items[i].innerHTML = `
-            <td>${path.parse(newPath).name}</td>
-            <td>${path.extname(newPath)}</td>
-            `;
-            addDelButton(items[i]);
-            addPreviewButton(items[i]);
-        });
+
+            let newPath = null;
+            if (copyChk.checked) {
+                if (pathInput.value === '') {
+                    throw 'Empty copy directory!'
+                } else {
+                    newPath = path.join(pathInput.value, `${name}${extension}`);
+                    fs.copyFile(pathList[i], newPath, (err) => {
+                        if (err) throw err;
+                        pathList[i] = newPath;
+                        items[i].setAttribute("path", newPath);
+                        items[i].innerHTML = `
+                    <td>${path.parse(newPath).name}</td>
+                    <td>${path.extname(newPath)}</td>
+                    `;
+                        addDelButton(items[i]);
+                        addPreviewButton(items[i]);
+                    });
+                }
+            } else {
+                newPath = path.join(pathList[i], "..", `${name}${extension}`);
+                fs.rename(pathList[i], newPath, function () {
+                    pathList[i] = newPath;
+                    items[i].setAttribute("path", newPath);
+                    items[i].innerHTML = `
+                <td>${path.parse(newPath).name}</td>
+                <td>${path.extname(newPath)}</td>
+                `;
+                    addDelButton(items[i]);
+                    addPreviewButton(items[i]);
+                });
+            }
+        }
+    } catch (err) {
+        errorHandle(err);
     }
 });
 
@@ -1036,5 +1061,27 @@ dropdownTitle.addEventListener('click', toggleMenuDisplay);
 
 dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
 
-document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
+// document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
 
+//handle browse button
+const browseBtn = document.getElementById('btnBrowse');
+const pathInput = document.getElementById('copy-path');
+
+browseBtn.addEventListener("click", function (event) {
+    ipc.send("open-browse-dialog");
+});
+
+ipc.on("selected-browse-path", function (event, folder) {
+    pathInput.value = folder;
+});
+
+const copyChk = document.getElementById("convert-copy");
+function EnableDisablePathInput() {
+    let pathInput = document.getElementById('copy-path');
+    browseBtn.disabled = copyChk.checked ? false : true;
+    pathInput.disabled = copyChk.checked ? false : true;
+    if (pathInput.disabled) {
+        pathInput.value = "";
+    }
+}
+copyChk.addEventListener("click", EnableDisablePathInput);
