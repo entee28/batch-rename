@@ -688,6 +688,23 @@ function check(checked = true) {
 const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
 
+// to check if all the checkbox is checked or not on click
+document.querySelector(`input[id="extension"]`).onclick = vibeCheck();
+function vibeCheck(){
+    const allBoxesState = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
+    
+    if (allBoxesState.length == 0){
+        selectBtn.title = "Select All Rules";
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.backgroundColor = "#1b3344";});
+        selectBtn.addEventListener('mouseover',function(){selectBtn.style.backgroundColor = "#f9cb6a";});
+    }
+    else{
+        selectBtn.title = "Unselect All Rules";
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.backgroundColor = "#91caf9";});
+        selectBtn.addEventListener('mouseover',function(){selectBtn.style.backgroundColor = "#f9cb6a";});
+    }
+}
+
 function checkAll() {
     check();
     EnableDisableCounterParam();
@@ -702,6 +719,7 @@ function checkAll() {
     order = getSelectedRules();
     createList();
     addEventListener();
+    vibeCheck()
 }
 
 function uncheckAll() {
@@ -716,6 +734,7 @@ function uncheckAll() {
     order = getSelectedRules();
     createList();
     addEventListener();
+    vibeCheck()
 }
 
 //function getting rules that are selected
