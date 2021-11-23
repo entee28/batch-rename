@@ -520,11 +520,11 @@ let order = []; //an array contains rule order
 
 //handle rule selection
 [].forEach.call(
-    document.querySelectorAll('input[type="checkbox"]'),
+    document.querySelectorAll(`input[name="renaming-rules"]`),
     function (checkbox) {
         "use strict";
         checkbox.addEventListener("change", function () {
-            let rules = document.querySelectorAll('input[type="checkbox"]');
+            let rules = document.querySelectorAll(`input[name="renaming-rules"]`);
             let previousLi = checkbox.parentNode.parentNode.previousElementSibling;
             let index = 0;
             while (previousLi !== null) {
@@ -774,7 +774,7 @@ counterCheckBox.addEventListener("click", EnableDisableCounterParam);
 
 //FUNCTIONS HANDLE SELECT/UNSELECT ALL RULES BUTTON
 function check(checked = true) {
-    const cbs = document.querySelectorAll('input[type="checkbox"]');
+    const cbs = document.querySelectorAll(`input[name="renaming-rules"]`);
     cbs.forEach((cb) => {
         cb.checked = checked;
     });
