@@ -248,6 +248,18 @@ h5{
     text-align: center;
   }
 
+  th{
+    width: 300px;
+  }
+
+  .trdiv1{
+    width: 300px;
+  }
+
+  .trdiv2{
+    width: 300px;
+  }
+
   thead tr{
     background: #1b3344;
     color: white;
@@ -460,4 +472,8 @@ h5{
 
 #rowdrop{
   width: 100%;
+}
+
+.overflow-x-hidden{
+  overflow-x: hidden;
 }
