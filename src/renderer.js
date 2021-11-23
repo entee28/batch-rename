@@ -143,7 +143,7 @@ function handlePreset(preset) {
     const checkboxes = document.querySelectorAll(
         `input[name="renaming-rules"]:checked`
     );
-    for(let i = 0; i < checkboxes.length; i++) {
+    for (let i = 0; i < checkboxes.length; i++) {
         checkboxes[i].checked = false;
     }
 
@@ -284,9 +284,9 @@ const addFileItem = (__filepath) => {
     <td>${path.extname(__filepath)}</td>
     `;
     var color = document.getElementsByTagName('tr');
-    for(var i = 0; i < color.length; i++){
-    if(i % 2 == 0 && color[i].getElementsByTagName('td').length){
-        color[i].style.backgroundColor = '#4e80cc';
+    for (var i = 0; i < color.length; i++) {
+        if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
+            color[i].style.backgroundColor = '#4e80cc';
         }
     }
     addDelButton(item);
