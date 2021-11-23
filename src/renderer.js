@@ -296,10 +296,11 @@ const addFileItem = (__filepath) => {
 //Function handle adding delete button for each loaded file
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("td"));
+    delBtn.classList.add("delTrash");
     // delBtn.classList.add("btn");
-    const delIcon = document.createElement("button");
+    const delIcon = document.createElement("i");
     delIcon.classList.add("fa");
-    delIcon.classList.add("fa-trash");
+    delIcon.classList.add("fa-times");
     delBtn.appendChild(delIcon);
     delBtn.onclick = function () {
         const path = this.parentElement.getAttribute("path");
