@@ -462,3 +462,7 @@ h5{
 #rowdrop{
   width: 100%;
 }
+
+.overflow-x-hidden{
+  overflow-x: hidden;
+}
