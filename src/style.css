@@ -298,6 +298,10 @@ h5{
     font-family: 'Bebas Neue', sans-serif;
     font-weight: bold;
   }
+  #ruleBtn:hover{
+    background-color: #f9cb6a;
+    color: #1b3344;
+  }
 
   #rulelistBtn{
     padding-top: 6px;
@@ -312,6 +316,12 @@ h5{
     font-family: 'Bebas Neue', sans-serif;
     font-weight: bold;
   }
+
+  #rulelistBtn:hover{
+    background-color: #f9cb6a;
+    color: #1b3344;
+  }
+
   .active, .accordion-collapse:hover {
     background-color: #fb742d;
   }
@@ -322,6 +332,14 @@ h5{
     overflow: hidden;
     padding-top: 3px;
     background-color: aliceblue;
+    max-height: 0;
+    transition: max-height 0.4s ease-out;
+  }
+
+  .rulebox {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease-out;
   }
 
   .drag-area{
