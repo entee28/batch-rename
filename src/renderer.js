@@ -280,8 +280,8 @@ const addFileItem = (__filepath) => {
     item.setAttribute("path", __filepath);
     item.classList.add("item");
     item.innerHTML = `
-    <td>${path.parse(__filepath).name}</td>
-    <td>${path.extname(__filepath)}</td>
+    <td><div class="trdiv1">${path.parse(__filepath).name}</div></td>
+    <td><div class="trdiv2">${path.extname(__filepath)}</div></td>
     `;
     // var color = document.getElementsByTagName('tr');
     // for (var i = 0; i < color.length; i++) {
