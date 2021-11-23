@@ -930,7 +930,9 @@ const closeMenu = document.getElementById("close");
 
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
-
+//disable startup easteregg
+document.getElementById("open").disabled = true;
+document.getElementById("open").style.cursor = "default";
 // $('.majorpoints').click(function(){
 //     $(this).find('.hider').toggle();
 // });
