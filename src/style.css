@@ -219,10 +219,12 @@ h5{
       position: flex;
       width: 100%;
       height: 100%;
-      border: 3px solid #213371;
+      /* border: 3px solid #213371; */
+      border-bottom: 3px solid #213371;
       margin-left: -100px;
-      border-collapse: separate;
+      border-collapse: collapse;
       border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   }
 
   th:first-of-type {
@@ -246,26 +248,20 @@ h5{
     text-align: center;
   }
 
-  thead{
-    background: #67abc4;
+  thead tr{
+    background: #1b3344;
     color: white;
-  }
-
-  thead:hover{
-    background: #F1EFEF;
   }
 
   tr{
       height: 50px;
-      border: white;
-      color: #d71a9a
       ;
   }
 
-  tr:hover{
-    background: #d8d8db;
-    color: #3e73aa;
-    
+  tbody tr:hover{
+    background: #F1EFEF;
+    color: #1b3344;
+    font-weight: bold;
   }
 
   .delTrash:hover{
