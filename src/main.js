@@ -164,6 +164,15 @@ ipc.on('error-handle', function (event, message) {
   dialog.showErrorBox('Error', `${message}`)
 })
 
+ipc.on('preview-handle', function (event, message) {
+  dialog.showMessageBoxSync({
+    message: `${message}`,
+    type: 'info',
+    buttons: [],
+    title: 'Preview',
+  });
+})
+
 //function handle opening file dialog, return an array of selected files
 const openFile = () => {
   const files = dialog.showOpenDialogSync({ properties: ['openFile', 'multiSelections'] });

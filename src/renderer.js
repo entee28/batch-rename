@@ -283,23 +283,25 @@ const addFileItem = (__filepath) => {
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
     `;
-    var color = document.getElementsByTagName('tr');
-    for (var i = 0; i < color.length; i++) {
-        if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
-            color[i].style.backgroundColor = '#4e80cc';
-        }
-    }
+    // var color = document.getElementsByTagName('tr');
+    // for (var i = 0; i < color.length; i++) {
+    //     if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
+    //         color[i].style.backgroundColor = '#4e80cc';
+    //     }
+    // }
     addDelButton(item);
+    addPreviewButton(item);
     container.appendChild(item);
 };
 
 //Function handle adding delete button for each loaded file
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("td"));
+    delBtn.classList.add("delTrash");
     // delBtn.classList.add("btn");
-    const delIcon = document.createElement("button");
+    const delIcon = document.createElement("i");
     delIcon.classList.add("fa");
-    delIcon.classList.add("fa-trash");
+    delIcon.classList.add("fa-times");
     delBtn.appendChild(delIcon);
     delBtn.onclick = function () {
         const path = this.parentElement.getAttribute("path");
@@ -345,6 +347,97 @@ function addDelButton(parent) {
             document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
         }
     };
+}
+
+function addPreviewButton(parent) {
+    const previewBtn = parent.appendChild(document.createElement("td"));
+    previewBtn.classList.add("preview");
+    // delBtn.classList.add("btn");
+    const previewIcon = document.createElement("i");
+    previewIcon.classList.add("fa");
+    previewIcon.classList.add("fa-search");
+    previewBtn.appendChild(previewIcon);
+    previewBtn.onclick = function () {
+        const rules = order;
+        let factory = new RuleCreator();
+
+        const __path = this.parentElement.getAttribute("path");
+        const original = path.basename(__path);
+
+        let name = path.parse(__path).name;
+        let extension = path.extname(__path);
+
+        try {
+            if (rules.length === 0) {
+                throw "No rules have been chosen!"
+            }
+
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    getExtensionParam();
+                } else if (rules[j] === "add-prefix") {
+                    getPrefixParam();
+                } else if (rules[j] === "add-suffix") {
+                    getSuffixParam();
+                } else if (rules[j] === "counter") {
+                    getCounterParam();
+                }
+            }
+
+            for (let j = 0; j < rules.length; j++) {
+                if (rules[j] === "extension") {
+                    const params = getExtensionParam();
+                    if (params) {
+                        extension = factory.invokeTransform(
+                            rules[j],
+                            extension,
+                            params[0],
+                            params[1]
+                        );
+                    }
+                } else if (rules[j] === "replace-characters") {
+                    const params = getReplaceParam();
+                    if (params) {
+                        name = factory.invokeTransform(rules[j], name, params[0], params[1]);
+                    }
+                } else if (rules[j] === "add-prefix") {
+                    const prefix = getPrefixParam();
+                    if (prefix) {
+                        name = factory.invokeTransform(rules[j], name, prefix);
+                    }
+                } else if (rules[j] === "add-suffix") {
+                    const suffix = getSuffixParam();
+                    if (suffix) {
+                        name = factory.invokeTransform(rules[j], name, suffix);
+                    }
+                } else if (rules[j] === "counter") {
+                    const params = getCounterParam();
+                    if (params) {
+                        let start = parseInt(params[0]);
+                        let steps = parseInt(params[1]) * i;
+                        let digits = parseInt(params[2]);
+
+                        let padding = start + steps;
+                        padding = padding.toString();
+                        while (padding.length < digits) padding = "0" + padding;
+
+                        name = factory.invokeTransform(rules[j], name, padding);
+                    }
+                } else {
+                    name = factory.invokeTransform(rules[j], name);
+                }
+            }
+            handlePreview(original, name, extension);
+        } catch (err) {
+            errorHandle(err);
+        }
+
+    }
+}
+
+function handlePreview(original, name, extension) {
+    const message = `${original} => ${name}${extension}`;
+    ipc.send('preview-handle', message);
 }
 
 //function getting parameters for the change extension rule
@@ -599,11 +692,13 @@ btn.addEventListener("click", () => {
         let newPath = path.join(pathList[i], "..", `${name}${extension}`);
         fs.rename(pathList[i], newPath, function () {
             pathList[i] = newPath;
+            items[i].setAttribute("path", newPath);
             items[i].innerHTML = `
             <td>${path.parse(newPath).name}</td>
             <td>${path.extname(newPath)}</td>
             `;
             addDelButton(items[i]);
+            addPreviewButton(items[i]);
         });
     }
 });
@@ -690,17 +785,17 @@ selectBtn.onclick = checkAll;
 
 // to check if all the checkbox is checked or not on click
 document.querySelector(`input[id="extension"]`).onclick = vibeCheck();
-function vibeCheck(){
+function vibeCheck() {
     const allBoxesState = document.querySelectorAll(`input[name="renaming-rules"]:checked`);
-    
-    if (allBoxesState.length == 0){
+
+    if (allBoxesState.length == 0) {
         selectBtn.title = "Select All Rules";
-        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "aliceblue";});
+        selectBtn.addEventListener('mouseleave', function () { selectBtn.style.color = "aliceblue"; });
     }
-    else{
+    else {
         selectBtn.title = "Unselect All Rules";
-        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "#f9cb6a";});
-        selectBtn.addEventListener('mouseover',function(){selectBtn.style.color = "#1b3344";});
+        selectBtn.addEventListener('mouseleave', function () { selectBtn.style.color = "#f9cb6a"; });
+        selectBtn.addEventListener('mouseover', function () { selectBtn.style.color = "#1b3344"; });
     }
 }
 
@@ -784,6 +879,8 @@ function openNav() {
     document.getElementById("open").style.transition = "0s";
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
+    document.getElementById("batchtitle").style.marginLeft = "45%";
+    document.getElementById("drag-back").style.marginLeft = "25%";
 }
 
 function closeNav() {
@@ -798,7 +895,8 @@ function closeNav() {
                 document.getElementById("open").style.opacity = "1";
             }
         });
-
+    document.getElementById("batchtitle").style.marginLeft = "40%";
+    document.getElementById("drag-back").style.marginLeft = "20%";
 }
 
 const openMenu = document.getElementById("open");

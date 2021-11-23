@@ -215,12 +215,29 @@ h5{
   }
 
 
-  .table-bordered{
+  .table{
       position: flex;
       width: 100%;
       height: 100%;
-      border: 2px solid #fb742d;
+      /* border: 3px solid #213371; */
+      border-bottom: 3px solid #213371;
       margin-left: -100px;
+      border-collapse: collapse;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  th:first-of-type {
+    border-top-left-radius: 10px;
+  }
+  th:last-of-type {
+    border-top-right-radius: 10px;
+  }
+  tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 10px;
+  }
+  tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 10px;
   }
 
   #batchtable{
@@ -231,9 +248,40 @@ h5{
     text-align: center;
   }
 
+  th{
+    width: 300px;
+  }
+
+  .trdiv1{
+    width: 300px;
+  }
+
+  .trdiv2{
+    width: 300px;
+  }
+
+  thead tr{
+    background: #1b3344;
+    color: white;
+  }
+
   tr{
       height: 50px;
-      border: 2px solid #fb742d;
+      ;
+  }
+
+  tbody tr:hover{
+    background: #F1EFEF;
+    color: #1b3344;
+    font-weight: bold;
+  }
+
+  .delTrash:hover{
+    background: #f9cb6a;
+  }
+
+  .preview:hover{
+    background: #f9cb6a;
   }
 
   #ruleBtn{
@@ -278,8 +326,8 @@ h5{
 
   .drag-area{
     border: 2px dashed #fff;
-    height: 250px;
-    width: 500px;
+    height: 370px;
+    width: 650px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -291,10 +339,10 @@ h5{
   }
 
   .drag-back{
-    height: 400px;
-    width: 700px;
+    height: 550px;
+    width: 850px;
     background: #4e80cc    ;
-    margin-left: 420px;
+    margin-left: 25%;
     border-radius: 10px;
   }
 
@@ -379,8 +427,8 @@ h5{
 }
 
 #batchtitle{
-    margin-left: 638px;
-    margin-bottom: 30px;
+    margin-left: 45%;
+    margin-bottom: 3%;
 }
 
 .martop-250{
@@ -424,5 +472,9 @@ h5{
 }
 
 #rowdrop{
-  width: 800px;
+  width: 100%;
+}
+
+.overflow-x-hidden{
+  overflow-x: hidden;
 }
