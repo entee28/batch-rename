@@ -280,8 +280,8 @@ const addFileItem = (__filepath) => {
     item.setAttribute("path", __filepath);
     item.classList.add("item");
     item.innerHTML = `
-    <td><div class="trdiv1">${path.parse(__filepath).name}</div></td>
-    <td><div class="trdiv2">${path.extname(__filepath)}</div></td>
+    <td>${path.parse(__filepath).name}</td>
+    <td>${path.extname(__filepath)}</td>
     `;
     // var color = document.getElementsByTagName('tr');
     // for (var i = 0; i < color.length; i++) {
@@ -624,18 +624,12 @@ btn.addEventListener("click", () => {
     const rules = order;
     let factory = new RuleCreator();
     const items = document.querySelectorAll(`tr[class="item"]`);
-    
-    try {
-        if (rules.length === 0) {
-            throw "No rules have been chosen!"
-        }
 
-        for (let i = 0; i < pathList.length; i++) {
-            let name = path.parse(pathList[i]).name;
-            let extension = path.extname(pathList[i]);
+    for (let i = 0; i < pathList.length; i++) {
+        let name = path.parse(pathList[i]).name;
+        let extension = path.extname(pathList[i]);
 
-
-
+        try {
             for (let j = 0; j < rules.length; j++) {
                 if (rules[j] === "extension") {
                     getExtensionParam();
@@ -691,11 +685,14 @@ btn.addEventListener("click", () => {
                     name = factory.invokeTransform(rules[j], name);
                 }
             }
+        } catch (err) {
+            errorHandle(err);
         }
 
         let newPath = path.join(pathList[i], "..", `${name}${extension}`);
         fs.rename(pathList[i], newPath, function () {
             pathList[i] = newPath;
+            items[i].setAttribute("path", newPath);
             items[i].innerHTML = `
             <td>${path.parse(newPath).name}</td>
             <td>${path.extname(newPath)}</td>
@@ -703,8 +700,6 @@ btn.addEventListener("click", () => {
             addDelButton(items[i]);
             addPreviewButton(items[i]);
         });
-    } catch (err) {
-        errorHandle(err);
     }
 });
 
@@ -884,8 +879,8 @@ function openNav() {
     document.getElementById("open").style.transition = "0s";
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
-    document.getElementById("batchtitle").style.marginLeft = "50%";
-    document.getElementById("drag-back").style.marginLeft = "30%";
+    document.getElementById("batchtitle").style.marginLeft = "45%";
+    document.getElementById("drag-back").style.marginLeft = "25%";
 }
 
 function closeNav() {
