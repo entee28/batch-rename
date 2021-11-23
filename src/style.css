@@ -275,8 +275,8 @@ h5{
 
   .drag-area{
     border: 2px dashed #fff;
-    height: 250px;
-    width: 500px;
+    height: 370px;
+    width: 650px;
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -288,10 +288,10 @@ h5{
   }
 
   .drag-back{
-    height: 400px;
-    width: 700px;
+    height: 550px;
+    width: 850px;
     background: #4e80cc    ;
-    margin-left: 420px;
+    margin-left: 25%;
     border-radius: 10px;
   }
 
@@ -376,8 +376,8 @@ h5{
 }
 
 #batchtitle{
-    margin-left: 638px;
-    margin-bottom: 30px;
+    margin-left: 45%;
+    margin-bottom: 3%;
 }
 
 .martop-250{
@@ -421,5 +421,5 @@ h5{
 }
 
 #rowdrop{
-  width: 800px;
+  width: 100%;
 }
