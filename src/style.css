@@ -258,6 +258,11 @@ h5{
       ;
   }
 
+  tbody tr:hover{
+    background: #F1EFEF;
+    color: #1b3344;
+    font-weight: bold;
+  }
 
   .delTrash:hover{
     background: #f9cb6a;
