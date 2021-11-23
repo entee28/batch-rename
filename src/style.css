@@ -101,7 +101,9 @@ h5{
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(122, 251, 255, 0.568);
+  background: 	#708090;
+  border: 4px solid transparent;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -213,12 +215,27 @@ h5{
   }
 
 
-  .table-bordered{
+  .table{
       position: flex;
       width: 100%;
       height: 100%;
-      border: 2px solid #fb742d;
+      border: 3px solid #213371;
       margin-left: -100px;
+      border-collapse: separate;
+      border-radius: 10px;
+  }
+
+  th:first-of-type {
+    border-top-left-radius: 10px;
+  }
+  th:last-of-type {
+    border-top-right-radius: 10px;
+  }
+  tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 10px;
+  }
+  tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 10px;
   }
 
   #batchtable{
@@ -229,9 +246,30 @@ h5{
     text-align: center;
   }
 
+  thead{
+    background: #67abc4;
+    color: white;
+  }
+
+  thead:hover{
+    background: #F1EFEF;
+  }
+
   tr{
       height: 50px;
-      border: 2px solid #fb742d;
+      border: white;
+      color: #d71a9a
+      ;
+  }
+
+  tr:hover{
+    background: #d8d8db;
+    color: #3e73aa;
+    
+  }
+
+  .delTrash:hover{
+    background: #f9cb6a;
   }
 
   #ruleBtn{
@@ -271,6 +309,7 @@ h5{
     /* display: none; */
     overflow: hidden;
     padding-top: 3px;
+    background-color: aliceblue;
   }
 
   .drag-area{

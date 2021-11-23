@@ -283,12 +283,12 @@ const addFileItem = (__filepath) => {
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
     `;
-    var color = document.getElementsByTagName('tr');
-    for (var i = 0; i < color.length; i++) {
-        if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
-            color[i].style.backgroundColor = '#4e80cc';
-        }
-    }
+    // var color = document.getElementsByTagName('tr');
+    // for (var i = 0; i < color.length; i++) {
+    //     if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
+    //         color[i].style.backgroundColor = '#4e80cc';
+    //     }
+    // }
     addDelButton(item);
     container.appendChild(item);
 };
@@ -296,10 +296,11 @@ const addFileItem = (__filepath) => {
 //Function handle adding delete button for each loaded file
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("td"));
+    delBtn.classList.add("delTrash");
     // delBtn.classList.add("btn");
-    const delIcon = document.createElement("button");
+    const delIcon = document.createElement("i");
     delIcon.classList.add("fa");
-    delIcon.classList.add("fa-trash");
+    delIcon.classList.add("fa-times");
     delBtn.appendChild(delIcon);
     delBtn.onclick = function () {
         const path = this.parentElement.getAttribute("path");
@@ -695,13 +696,12 @@ function vibeCheck(){
     
     if (allBoxesState.length == 0){
         selectBtn.title = "Select All Rules";
-        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.backgroundColor = "#1b3344";});
-        selectBtn.addEventListener('mouseover',function(){selectBtn.style.backgroundColor = "#f9cb6a";});
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "aliceblue";});
     }
     else{
         selectBtn.title = "Unselect All Rules";
-        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.backgroundColor = "#91caf9";});
-        selectBtn.addEventListener('mouseover',function(){selectBtn.style.backgroundColor = "#f9cb6a";});
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "#f9cb6a";});
+        selectBtn.addEventListener('mouseover',function(){selectBtn.style.color = "#1b3344";});
     }
 }
 
