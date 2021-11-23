@@ -101,7 +101,9 @@ h5{
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(122, 251, 255, 0.568);
+  background: 	#708090;
+  border: 4px solid transparent;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -271,6 +273,7 @@ h5{
     /* display: none; */
     overflow: hidden;
     padding-top: 3px;
+    background-color: aliceblue;
   }
 
   .drag-area{

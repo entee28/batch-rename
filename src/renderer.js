@@ -695,13 +695,12 @@ function vibeCheck(){
     
     if (allBoxesState.length == 0){
         selectBtn.title = "Select All Rules";
-        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.backgroundColor = "#1b3344";});
-        selectBtn.addEventListener('mouseover',function(){selectBtn.style.backgroundColor = "#f9cb6a";});
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "aliceblue";});
     }
     else{
         selectBtn.title = "Unselect All Rules";
-        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.backgroundColor = "#91caf9";});
-        selectBtn.addEventListener('mouseover',function(){selectBtn.style.backgroundColor = "#f9cb6a";});
+        selectBtn.addEventListener('mouseleave',function(){selectBtn.style.color = "#f9cb6a";});
+        selectBtn.addEventListener('mouseover',function(){selectBtn.style.color = "#1b3344";});
     }
 }
 
