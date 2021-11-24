@@ -427,7 +427,19 @@ function addPreviewButton(parent) {
                     name = factory.invokeTransform(rules[j], name);
                 }
             }
-            handlePreview(original, name, extension);
+
+            let newPath = null;
+            if (copyChk.checked) {
+                if (pathInput.value === '') {
+                    throw 'Empty copy directory!'
+                } else {
+                    newPath = path.join(pathInput.value, `${name}${extension}`);
+                }
+            } else {
+                newPath = path.join(__path, "..", `${name}${extension}`);
+            }
+
+            handlePreview(original, __path, name, extension, newPath);
         } catch (err) {
             errorHandle(err);
         }
@@ -435,8 +447,11 @@ function addPreviewButton(parent) {
     }
 }
 
-function handlePreview(original, name, extension) {
-    const message = `${original} => ${name}${extension}`;
+function handlePreview(original, oldPath, name, extension, newPath) {
+    const message = `    Original name: ${original}\n
+    Original path: ${oldPath}\n
+    New name: ${name}${extension}\n
+    New path: ${newPath}`;
     ipc.send('preview-handle', message);
 }
 
