@@ -499,8 +499,9 @@ h5{
 
 #btnset{
   justify-content: center;
-  margin-left: 50%;
+  margin-left: 45%;
   margin-top: 15%;
+  width: 500px;
 }
 
 #copyarea{
@@ -516,5 +517,9 @@ h5{
 .btn-style{
   background-color: #1b3344;
   color: white;
+}
+
+.btn-style:hover{
+  background-color: aliceblue;
   font-weight: bold;
 }
