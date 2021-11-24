@@ -332,13 +332,13 @@ h5{
     overflow: hidden;
     padding-top: 3px;
     background-color: aliceblue;
-    max-height: 0;
+    max-height: 400px;
     transition: max-height 0.4s ease-out;
   }
 
   .rulebox {
     overflow: hidden;
-    max-height: 0;
+    max-height: 600px;
     transition: max-height 0.4s ease-out;
   }
 

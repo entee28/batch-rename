@@ -964,10 +964,10 @@ for (i = 0; i < acc.length; i++) {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
-        if (panel.style.maxHeight) {
-            panel.style.maxHeight = null;
+        if (panel.style.maxHeight == "0px") {
+            panel.style.maxHeight = "600px";
           } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
+            panel.style.maxHeight = "0px";
           }
     });
 }
@@ -980,10 +980,10 @@ for (j = 0; j < lol.length; j++) {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
-        if (panel.style.maxHeight) {
-            panel.style.maxHeight = null;
+        if (panel.style.maxHeight == "0px") {
+            panel.style.maxHeight = "400px";
           } else {
-            panel.style.maxHeight =  "400px";
+            panel.style.maxHeight = "0px";
           }
     });
 }
@@ -991,28 +991,30 @@ for (j = 0; j < lol.length; j++) {
 document.getElementById("ruleBtn").addEventListener('click', function () {
     const icon = this.querySelector("i");
     const text = this.querySelector("span");
-    if (icon.classList.contains('fa-chevron-right')) {
-        icon.classList.remove('fa-chevron-right');
-        icon.classList.add('fa-chevron-down');
-        // text.innerHTML = 'Retract rule ';
-    } else {
+
+    if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
         // text.innerHTML = 'Expand rule ';
+    } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        // text.innerHTML = 'Retract rule ';
     }
 })
 
 document.getElementById("rulelistBtn").addEventListener('click', function () {
     const icon = this.querySelector("i");
     const text = this.querySelector("span");
-    if (icon.classList.contains('fa-chevron-right')) {
-        icon.classList.remove('fa-chevron-right');
-        icon.classList.add('fa-chevron-down');
-        // text.innerHTML = 'Retract list rule ';
-    } else {
+
+    if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
         // text.innerHTML = 'Expand list rule ';
+    } else {
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+        // text.innerHTML = 'Retract list rule ';
     }
 })
 
