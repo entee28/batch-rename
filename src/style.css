@@ -500,6 +500,7 @@ h5{
   justify-content: center;
   margin-left: 55%;
   margin-top: 10%;
+  width: 500px;
 }
 
 #copyarea{
@@ -515,6 +516,10 @@ h5{
 .btn-style{
   background-color: #1b3344;
   color: white;
+}
+
+.btn-style:hover{
+  background-color: aliceblue;
   font-weight: bold;
 }
 
