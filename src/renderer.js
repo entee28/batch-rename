@@ -919,8 +919,7 @@ function openNav() {
     document.getElementById("open").style.transition = "0s";
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
-    document.getElementById("batchtitle").style.marginLeft = "45%";
-    document.getElementById("drag-back").style.marginLeft = "25%";
+    document.getElementById("drag-back").style.marginLeft = "30%";
 }
 
 function closeNav() {
@@ -935,7 +934,6 @@ function closeNav() {
                 document.getElementById("open").style.opacity = "1";
             }
         });
-    document.getElementById("batchtitle").style.marginLeft = "40%";
     document.getElementById("drag-back").style.marginLeft = "20%";
 }
 

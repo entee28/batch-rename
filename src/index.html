@@ -168,17 +168,20 @@
           </section>
   
           <section id="tablebutton">
-            <div class="container-fluid martop-250 marleft-333">
-              <button type="button" class="btn btn-info focus-second-visible btn-shadow mar-lr-5" id="openFileBtn">Open File</button>
-              <button type="button" class="btn btn-warning focus-second-visible btn-shadow mar-lr-5" id="openFolderBtn">Open Folder</button>
-              <button id="btnConvert" class="btn btn-primary focus-second-visible btn-shadow mar-lr-5">Convert</button>
+            <div class="container-fluid" id="btnset">
+              <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFileBtn">Open File</button>
+              <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFolderBtn">Open Folder</button>
+              <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnConvert">Convert</button>
             </div>
+            <br><br>
             <!-- NEED REPOSITION!!!!! -->
+            <div class="container-fluid" id="copyarea">
             <label for="convert-copy">
               <input type="checkbox" id="convert-copy" class="mar-tb-5" name="copy-checkbox"> Copy renamed files to this path
             </label>
-            <input type="text" placeholder="Path..." disabled id="copy-path" name="copy-path" readonly="readonly" />
-            <button type="button" disabled class="btn btn-warning focus-second-visible btn-shadow mar-lr-5" id="btnBrowse">Browse...</button>
+            <input type="text" placeholder="Path..." disabled id="copy-path" name="copy-path" readonly="readonly"/>
+            <button type="button" disabled class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnBrowse">Browse...</button>
+          </div>
             <!-- NEED REPOSITION!!!!! -->
         </section>
     </div>

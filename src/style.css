@@ -496,3 +496,25 @@ h5{
 .overflow-x-hidden{
   overflow-x: hidden;
 }
+
+#btnset{
+  justify-content: center;
+  margin-left: 50%;
+  margin-top: 15%;
+}
+
+#copyarea{
+  justify-content: center;
+  margin-left: 50%;
+  margin-top: 10%;
+}
+
+#copy-path{
+  width: 220px;
+}
+
+.btn-style{
+  background-color: #1b3344;
+  color: white;
+  font-weight: bold;
+}
