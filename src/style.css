@@ -461,13 +461,12 @@ h5{
 }
 
 .mar-lr-5{
-  margin-left: 2.5px;
-  margin-right: 2.5px;
+  margin-bottom: 10px;
+  width: 50%;
 }
 
 .mar-tb-5{
-  margin-top: 2.5px;
-  margin-bottom: 2.5px;
+  margin-bottom: 10px;
 }
 
 #tablebutton{
@@ -498,15 +497,16 @@ h5{
 
 #btnset{
   justify-content: center;
-  margin-left: 55%;
+  margin-left: -7%;
   margin-top: 10%;
-  width: 500px;
+  width: 600px;
 }
 
 #copyarea{
   justify-content: center;
-  margin-left: 55%;
-  margin-top: 5%;
+  margin-left: 100%;
+  margin-top: -31%;
+  width: 800px;
 }
 
 #copy-path{
@@ -516,15 +516,29 @@ h5{
 .btn-style{
   background-color: #1b3344;
   color: white;
+  cursor: pointer;
 }
 
 .btn-style:hover{
   background-color: aliceblue;
-  font-weight: bold;
+}
+
+#btnConvert{
+  background-color: #1b3344;
+  color: #f9cb6a;
+
+}
+
+#btnConvert:hover{
+  background-color: aliceblue;
+  color: #1b3344;
+}
+
+#btnBrowse{
+  width: 20%;
 }
 
 .table-wrap{
   height: 100%;
   overflow-y: scroll;
 }
-

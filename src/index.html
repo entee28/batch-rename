@@ -175,18 +175,19 @@
                 <i class="fa fa-file"></i> Open File</button>
               <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFolderBtn">
                 <i class="fa fa-folder-open"></i> Open Folder</button>
+            </div>
+            <!-- NEED REPOSITION!!!!! -->
+            <div class="container-fluid" id="copyarea">
+              <label for="convert-copy">
+                <input type="checkbox" id="convert-copy" class="mar-tb-5" name="copy-checkbox"> Copy renamed files to this path
+              </label>
+              <section id="borwsebox">
+                <input type="text" placeholder="Path..." disabled id="copy-path" name="copy-path" readonly="readonly">
+                <button type="button" disabled class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnBrowse">Browse...</button>
+              </section>
               <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnConvert">
                 <i class="fa fa-exchange"></i> Convert</button>
             </div>
-            <br><br>
-            <!-- NEED REPOSITION!!!!! -->
-            <div class="container-fluid" id="copyarea">
-            <label for="convert-copy">
-              <input type="checkbox" id="convert-copy" class="mar-tb-5" name="copy-checkbox"> Copy renamed files to this path
-            </label>
-            <input type="text" placeholder="Path..." disabled id="copy-path" name="copy-path" readonly="readonly"/>
-            <button type="button" disabled class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnBrowse">Browse...</button>
-          </div>
             <!-- NEED REPOSITION!!!!! -->
         </section>
     </div>
