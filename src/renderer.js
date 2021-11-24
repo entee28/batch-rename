@@ -822,6 +822,7 @@ function check(checked = true) {
 
 const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
+selectBtn.addEventListener('mouseover', function () { selectBtn.style.color = "#1b3344"; });
 
 // to check if all the checkbox is checked or not on click
 document.querySelector(`input[id="extension"]`).onclick = vibeCheck();
