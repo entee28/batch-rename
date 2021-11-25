@@ -13,187 +13,203 @@
   <link rel="stylesheet" href="../node_modules/bootstrap/dist/js/bootstrap.min.js">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Mulish:wght@300&display=swap" rel="stylesheet">
-  
+
   <title>Batch Rename</title>
 </head>
 
 <body class="overflow-x-hidden">
-    <div class="row"  id="rule-list-container">
-      <div class="col-lg-4">
-        <div id="sideBar" class="sidebar">
-          <i href="javascript:void(0)" class="closebtn" id="close">&times;</i>
-            <div class="majorpoints">
-              <button id="ruleBtn" class="accordion-collapse container-fluid btn_rule">
-                <span>RENAMING RULES</span>
-                <i class="fa fa-chevron-down"></i>
-              </button>
+  <div class="row" id="rule-list-container">
+    <div class="col-lg-4">
+      <div id="sideBar" class="sidebar">
+        <i href="javascript:void(0)" class="closebtn" id="close">&times;</i>
+        <div class="majorpoints">
+          <button id="ruleBtn" class="accordion-collapse container-fluid btn_rule">
+            <span>RENAMING RULES</span>
+            <i class="fa fa-chevron-down"></i>
+          </button>
 
-              <div class="rulebox" style="display: none;">
-               
-                <div class="btn-group" role="group" id="groupBtn" aria-label="...">
-                  <button type="button" class="btn-success focus-visible" id="savePresetBtn" title="Save Preset"><i class="fa fa-save"></i></button>
-                  <button type="button" class="btn-danger focus-visible" id="loadPresetBtn" title="Load Preset"><i class="fa fa-download"></i></button>
-                  <button id="selectall" class="btn-primary focus-visible" title="Select All Rules"><i class="fa fa-check-square"></i></button>
-                </div>
-                
-                <ul class="container-fluid" id="rule-list">
-                  <li>
-                    <label for="extension">
-                      <input type="checkbox" id="extension" name="renaming-rules" value="extension"> Change File Extension
-                    </label>
-                    <!-- <label for="extension-needle">Needle: </label> -->
-                    <input type="text" id="extension-needle" class="mar-tb-5" name="extension-parameter" placeholder="Needle..." disabled>
-                    <!-- <label for="extension-replacement">Replacement: </label> -->
-                    <input type="text" id="extension-replacement" class="mar-tb-5" name="extension-parameter" placeholder="Replacement..." disabled>
-                  </li>
-      
-                  <li>
-                    <label for="remove-space">
-                      <input type="checkbox" id="remove-space" name="renaming-rules" value="remove-space"> Remove All Space
-                    </label>
-                  </li>
-      
-                  <li>
-                    <label for="replace-characters">
-                      <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters"> Replace Characters
-                    </label>
-                    <!-- <label for="needle">Needle: </label> -->
-                    <input type="text" id="needle" class="mar-tb-5" name="replace-parameter" placeholder="Needle..." disabled>
-                    <!-- <label for="replacement">Replacement: </label> -->
-                    <input type="text" id="replacement" class="mar-tb-5" name="replace-parameter" placeholder="Replacement..." disabled>
-                  </li>
-      
-                  <li>
-                    <label for="add-prefix">
-                      <input type="checkbox" id="add-prefix" name="renaming-rules" value="add-prefix"> Add Prefix
-                    </label>
-                    <!-- <label for="prefix">Prefix: </label> -->
-                    <input type="text" id="prefix" class="mar-tb-5" name="prefix-parameter" placeholder="Prefix..." disabled>
-                  </li>
-      
-                  <li>
-                    <label for="add-suffix">
-                      <input type="checkbox" id="add-suffix" class="mar-tb-5" name="renaming-rules" value="add-suffix"> Add Suffix
-                    </label>
-                    <!-- <label for="suffix">Suffix: </label> -->
-                    <input type="text" id="suffix" class="mar-tb-5" name="suffix-parameter" placeholder="Suffix..." disabled>
-                  </li>
-      
-                  <li>
-                    <label for="lowercase">
-                      <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case And
-                      No
-                      Space
-                    </label>
-                  </li>
-      
-                  <li>
-                    <label for="pascalcase">
-                      <input type="checkbox" id="pascalcase" name="renaming-rules" value="pascalcase"> Convert To PascalCase
-                    </label>
-                  </li>
-      
-                  <li>
-                    <label for="counter">
-                      <input type="checkbox" id="counter" name="renaming-rules" value="counter"> Add Counter
-                    </label>
-                    <!-- <label for="start">Start: </label> -->
-                    <input type="number" id="start" class="mar-tb-5" name="counter-parameter" placeholder="Start value..." min="0" disabled>
-                    <!-- <label for="step">Steps: </label> -->
-                    <input type="number" id="step" class="mar-tb-5" name="counter-parameter" placeholder="Steps..." min="1" disabled>
-                    <!-- <label for="digits">Number of digits: </label> -->
-                    <input type="number" id="digits" class="mar-tb-5" name="counter-parameter" placeholder="Number of digits..." min="1"
-                      disabled>
-                  </li>
-                </ul>
+          <div class="rulebox" style="display: none;">
 
-              </div>
+            <div class="btn-group" role="group" id="groupBtn" aria-label="...">
+              <button type="button" class="btn-success focus-visible" id="savePresetBtn" title="Save Preset"><i
+                  class="fa fa-save"></i></button>
+              <button type="button" class="btn-danger focus-visible" id="loadPresetBtn" title="Load Preset"><i
+                  class="fa fa-download"></i></button>
+              <button id="selectall" class="btn-primary focus-visible" title="Select All Rules"><i
+                  class="fa fa-check-square"></i></button>
             </div>
-            <hr>
-          <div class="listmajor">
-            <button id="rulelistBtn" class="accordion-collapse container-fluid btn_body">
-              <span>RULES ORDER</span>
-              <i class="fa fa-chevron-down"></i>
-            </button>
-            <div class="ruleList">
-              <section id="draggable-list-container">
-                <ul class="draggable-list container-fluid" id="draggable-list"></ul>
-              </section>
-            </div>
+
+            <ul class="container-fluid" id="rule-list">
+              <li>
+                <label for="extension">
+                  <input type="checkbox" id="extension" name="renaming-rules" value="extension"> Change File Extension
+                </label>
+                <!-- <label for="extension-needle">Needle: </label> -->
+                <input type="text" id="extension-needle" class="mar-tb-5" name="extension-parameter"
+                  placeholder="Needle..." disabled>
+                <!-- <label for="extension-replacement">Replacement: </label> -->
+                <input type="text" id="extension-replacement" class="mar-tb-5" name="extension-parameter"
+                  placeholder="Replacement..." disabled>
+              </li>
+
+              <li>
+                <label for="remove-space">
+                  <input type="checkbox" id="remove-space" name="renaming-rules" value="remove-space"> Remove All Space
+                </label>
+              </li>
+
+              <li>
+                <label for="replace-characters">
+                  <input type="checkbox" id="replace-characters" name="renaming-rules" value="replace-characters">
+                  Replace Characters
+                </label>
+                <!-- <label for="needle">Needle: </label> -->
+                <input type="text" id="needle" class="mar-tb-5" name="replace-parameter" placeholder="Needle..."
+                  disabled>
+                <!-- <label for="replacement">Replacement: </label> -->
+                <input type="text" id="replacement" class="mar-tb-5" name="replace-parameter"
+                  placeholder="Replacement..." disabled>
+              </li>
+
+              <li>
+                <label for="add-prefix">
+                  <input type="checkbox" id="add-prefix" name="renaming-rules" value="add-prefix"> Add Prefix
+                </label>
+                <!-- <label for="prefix">Prefix: </label> -->
+                <input type="text" id="prefix" class="mar-tb-5" name="prefix-parameter" placeholder="Prefix..."
+                  disabled>
+              </li>
+
+              <li>
+                <label for="add-suffix">
+                  <input type="checkbox" id="add-suffix" class="mar-tb-5" name="renaming-rules" value="add-suffix"> Add
+                  Suffix
+                </label>
+                <!-- <label for="suffix">Suffix: </label> -->
+                <input type="text" id="suffix" class="mar-tb-5" name="suffix-parameter" placeholder="Suffix..."
+                  disabled>
+              </li>
+
+              <li>
+                <label for="lowercase">
+                  <input type="checkbox" id="lowercase" name="renaming-rules" value="lowercase"> Convert To Lower Case
+                  And
+                  No
+                  Space
+                </label>
+              </li>
+
+              <li>
+                <label for="pascalcase">
+                  <input type="checkbox" id="pascalcase" name="renaming-rules" value="pascalcase"> Convert To PascalCase
+                </label>
+              </li>
+
+              <li>
+                <label for="counter">
+                  <input type="checkbox" id="counter" name="renaming-rules" value="counter"> Add Counter
+                </label>
+                <!-- <label for="start">Start: </label> -->
+                <input type="number" id="start" class="mar-tb-5" name="counter-parameter" placeholder="Start value..."
+                  min="0" disabled>
+                <!-- <label for="step">Steps: </label> -->
+                <input type="number" id="step" class="mar-tb-5" name="counter-parameter" placeholder="Steps..." min="1"
+                  disabled>
+                <!-- <label for="digits">Number of digits: </label> -->
+                <input type="number" id="digits" class="mar-tb-5" name="counter-parameter"
+                  placeholder="Number of digits..." min="1" disabled>
+              </li>
+            </ul>
+
           </div>
         </div>
+        <hr>
+        <div class="listmajor">
+          <button id="rulelistBtn" class="accordion-collapse container-fluid btn_body">
+            <span>RULES ORDER</span>
+            <i class="fa fa-chevron-down"></i>
+          </button>
+          <div class="ruleList">
+            <section id="draggable-list-container">
+              <ul class="draggable-list container-fluid" id="draggable-list"></ul>
+            </section>
+          </div>
+        </div>
+      </div>
 
-        <div id="menu">
-          <button class="openbtn" id="open">&#9776;</button>
+      <div id="menu">
+        <button class="openbtn" id="open">&#9776;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" id="rowdrop">
+    <div class="drag-back" id="drag-back">
+      <div class="drag-area" id="drag-area">
+        <header>Drop files / folders here</header>
+        <span>OR</span>
+        <div class="dropdown">
+          <div class="title pointerCursor">Choose Files<i class="fa fa-angle-right"></i></div>
+          <div class="menu pointerCursor hide">
+            <div class="option" id="option1">Open file</div>
+            <div class="option" id="option2">Open folder</div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="row" id="rowdrop">
-          <div class="drag-back" id="drag-back">
-            <div class="drag-area" id="drag-area">
-              <header>Drop files / folders here</header>
-              <span>OR</span>
-              <div class="dropdown">
-                <div class="title pointerCursor">Choose Files<i class="fa fa-angle-right"></i></div>
-                <div class="menu pointerCursor hide">
-                  <div class="option" id="option1">Open file</div>
-                  <div class="option" id="option2">Open folder</div>
-                </div>
-              </div>
-            </div>
+  <br>
+
+  <div class="row" id="rowtable">
+    <section id="batchtable" class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>File name</th>
+            <th>Type</th>
+            <th>Delete</th>
+            <th>Preview</th>
+          </tr>
+        </thead>
+        <div id="myTable">
+          <tbody id="file-list-container">
+          </tbody>
         </div>
-    </div>
+      </table>
+    </section>
 
-        <br>
+    <section id="tablebutton">
+      <div class="container-fluid" id="btnset">
+        <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFileBtn">
+          <i class="fa fa-file"></i> Open File</button>
+        <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFolderBtn">
+          <i class="fa fa-folder-open"></i> Open Folder</button>
+      </div>
 
-        <div class="row" id="rowtable">
-          <section id="batchtable" class="table-wrap">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>File name</th>
-                  <th>Type</th>
-                  <th>Delete</th>
-                  <th>Preview</th>
-                </tr>
-              </thead>
-              <div id="myTable">
-                <tbody id="file-list-container">
-                </tbody>
-              </div>
-            </table>
-          </section>
-  
-          <section id="tablebutton">
-            <div class="container-fluid" id="btnset">
-              <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFileBtn">
-                <i class="fa fa-file"></i> Open File</button>
-              <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="openFolderBtn">
-                <i class="fa fa-folder-open"></i> Open Folder</button>
-            </div>
-            <!-- NEED REPOSITION!!!!! -->
-            <div class="container-fluid" id="copyarea">
-              <label for="convert-copy">
-                <input type="checkbox" id="convert-copy" class="mar-tb-5" name="copy-checkbox"> Copy renamed files to this path
-              </label>
-              <section id="borwsebox">
-                <input type="text" placeholder="Path..." disabled id="copy-path" name="copy-path" readonly="readonly">
-                <button type="button" disabled class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnBrowse">Browse...</button>
-              </section>
-              <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnConvert">
-                <i class="fa fa-exchange"></i> Convert</button>
-            </div>
-            <!-- NEED REPOSITION!!!!! -->
+      <div class="container-fluid" id="copyarea">
+        <label for="convert-copy">
+          <input type="checkbox" id="convert-copy" class="mar-tb-5" name="copy-checkbox"> Copy renamed files to this
+          path
+        </label>
+        <section id="borwsebox">
+          <input type="text" placeholder="Path..." disabled id="copy-path" name="copy-path" readonly="readonly">
+          <button type="button" disabled class="btn btn-style focus-second-visible btn-shadow mar-lr-5"
+            id="btnBrowse">Browse...</button>
         </section>
-    </div>
-    
+        <button type="button" class="btn btn-style focus-second-visible btn-shadow mar-lr-5" id="btnConvert">
+          <i class="fa fa-exchange"></i> Convert</button>
+      </div>
+    </section>
+  </div>
+
 
   <script src="./renderer.js"></script>
-  
+
 </body>
+
 </html>
