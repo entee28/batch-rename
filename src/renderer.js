@@ -268,7 +268,7 @@ const addFileItem = (__filepath) => {
 
     if (pathList.length === 1) {
         area.innerHTML = '';
-        area.style.background = 'white';
+        area.style.background = 'aliceblue';
         $(datatable).appendTo(area);
         $(buttontable).appendTo(area);
         tablerow.display = 'initial';
@@ -321,7 +321,7 @@ function addDelButton(parent) {
                     </div>
                 </div>
             </div>`;
-            area.style.background = '#4e80cc';
+            area.style.background = '#142532';
             $(datatable).appendTo('#rowtable');
             $(buttontable).appendTo('#rowtable');
 
@@ -427,7 +427,19 @@ function addPreviewButton(parent) {
                     name = factory.invokeTransform(rules[j], name);
                 }
             }
-            handlePreview(original, name, extension);
+
+            let newPath = null;
+            if (copyChk.checked) {
+                if (pathInput.value === '') {
+                    throw 'Empty copy directory!'
+                } else {
+                    newPath = path.join(pathInput.value, `${name}${extension}`);
+                }
+            } else {
+                newPath = path.join(__path, "..", `${name}${extension}`);
+            }
+
+            handlePreview(original, __path, name, extension, newPath);
         } catch (err) {
             errorHandle(err);
         }
@@ -435,8 +447,11 @@ function addPreviewButton(parent) {
     }
 }
 
-function handlePreview(original, name, extension) {
-    const message = `${original} => ${name}${extension}`;
+function handlePreview(original, oldPath, name, extension, newPath) {
+    const message = `    Original name: ${original}\n
+    Original path: ${oldPath}\n
+    New name: ${name}${extension}\n
+    New path: ${newPath}`;
     ipc.send('preview-handle', message);
 }
 
@@ -520,11 +535,11 @@ let order = []; //an array contains rule order
 
 //handle rule selection
 [].forEach.call(
-    document.querySelectorAll('input[type="checkbox"]'),
+    document.querySelectorAll(`input[name="renaming-rules"]`),
     function (checkbox) {
         "use strict";
         checkbox.addEventListener("change", function () {
-            let rules = document.querySelectorAll('input[type="checkbox"]');
+            let rules = document.querySelectorAll(`input[name="renaming-rules"]`);
             let previousLi = checkbox.parentNode.parentNode.previousElementSibling;
             let index = 0;
             while (previousLi !== null) {
@@ -625,11 +640,15 @@ btn.addEventListener("click", () => {
     let factory = new RuleCreator();
     const items = document.querySelectorAll(`tr[class="item"]`);
 
-    for (let i = 0; i < pathList.length; i++) {
-        let name = path.parse(pathList[i]).name;
-        let extension = path.extname(pathList[i]);
+    try {
+        if (rules.length === 0) {
+            throw "No rules have been chosen!"
+        }
 
-        try {
+        for (let i = 0; i < pathList.length; i++) {
+            let name = path.parse(pathList[i]).name;
+            let extension = path.extname(pathList[i]);
+
             for (let j = 0; j < rules.length; j++) {
                 if (rules[j] === "extension") {
                     getExtensionParam();
@@ -685,21 +704,42 @@ btn.addEventListener("click", () => {
                     name = factory.invokeTransform(rules[j], name);
                 }
             }
-        } catch (err) {
-            errorHandle(err);
-        }
 
-        let newPath = path.join(pathList[i], "..", `${name}${extension}`);
-        fs.rename(pathList[i], newPath, function () {
-            pathList[i] = newPath;
-            items[i].setAttribute("path", newPath);
-            items[i].innerHTML = `
-            <td>${path.parse(newPath).name}</td>
-            <td>${path.extname(newPath)}</td>
-            `;
-            addDelButton(items[i]);
-            addPreviewButton(items[i]);
-        });
+
+            let newPath = null;
+            if (copyChk.checked) {
+                if (pathInput.value === '') {
+                    throw 'Empty copy directory!'
+                } else {
+                    newPath = path.join(pathInput.value, `${name}${extension}`);
+                    fs.copyFile(pathList[i], newPath, (err) => {
+                        if (err) throw err;
+                        pathList[i] = newPath;
+                        items[i].setAttribute("path", newPath);
+                        items[i].innerHTML = `
+                    <td>${path.parse(newPath).name}</td>
+                    <td>${path.extname(newPath)}</td>
+                    `;
+                        addDelButton(items[i]);
+                        addPreviewButton(items[i]);
+                    });
+                }
+            } else {
+                newPath = path.join(pathList[i], "..", `${name}${extension}`);
+                fs.rename(pathList[i], newPath, function () {
+                    pathList[i] = newPath;
+                    items[i].setAttribute("path", newPath);
+                    items[i].innerHTML = `
+                <td>${path.parse(newPath).name}</td>
+                <td>${path.extname(newPath)}</td>
+                `;
+                    addDelButton(items[i]);
+                    addPreviewButton(items[i]);
+                });
+            }
+        }
+    } catch (err) {
+        errorHandle(err);
     }
 });
 
@@ -774,7 +814,7 @@ counterCheckBox.addEventListener("click", EnableDisableCounterParam);
 
 //FUNCTIONS HANDLE SELECT/UNSELECT ALL RULES BUTTON
 function check(checked = true) {
-    const cbs = document.querySelectorAll('input[type="checkbox"]');
+    const cbs = document.querySelectorAll(`input[name="renaming-rules"]`);
     cbs.forEach((cb) => {
         cb.checked = checked;
     });
@@ -782,6 +822,7 @@ function check(checked = true) {
 
 const selectBtn = document.querySelector("#selectall");
 selectBtn.onclick = checkAll;
+selectBtn.addEventListener('mouseover', function () { selectBtn.style.color = "#1b3344"; });
 
 // to check if all the checkbox is checked or not on click
 document.querySelector(`input[id="extension"]`).onclick = vibeCheck();
@@ -879,8 +920,7 @@ function openNav() {
     document.getElementById("open").style.transition = "0s";
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
-    document.getElementById("batchtitle").style.marginLeft = "45%";
-    document.getElementById("drag-back").style.marginLeft = "25%";
+    document.getElementById("drag-back").style.marginLeft = "30%";
 }
 
 function closeNav() {
@@ -895,7 +935,6 @@ function closeNav() {
                 document.getElementById("open").style.opacity = "1";
             }
         });
-    document.getElementById("batchtitle").style.marginLeft = "40%";
     document.getElementById("drag-back").style.marginLeft = "20%";
 }
 
@@ -905,7 +944,9 @@ const closeMenu = document.getElementById("close");
 
 openMenu.addEventListener("click", openNav);
 closeMenu.addEventListener("click", closeNav);
-
+//disable startup easteregg
+document.getElementById("open").disabled = true;
+document.getElementById("open").style.cursor = "default";
 // $('.majorpoints').click(function(){
 //     $(this).find('.hider').toggle();
 // });
@@ -922,11 +963,11 @@ for (i = 0; i < acc.length; i++) {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
-        if (panel.style.display === "none") {
-            panel.style.display = "block";
-        } else {
-            panel.style.display = "none";
-        }
+        if (panel.style.maxHeight == "0px") {
+            panel.style.maxHeight = "600px";
+          } else {
+            panel.style.maxHeight = "0px";
+          }
     });
 }
 
@@ -938,11 +979,11 @@ for (j = 0; j < lol.length; j++) {
         this.classList.toggle("active");
 
         var panel = this.nextElementSibling;
-        if (panel.style.display === "none") {
-            panel.style.display = "block";
-        } else {
-            panel.style.display = "none";
-        }
+        if (panel.style.maxHeight == "0px") {
+            panel.style.maxHeight = "400px";
+          } else {
+            panel.style.maxHeight = "0px";
+          }
     });
 }
 
@@ -1036,5 +1077,27 @@ dropdownTitle.addEventListener('click', toggleMenuDisplay);
 
 dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
 
-document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
+// document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
 
+//handle browse button
+const browseBtn = document.getElementById('btnBrowse');
+const pathInput = document.getElementById('copy-path');
+
+browseBtn.addEventListener("click", function (event) {
+    ipc.send("open-browse-dialog");
+});
+
+ipc.on("selected-browse-path", function (event, folder) {
+    pathInput.value = folder;
+});
+
+const copyChk = document.getElementById("convert-copy");
+function EnableDisablePathInput() {
+    let pathInput = document.getElementById('copy-path');
+    browseBtn.disabled = copyChk.checked ? false : true;
+    pathInput.disabled = copyChk.checked ? false : true;
+    if (pathInput.disabled) {
+        pathInput.value = "";
+    }
+}
+copyChk.addEventListener("click", EnableDisablePathInput);

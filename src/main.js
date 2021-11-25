@@ -155,6 +155,11 @@ ipc.on('open-folder-dialog', function (event) {
   if (folders) event.sender.send('selected-folder', folders);
 })
 
+ipc.on('open-browse-dialog', function (event) {
+  const folder = openOneFolder();
+  if (folder) event.sender.send('selected-browse-path', folder);
+})
+
 ipc.on('save-preset-dialog', function (event, myJSON) {
   const file = savePreset(myJSON);
 })
@@ -204,6 +209,13 @@ const openFolder = () => {
 
   if (!folders) { return; }
   return folders;
+}
+
+const openOneFolder = () => {
+  const folder = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
+
+  if (!folder) { return; }
+  return folder;
 }
 
 //function handle save preset dialog
