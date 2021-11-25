@@ -920,7 +920,13 @@ function openNav() {
     document.getElementById("open").style.transition = "0s";
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
+
     document.getElementById("drag-back").style.marginLeft = "30%";
+
+    const screenmin1600 = window.matchMedia("(min-width: 1600px)");
+    if(screenmin1600.matches){
+        document.getElementById("drag-back").style.marginLeft = "23%";
+    }
 }
 
 function closeNav() {
@@ -929,13 +935,20 @@ function closeNav() {
     document.getElementById("open").disabled = false;
     document.getElementById("open").style.cursor = "pointer";
     document.getElementById("open").style.transition = "0s";
+
     document.getElementById("menu").addEventListener("transitionend",
         function () {
             if (document.getElementById("sideBar").style.width == '0px') {
                 document.getElementById("open").style.opacity = "1";
             }
         });
+    
     document.getElementById("drag-back").style.marginLeft = "20%";
+
+    const screenmin1600 = window.matchMedia("(min-width: 1600px)");
+    if(screenmin1600.matches){
+        document.getElementById("drag-back").style.marginLeft = "15%";
+    }
 }
 
 const openMenu = document.getElementById("open");
@@ -1101,3 +1114,4 @@ function EnableDisablePathInput() {
     }
 }
 copyChk.addEventListener("click", EnableDisablePathInput);
+
