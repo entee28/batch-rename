@@ -12,6 +12,10 @@ li {
     box-sizing: border-box;
 }
 
+body{
+  background-color:	aliceblue;
+}
+
 #draggable-list-container {
     display: flex;
     border: none;
@@ -22,15 +26,15 @@ li {
 }
 
 .draggable-list {
-    border: 1px solid var(--border-color);
+    border: 1px solid #294e69;
     color: var(--text-color);
     padding: 0;
     list-style: none;
 }
 
 .draggable-list li {
-    background-color: #47464d;
-    color: #ffffff;
+    background-color: #294e69;
+    color: aliceblue;
     display: flex;
     flex: 1;
     height: 50px;
@@ -38,12 +42,12 @@ li {
 }
 
 .draggable-list li:not(:last-of-type) {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid #294e69;
 }
 
 .draggable-list .number {
-  background-color: aliceblue;
-  color: #1b3344;
+  background-color: #224156;
+  color: aliceblue;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -92,7 +96,8 @@ h5{
     overflow-y: overlay;
     padding-top: 90px;
     transition: ease-out 0.2s;
-    background-color: aliceblue;
+    background-color: #294e69;
+    color: aliceblue;
 }
 
 ::-webkit-scrollbar {
@@ -242,6 +247,8 @@ h5{
 
   #batchtable{
       margin-left: 0%;
+      background-color: white;
+      font-weight: bold;
   }
 
   td,th{
@@ -330,7 +337,8 @@ h5{
     /* display: none; */
     overflow: hidden;
     padding-top: 3px;
-    background-color: aliceblue;
+    background-color: #294e69;
+    border: none;
     max-height: 400px;
     transition: max-height 0.4s ease-out;
   }
@@ -342,7 +350,7 @@ h5{
   }
 
   .drag-area{
-    border: 2px dashed #fff;
+    border: 2px dashed #384048;
     height: 370px;
     width: 650px;
     border-radius: 5px;
@@ -350,7 +358,7 @@ h5{
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: #608ecf;
+    background: #1b3344;
     margin-left: 90px;
     margin-top: 80px;
   }
@@ -358,7 +366,7 @@ h5{
   .drag-back{
     height: 550px;
     width: 850px;
-    background: #4e80cc    ;
+    background: #142532  ;
     margin-left: 30%;
     border-radius: 10px;
   }
@@ -387,7 +395,9 @@ h5{
 	border: 0.1em solid black;
 	width: 11em;
 	margin-bottom: 1em;
-    background-color: #1d79c7;
+    background-color: #224156;
+    color: aliceblue;
+    
     box-shadow: 0 4px 5px rgba(10, 20, 30, 4);
     border-radius: 8px;
     font-weight: bold;
@@ -422,7 +432,8 @@ h5{
 .dropdown .menu .option{
 	margin: .3em .3em .3em .3em;
 	margin-top: 0;
-  background-color: #c3c7ca;
+  background-color: #224156;
+  color: aliceblue;
   width: 10.2em;
   height: 30px;
   border-top: 2px solid transparent;
@@ -517,6 +528,7 @@ h5{
   background-color: #1b3344;
   color: white;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .btn-style:hover{

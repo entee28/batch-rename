@@ -268,7 +268,7 @@ const addFileItem = (__filepath) => {
 
     if (pathList.length === 1) {
         area.innerHTML = '';
-        area.style.background = 'white';
+        area.style.background = 'aliceblue';
         $(datatable).appendTo(area);
         $(buttontable).appendTo(area);
         tablerow.display = 'initial';
@@ -321,7 +321,7 @@ function addDelButton(parent) {
                     </div>
                 </div>
             </div>`;
-            area.style.background = '#4e80cc';
+            area.style.background = '#142532';
             $(datatable).appendTo('#rowtable');
             $(buttontable).appendTo('#rowtable');
 
