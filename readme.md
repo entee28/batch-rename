@@ -20,6 +20,7 @@ $ npm install
 $ npm start
 ```
 ## :bulb: Features (things that we've managed to handle)
+![App Screenshot 2](https://scontent.fsgn5-11.fna.fbcdn.net/v/t1.15752-9/260652414_3064599633860991_6693445823089027386_n.png?_nc_cat=111&ccb=1-5&_nc_sid=ae9488&_nc_ohc=LAdcJlEBhyoAX_4Zh0j&_nc_ht=scontent.fsgn5-11.fna&oh=83923d550a7e0223c01e8eccccc2ed78&oe=61C41BDF)
 - Functions that handle each renaming rule are dynamically loaded from an external DLL file, written in C#.
 - Ability to select all files and folders you want to rename, with drag and drop support.
 - A set of whopping 8 renaming rules.
