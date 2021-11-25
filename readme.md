@@ -1,5 +1,7 @@
 # Batch Rename
 > An app powered with [Electron](https://www.electronjs.org/), a framework for building desktop applications using JavaScript, HTML, and CSS.
+
+![App Screenshot](https://scontent.fsgn5-8.fna.fbcdn.net/v/t1.15752-9/260902156_1475669992851348_4585694398908888505_n.png?_nc_cat=109&ccb=1-5&_nc_sid=ae9488&_nc_ohc=SelIewRS_V0AX_E1t1x&_nc_ht=scontent.fsgn5-8.fna&oh=2cc025cd368632fa5482d67233910948&oe=61C457F0)
 ## :construction_worker: People behind this project
 - Nguyễn Nhật Thành - 2059040
 - Vũ Bình Gia Uy - 2059048
