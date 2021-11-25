@@ -345,7 +345,7 @@ h5{
 
   .rulebox {
     overflow: hidden;
-    max-height: 600px;
+    max-height: 650px;
     transition: max-height 0.4s ease-out;
   }
 
