@@ -35,5 +35,5 @@ $ npm start
 - The fact that we have spent time doing our own research on this framework (Electron) and build this project with HTML, CSS and JS, make all of our work happens.
 - Rules' order can be rearranged seamlessly with drag and drop enabled.
 - Exceptions are carefully handled.
-- A lot of improvements are added to our program (JSON preset, copy renamed files to another folder, drag and drop enabled, result preview, etc.)
+- A lot of improvements have been added to our program (JSON preset, copy renamed files to another folder, drag and drop enabled, result preview, etc.)
 - A lot of work and research have been put into designing UI.
