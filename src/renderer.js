@@ -977,7 +977,7 @@ for (i = 0; i < acc.length; i++) {
 
         var panel = this.nextElementSibling;
         if (panel.style.maxHeight == "0px") {
-            panel.style.maxHeight = "600px";
+            panel.style.maxHeight = "610px";
           } else {
             panel.style.maxHeight = "0px";
           }
