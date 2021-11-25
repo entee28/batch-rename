@@ -132,7 +132,7 @@ h5{
 
   #menu{
     margin-left: 250px;
-    transition: margin-left .4s;
+    transition: margin-left .1s;
     padding: 20px;
   }
 
@@ -426,7 +426,6 @@ h5{
     text-align: center !important;
     position: absolute;
     display: inline-block;
-    
 }
 
 .dropdown .menu .option{
@@ -452,19 +451,6 @@ h5{
 
 .rotate-90{
 	transform: rotate(90deg);
-}
-
-#batchtitle{
-    margin-left: 45%;
-    margin-bottom: 3%;
-}
-
-.martop-250{
-  margin-top: 60px;
-}
-
-.marleft-333{
-  margin-left: 200px;
 }
 
 .btn-shadow{
@@ -551,10 +537,57 @@ h5{
 }
 
 .table-wrap{
-  /* height: 100%;
-  overflow-y: scroll; */
   table-layout: fixed;
   max-height: 95%;
   height: auto;
   overflow-y: scroll;
+}
+
+@media screen and (min-width: 1600px) {
+  .drag-back{
+    height: 750px;
+    width: 1300px;
+    margin-left: 23%;
+  }
+
+  .drag-area{
+    height: 550px;
+    width: 1100px;
+    margin-left: 90px;
+    margin-top: 80px;
+  }
+
+  .drag-area header{
+    font-size: 50px;
+  }
+
+  .drag-area span{
+    font-size: 30px;
+  }
+
+  .dropdown{
+    width: 15em;
+  }
+
+  .dropdown .title{
+    font-size: 25px;
+  }
+
+  .dropdown .title .fa-angle-right{
+    font-size: 25px;
+  }
+
+  .dropdown .menu .option{
+    width: 11.2em;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  #batchtable{
+    width: 1300px;
+  }
+  
+  #tablebutton{
+    margin-left: 12%;
+  }
 }
