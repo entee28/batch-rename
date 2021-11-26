@@ -1,6 +1,6 @@
 const ffi = require('ffi-napi');
 
-const Rules = ffi.Library(__dirname + '\\RenamingRulesLibrary.dll', {
+const Rules = ffi.Library(__dirname + '\\..\\lib\\RenamingRulesLibrary.dll', {
     'AddSuffix': ['string', ['string', 'string']],
     'AddPrefix': ['string', ['string', 'string']],
     'RemoveAllSpace': ['string', ['string']],
