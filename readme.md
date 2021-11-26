@@ -30,8 +30,7 @@ $ npm start
 - The result can be previewed by users.
 - Ability to create a copy of all the files and move them to a selected folder rather than perform the renaming on the original file.
 - Extraodinary UI powered by HTML and CSS (Bootstrap enabled).
-## :x: Things that we have yet managed to handle (until 25/11/2021)
-- The UI has yet responsive to resize.
+## :x: Things that we have yet managed to handle
 - Some improvements mentioned in the project requirement article that we have yet delivered (no last time save, no autosave, no ability to save and load the work into a project).
 ## :100: Things that should be taken into account for bonus
 - The fact that we have finished this project one month before the deadline.
@@ -41,4 +40,6 @@ $ npm start
 - A lot of improvements have been added to our program (JSON preset, copy renamed files to another folder, drag and drop enabled, result preview, etc.)
 - A lot of work and research have been put into designing an intuitive and clean UI.
 ## :100: Expected grade
-> Everyone deserves a ten
+Every single member of our group has devoted immersive workload and research to making this project, so it's best to consider giving everyone a ten.
+## :rocket: Demo
+Coming Soon
