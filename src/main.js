@@ -38,6 +38,7 @@ app.whenReady().then(() => {
         },
         {
           label: "Open Folder...",
+          accelerator: "Ctrl+Shift+O",
           click() {
             const folders = openFolder();
             if (folders) win.webContents.send('selected-folder', folders)
