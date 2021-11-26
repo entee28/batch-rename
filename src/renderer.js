@@ -448,10 +448,7 @@ function addPreviewButton(parent) {
 }
 
 function handlePreview(original, oldPath, name, extension, newPath) {
-    const message = `    Original name: ${original}\n
-    Original path: ${oldPath}\n
-    New name: ${name}${extension}\n
-    New path: ${newPath}`;
+    const message = `Original name: ${original}\nOriginal path: ${oldPath}\nNEW name: ${name}${extension}\nNEW path: ${newPath}`;
     ipc.send('preview-handle', message);
 }
 

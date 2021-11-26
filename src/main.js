@@ -118,6 +118,20 @@ app.whenReady().then(() => {
             electron.shell.openExternal('https://github.com/entee28/batch-rename-final');
           }
         },
+        { type: 'separator' },
+        {
+          label: "About",
+          click: function() {
+            const about = `Electron: ${process.versions['electron']}\nNode.js: ${process.versions['node']}\nChrome: ${process.versions['chrome']}\nV8: ${process.versions['v8']}\nAuthors: Nhật Thành, Trung Hải, Gia Uy, Triệu Huy`
+            dialog.showMessageBoxSync({
+              message: "Batch Rename",
+              type: 'info',
+              buttons: [],
+              title: 'Batch Rename',
+              detail: `${about}`
+            });
+          }
+        },
       ]
     },
   ]
@@ -171,10 +185,11 @@ ipc.on('error-handle', function (event, message) {
 
 ipc.on('preview-handle', function (event, message) {
   dialog.showMessageBoxSync({
-    message: `${message}`,
+    message: `Preview`,
     type: 'info',
     buttons: [],
     title: 'Preview',
+    detail: `${message}`
   });
 })
 
