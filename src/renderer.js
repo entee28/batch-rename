@@ -20,6 +20,7 @@ openFileMenu.addEventListener("click", function (event) {
 
 //this listen "selected-file" channel, when new files are selected listener would load these files into the program 
 ipc.on("selected-file", function (event, files) {
+    let errMessage = ''
     for (let i = 0; i < files.length; i++) {
         try {
 
@@ -30,8 +31,11 @@ ipc.on("selected-file", function (event, files) {
             }
             addFileItem(files[i]);
         } catch (err) {
-            errorHandle(err);
+            errMessage += `${err}\n`
         }
+    }
+    if (errMessage !== '') {
+        errorHandle(errMessage);
     }
 });
 
@@ -48,6 +52,7 @@ openFolderMenu.addEventListener("click", function (event) {
 
 //listener when folders are selected
 ipc.on("selected-folder", function (event, folders) {
+    let errMessage = ''
     for (let i = 0; i < folders.length; i++) {
         try {
             for (let j = 0; j < pathList.length; j++) {
@@ -57,8 +62,11 @@ ipc.on("selected-folder", function (event, folders) {
             }
             addFileItem(folders[i]);
         } catch (err) {
-            errorHandle(err);
+            errMessage += `${err}\n`
         }
+    }
+    if (errMessage !== '') {
+        errorHandle(errMessage);
     }
 });
 
@@ -283,16 +291,29 @@ const addFileItem = (__filepath) => {
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
     `;
-    // var color = document.getElementsByTagName('tr');
-    // for (var i = 0; i < color.length; i++) {
-    //     if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
-    //         color[i].style.backgroundColor = '#4e80cc';
-    //     }
-    // }
     addDelButton(item);
     addPreviewButton(item);
+    addSelectCheckbox(item);
     container.appendChild(item);
+
+    selectedFiles = getSelectedFiles();
 };
+
+function addSelectCheckbox(parent) {
+    const selectTd = parent.appendChild(document.createElement("td"));
+    const path = selectTd.parentElement.getAttribute("path");
+
+    const selectCheckbox = document.createElement("input");
+    selectCheckbox.type = 'checkbox';
+    selectCheckbox.name = 'file-select';
+    selectCheckbox.id = path;
+    selectCheckbox.value = path;
+    selectCheckbox.checked = true;
+    selectTd.appendChild(selectCheckbox);
+    selectCheckbox.onchange = function () {
+        selectedFiles = getSelectedFiles();
+    }
+}
 
 //Function handle adding delete button for each loaded file
 function addDelButton(parent) {
@@ -641,98 +662,106 @@ btn.addEventListener("click", () => {
         if (rules.length === 0) {
             throw "No rules have been chosen!"
         }
+        if (selectedFiles.length === 0) {
+            throw "No files have been selected!"
+        }
 
         for (let i = 0; i < pathList.length; i++) {
-            let name = path.parse(pathList[i]).name;
-            let extension = path.extname(pathList[i]);
+            const checkbox = document.getElementById(pathList[i]);
+            if (checkbox.checked) {
+                let name = path.parse(pathList[i]).name;
+                let extension = path.extname(pathList[i]);
 
-            for (let j = 0; j < rules.length; j++) {
-                if (rules[j] === "extension") {
-                    getExtensionParam();
-                } else if (rules[j] === "add-prefix") {
-                    getPrefixParam();
-                } else if (rules[j] === "add-suffix") {
-                    getSuffixParam();
-                } else if (rules[j] === "counter") {
-                    getCounterParam();
+                for (let j = 0; j < rules.length; j++) {
+                    if (rules[j] === "extension") {
+                        getExtensionParam();
+                    } else if (rules[j] === "add-prefix") {
+                        getPrefixParam();
+                    } else if (rules[j] === "add-suffix") {
+                        getSuffixParam();
+                    } else if (rules[j] === "counter") {
+                        getCounterParam();
+                    }
                 }
-            }
 
-            for (let j = 0; j < rules.length; j++) {
-                if (rules[j] === "extension") {
-                    const params = getExtensionParam();
-                    if (params) {
-                        extension = factory.invokeTransform(
-                            rules[j],
-                            extension,
-                            params[0],
-                            params[1]
-                        );
-                    }
-                } else if (rules[j] === "replace-characters") {
-                    const params = getReplaceParam();
-                    if (params) {
-                        name = factory.invokeTransform(rules[j], name, params[0], params[1]);
-                    }
-                } else if (rules[j] === "add-prefix") {
-                    const prefix = getPrefixParam();
-                    if (prefix) {
-                        name = factory.invokeTransform(rules[j], name, prefix);
-                    }
-                } else if (rules[j] === "add-suffix") {
-                    const suffix = getSuffixParam();
-                    if (suffix) {
-                        name = factory.invokeTransform(rules[j], name, suffix);
-                    }
-                } else if (rules[j] === "counter") {
-                    const params = getCounterParam();
-                    if (params) {
-                        let start = parseInt(params[0]);
-                        let steps = parseInt(params[1]) * i;
-                        let digits = parseInt(params[2]);
+                for (let j = 0; j < rules.length; j++) {
+                    if (rules[j] === "extension") {
+                        const params = getExtensionParam();
+                        if (params) {
+                            extension = factory.invokeTransform(
+                                rules[j],
+                                extension,
+                                params[0],
+                                params[1]
+                            );
+                        }
+                    } else if (rules[j] === "replace-characters") {
+                        const params = getReplaceParam();
+                        if (params) {
+                            name = factory.invokeTransform(rules[j], name, params[0], params[1]);
+                        }
+                    } else if (rules[j] === "add-prefix") {
+                        const prefix = getPrefixParam();
+                        if (prefix) {
+                            name = factory.invokeTransform(rules[j], name, prefix);
+                        }
+                    } else if (rules[j] === "add-suffix") {
+                        const suffix = getSuffixParam();
+                        if (suffix) {
+                            name = factory.invokeTransform(rules[j], name, suffix);
+                        }
+                    } else if (rules[j] === "counter") {
+                        const params = getCounterParam();
+                        if (params) {
+                            let start = parseInt(params[0]);
+                            let steps = parseInt(params[1]) * i;
+                            let digits = parseInt(params[2]);
 
-                        let padding = start + steps;
-                        padding = padding.toString();
-                        while (padding.length < digits) padding = "0" + padding;
+                            let padding = start + steps;
+                            padding = padding.toString();
+                            while (padding.length < digits) padding = "0" + padding;
 
-                        name = factory.invokeTransform(rules[j], name, padding);
+                            name = factory.invokeTransform(rules[j], name, padding);
+                        }
+                    } else {
+                        name = factory.invokeTransform(rules[j], name);
                     }
-                } else {
-                    name = factory.invokeTransform(rules[j], name);
                 }
-            }
 
 
-            let newPath = null;
-            if (copyChk.checked) {
-                if (pathInput.value === '') {
-                    throw 'Empty copy directory!'
-                } else {
-                    newPath = path.join(pathInput.value, `${name}${extension}`);
-                    fs.copyFile(pathList[i], newPath, (err) => {
-                        if (err) throw err;
-                        pathList[i] = newPath;
-                        items[i].setAttribute("path", newPath);
-                        items[i].innerHTML = `
+                let newPath = null;
+                if (copyChk.checked) {
+                    if (pathInput.value === '') {
+                        throw 'Empty copy directory!'
+                    } else {
+                        newPath = path.join(pathInput.value, `${name}${extension}`);
+                        fs.copyFile(pathList[i], newPath, (err) => {
+                            if (err) throw err;
+                            pathList[i] = newPath;
+                            items[i].setAttribute("path", newPath);
+                            items[i].innerHTML = `
                     <td>${path.parse(newPath).name}</td>
                     <td>${path.extname(newPath)}</td>
                     `;
-                        addDelButton(items[i]);
-                        addPreviewButton(items[i]);
-                    });
-                }
-            } else {
-                newPath = path.join(pathList[i], "..", `${name}${extension}`);
-                fs.rename(pathList[i], newPath, function () {
-                    pathList[i] = newPath;
-                    items[i].setAttribute("path", newPath);
-                    items[i].innerHTML = `
+                            addDelButton(items[i]);
+                            addPreviewButton(items[i]);
+                            addSelectCheckbox(items[i]);
+                        });
+                    }
+                } else {
+                    newPath = path.join(pathList[i], "..", `${name}${extension}`);
+                    fs.rename(pathList[i], newPath, function () {
+                        pathList[i] = newPath;
+                        items[i].setAttribute("path", newPath);
+                        items[i].innerHTML = `
                 <td>${path.parse(newPath).name}</td>
                 <td>${path.extname(newPath)}</td>
                 `;
-                    addDelButton(items[i]);
-                    addPreviewButton(items[i]);
-                });
+                        addDelButton(items[i]);
+                        addPreviewButton(items[i]);
+                        addSelectCheckbox(items[i]);
+                    });
+                }
             }
         }
     } catch (err) {
@@ -881,6 +910,20 @@ function getSelectedRules() {
     return values;
 }
 
+let selectedFiles = [];
+//function getting files path that are selected
+function getSelectedFiles() {
+    const checkboxes = document.querySelectorAll(
+        `input[name="file-select"]:checked`
+    );
+    let values = [];
+    checkboxes.forEach((checkbox) => {
+        values.push(checkbox.value);
+    });
+    console.log(values);
+    return values;
+}
+
 //function convert the html rule-checkbox value to proper rule names
 function convertOrderToName() {
     let properNames = [];
@@ -921,7 +964,7 @@ function openNav() {
     document.getElementById("drag-back").style.marginLeft = "30%";
 
     const screenmin1600 = window.matchMedia("(min-width: 1600px)");
-    if(screenmin1600.matches){
+    if (screenmin1600.matches) {
         document.getElementById("drag-back").style.marginLeft = "23%";
     }
 }
@@ -939,11 +982,11 @@ function closeNav() {
                 document.getElementById("open").style.opacity = "1";
             }
         });
-    
+
     document.getElementById("drag-back").style.marginLeft = "20%";
 
     const screenmin1600 = window.matchMedia("(min-width: 1600px)");
-    if(screenmin1600.matches){
+    if (screenmin1600.matches) {
         document.getElementById("drag-back").style.marginLeft = "15%";
     }
 }
@@ -975,9 +1018,9 @@ for (i = 0; i < acc.length; i++) {
         var panel = this.nextElementSibling;
         if (panel.style.maxHeight == "0px") {
             panel.style.maxHeight = "610px";
-          } else {
+        } else {
             panel.style.maxHeight = "0px";
-          }
+        }
     });
 }
 
@@ -991,9 +1034,9 @@ for (j = 0; j < lol.length; j++) {
         var panel = this.nextElementSibling;
         if (panel.style.maxHeight == "0px") {
             panel.style.maxHeight = "400px";
-          } else {
+        } else {
             panel.style.maxHeight = "0px";
-          }
+        }
     });
 }
 
