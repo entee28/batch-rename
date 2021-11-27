@@ -26,6 +26,7 @@ $ npm start
 - A set of whopping 8 renaming rules.
 - Ability to save and load rule preset (which includes selected rules, rules' parameters, rules' order) as JSON file, with drag and drop support for loading preset.
 - Ability to rearrange rules' order.
+- Ability to select which files should be renamed after loading files
 - Exceptions handle (duplication, empty or invalid parameters, no rule selected, etc.)
 - The result can be previewed by users.
 - Ability to create a copy of all the files and move them to a selected folder rather than perform the renaming on the original file.
@@ -39,6 +40,7 @@ $ npm start
 - Exceptions are carefully handled.
 - A lot of improvements have been added to our program (JSON preset, copy renamed files to another folder, drag and drop enabled, result preview, etc.)
 - A lot of work and research have been put into designing an intuitive and clean UI.
+- Ability to select which files should be renamed after loading files
 ## :100: Expected grade
 Every single member of our group has devoted immersive workload and research to making this project, so it's best to consider giving everyone a ten.
 ## :rocket: Demo

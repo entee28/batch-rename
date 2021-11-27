@@ -20,6 +20,7 @@ openFileMenu.addEventListener("click", function (event) {
 
 //this listen "selected-file" channel, when new files are selected listener would load these files into the program 
 ipc.on("selected-file", function (event, files) {
+    let errMessage = ''
     for (let i = 0; i < files.length; i++) {
         try {
 
@@ -30,8 +31,11 @@ ipc.on("selected-file", function (event, files) {
             }
             addFileItem(files[i]);
         } catch (err) {
-            errorHandle(err);
+            errMessage += `${err}\n`
         }
+    }
+    if (errMessage !== '') {
+        errorHandle(errMessage);
     }
 });
 
@@ -48,6 +52,7 @@ openFolderMenu.addEventListener("click", function (event) {
 
 //listener when folders are selected
 ipc.on("selected-folder", function (event, folders) {
+    let errMessage = ''
     for (let i = 0; i < folders.length; i++) {
         try {
             for (let j = 0; j < pathList.length; j++) {
@@ -57,8 +62,11 @@ ipc.on("selected-folder", function (event, folders) {
             }
             addFileItem(folders[i]);
         } catch (err) {
-            errorHandle(err);
+            errMessage += `${err}\n`
         }
+    }
+    if (errMessage !== '') {
+        errorHandle(errMessage);
     }
 });
 
@@ -283,12 +291,6 @@ const addFileItem = (__filepath) => {
     <td>${path.parse(__filepath).name}</td>
     <td>${path.extname(__filepath)}</td>
     `;
-    // var color = document.getElementsByTagName('tr');
-    // for (var i = 0; i < color.length; i++) {
-    //     if (i % 2 === 0 && color[i].getElementsByTagName('td').length) {
-    //         color[i].style.backgroundColor = '#4e80cc';
-    //     }
-    // }
     addDelButton(item);
     addPreviewButton(item);
     addSelectCheckbox(item);
