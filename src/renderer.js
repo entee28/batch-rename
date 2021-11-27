@@ -299,7 +299,10 @@ const addFileItem = (__filepath) => {
 
 function addSelectCheckbox(parent) {
     const selectTd = parent.appendChild(document.createElement("td"));
+    selectTd.classList.add("container-checkbox");
     const path = selectTd.parentElement.getAttribute("path");
+
+    const selectLabel = document.createElement("label");
 
     const selectCheckbox = document.createElement("input");
     selectCheckbox.type = 'checkbox';
@@ -307,7 +310,13 @@ function addSelectCheckbox(parent) {
     selectCheckbox.id = path;
     selectCheckbox.value = path;
     selectCheckbox.checked = true;
-    selectTd.appendChild(selectCheckbox);
+
+    const selectCheckMark = document.createElement("span");
+    selectCheckMark.classList.add("checkmark");
+    selectTd.appendChild(selectLabel);
+    selectLabel.appendChild(selectCheckbox);
+    selectLabel.appendChild(selectCheckMark);
+    selectTd.appendChild(selectLabel);
     selectCheckbox.onchange = function () {
         selectedFiles = getSelectedFiles();
     }
