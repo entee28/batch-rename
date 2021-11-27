@@ -291,8 +291,26 @@ const addFileItem = (__filepath) => {
     // }
     addDelButton(item);
     addPreviewButton(item);
+    addSelectCheckbox(item);
     container.appendChild(item);
+
+    selectedFiles = getSelectedFiles();
 };
+
+function addSelectCheckbox(parent) {
+    const selectTd = parent.appendChild(document.createElement("td"));
+    const path = selectTd.parentElement.getAttribute("path");
+
+    const selectCheckbox = document.createElement("input");
+    selectCheckbox.type = 'checkbox';
+    selectCheckbox.name = 'file-select';
+    selectCheckbox.value = path;
+    selectCheckbox.checked = true;
+    selectTd.appendChild(selectCheckbox);
+    selectCheckbox.onchange = function () {
+        selectedFiles = getSelectedFiles();
+    }
+}
 
 //Function handle adding delete button for each loaded file
 function addDelButton(parent) {
@@ -878,6 +896,20 @@ function getSelectedRules() {
     checkboxes.forEach((checkbox) => {
         values.push(checkbox.value);
     });
+    return values;
+}
+
+let selectedFiles = [];
+//function getting files path that are selected
+function getSelectedFiles() {
+    const checkboxes = document.querySelectorAll(
+        `input[name="file-select"]:checked`
+    );
+    let values = [];
+    checkboxes.forEach((checkbox) => {
+        values.push(checkbox.value);
+    });
+    console.log(values);
     return values;
 }
 
