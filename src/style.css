@@ -591,3 +591,60 @@ h5{
     margin-left: 12%;
   }
 }
+
+.container-checkbox {
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 20%;
+}
+
+/* Hide the default checkbox */
+.container-checkbox input {
+  position: absolute;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  opacity: 0%;
+  
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  height: 30px;
+  width: 30px;
+  background-color: #ccc;
+  border: 20%;
+}
+
+/* checkbox bg*/
+.container-checkbox input:checked ~ .checkmark {
+  background-color: #ccc;
+}
+/* checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container-checkbox .checkmark:after {
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 10%;
+  background: black;
+}
