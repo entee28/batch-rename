@@ -942,6 +942,7 @@ function convertOrderToName() {
     return properNames;
 }
 
+//a map to bind the rule checkboxes' values to a proper rule name
 const ruleMap = new Map();
 
 ruleMap.set("extension", "Change File Extension");
