@@ -929,7 +929,6 @@ function getSelectedFiles() {
     checkboxes.forEach((checkbox) => {
         values.push(checkbox.value);
     });
-    console.log(values);
     return values;
 }
 
