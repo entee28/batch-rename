@@ -44,4 +44,4 @@ $ npm start
 ## :100: Expected grade
 Every single member of our group has devoted immersive workload and research to making this project, so it's best to consider giving everyone a ten.
 ## :rocket: Demo
-Coming Soon
+:video_camera: ![View demo on YouTube](https://youtu.be/02bNAz4L9KE)
