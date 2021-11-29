@@ -103,8 +103,7 @@ app.whenReady().then(() => {
     {
       label: 'Help',
       submenu: [
-        { role: 'reload' },
-        { role: 'forceReload' },
+        { role: 'reload', accelerator: "F5"},
         { role: 'toggleDevTools' },
         { type: 'separator' },
         {
@@ -122,6 +121,7 @@ app.whenReady().then(() => {
         { type: 'separator' },
         {
           label: "About",
+          accelerator: "F2",
           click: function() {
             const about = `Electron: ${process.versions['electron']}\nNode.js: ${process.versions['node']}\nChrome: ${process.versions['chrome']}\nV8: ${process.versions['v8']}\nAuthors: Nhật Thành, Trung Hải, Gia Uy, Triệu Huy`
             dialog.showMessageBoxSync({
