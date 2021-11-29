@@ -116,7 +116,7 @@ app.whenReady().then(() => {
         {
           label: "Get Started",
           click: function() {
-            electron.shell.openExternal('https://github.com/entee28/batch-rename-final');
+            electron.shell.openExternal('https://youtu.be/02bNAz4L9KE');
           }
         },
         { type: 'separator' },
@@ -184,6 +184,7 @@ ipc.on('error-handle', function (event, message) {
   dialog.showErrorBox('Error', `${message}`)
 })
 
+//show preview dialog when received message from renderer process
 ipc.on('preview-handle', function (event, message) {
   dialog.showMessageBoxSync({
     message: `Preview`,
@@ -227,6 +228,7 @@ const openFolder = () => {
   return folders;
 }
 
+//handle choosing folder directory for copying feature
 const openOneFolder = () => {
   const folder = dialog.showOpenDialogSync({ properties: ['openDirectory'] });
 

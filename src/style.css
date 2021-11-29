@@ -224,7 +224,6 @@ h5{
       position: flex;
       width: 100%;
       height: 100%;
-      /* border: 3px solid #213371; */
       border-bottom: 3px solid #213371;
       margin-left: 0%;
       border-collapse: collapse;
@@ -334,7 +333,6 @@ h5{
 
   .ruleList{
     font-family: 'Mulish', sans-serif;
-    /* display: none; */
     overflow: hidden;
     padding-top: 3px;
     background-color: #294e69;
@@ -543,59 +541,6 @@ h5{
   overflow-y: scroll;
 }
 
-@media screen and (min-width: 1600px) {
-  .drag-back{
-    height: 750px;
-    width: 1300px;
-    margin-left: 23%;
-  }
-
-  .drag-area{
-    height: 550px;
-    width: 1100px;
-    margin-left: 90px;
-    margin-top: 80px;
-  }
-
-  .drag-area header{
-    font-size: 50px;
-  }
-
-  .drag-area span{
-    font-size: 25px;
-  }
-
-  .dropdown{
-    width: 15em;
-  }
-
-  .dropdown .title{
-    font-size: 25px;
-  }
-
-  .dropdown .title .fa-angle-right{
-    font-size: 25px;
-  }
-
-  .dropdown .menu .option{
-    width: 11.2em;
-    height: 50px;
-    font-size: 20px;
-  }
-
-  #batchtable{
-    width: 1300px;
-  }
-  
-  #tablebutton{
-    margin-left: 12%;
-  }
-
-  .checkmark{
-    margin-left: 3%;
-  }
-}
-
 .container-checkbox {
   position: relative;
   cursor: pointer;
@@ -651,4 +596,58 @@ h5{
   height: 24px;
   border-radius: 10%;
   background: black;
+}
+
+/* responsive when app in fullscreen */
+@media screen and (min-width: 1600px) {
+  .drag-back{
+    height: 750px;
+    width: 1300px;
+    margin-left: 23%;
+  }
+
+  .drag-area{
+    height: 550px;
+    width: 1100px;
+    margin-left: 90px;
+    margin-top: 80px;
+  }
+
+  .drag-area header{
+    font-size: 50px;
+  }
+
+  .drag-area span{
+    font-size: 25px;
+  }
+
+  .dropdown{
+    width: 15em;
+  }
+
+  .dropdown .title{
+    font-size: 25px;
+  }
+
+  .dropdown .title .fa-angle-right{
+    font-size: 25px;
+  }
+
+  .dropdown .menu .option{
+    width: 11.2em;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  #batchtable{
+    width: 1300px;
+  }
+  
+  #tablebutton{
+    margin-left: 12%;
+  }
+
+  .checkmark{
+    margin-left: 3%;
+  }
 }

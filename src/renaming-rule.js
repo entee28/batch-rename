@@ -1,5 +1,6 @@
 const ffi = require('ffi-napi');
 
+//use ffi module to load external DLL file
 const Rules = ffi.Library(__dirname + '\\..\\lib\\RenamingRulesLibrary.dll', {
     'AddSuffix': ['string', ['string', 'string']],
     'AddPrefix': ['string', ['string', 'string']],

@@ -5,7 +5,7 @@ window.$ = window.jQuery = require("jquery");
 const fs = require("fs");
 
 const pathList = new Array(); //an array of loaded files' path
-const invalidChars = /[~"#%&*:<>?/\\{|}]+/;
+const invalidChars = /[~"#%&*:<>?/\\{|}]+/; //regex of invalid file name characters
 
 //Handle open file button click event
 const openFileBtn = document.getElementById("openFileBtn");
@@ -45,6 +45,7 @@ openFolderBtn.addEventListener("click", function (event) {
     ipc.send("open-folder-dialog");
 });
 
+//Handle open folder button in the box
 const openFolderMenu = document.getElementById("option2");
 openFolderMenu.addEventListener("click", function (event) {
     ipc.send("open-folder-dialog");
@@ -87,6 +88,7 @@ function savePreset() {
             throw "No rules have been chosen!"
         }
 
+        //this loop is to check if any rule occurs exception, if there is any then throw exception before going any further
         for (let j = 0; j < rules.length; j++) {
             if (rules[j] === "extension") {
                 getExtensionParam();
@@ -160,6 +162,7 @@ function handlePreset(preset) {
     for (let i = 0; i < rulePreset.length - 1; i++) {
         const obj = JSON.parse(rulePreset[i]); //parse JSON RULE to a rule object
 
+        //handle for each rule detected in the JSON string
         if (obj.name === "Remove all space") {
             const cb = document.querySelector('input[id="remove-space"]');
             cb.checked = true;
@@ -228,11 +231,12 @@ const errorHandle = (message) => {
     ipc.send("error-handle", message);
 };
 
-//files/folders drag and drop handle
 const area = document.getElementById('drag-back');
 const datatable = document.getElementById('batchtable');
 const buttontable = document.getElementById('tablebutton');
 const tablerow = document.getElementById('rowtable');
+
+//files/folders drag and drop handle
 area.addEventListener("drop", (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -283,6 +287,7 @@ const addFileItem = (__filepath) => {
         tablerow.marginRight = '100px';
     }
 
+    //this add selected file to the table
     const container = document.querySelector("#file-list-container");
     const item = document.createElement("tr");
     item.setAttribute("path", __filepath);
@@ -299,6 +304,7 @@ const addFileItem = (__filepath) => {
     selectedFiles = getSelectedFiles();
 };
 
+//Function handle adding select checkbox for each loaded file
 function addSelectCheckbox(parent) {
     const selectTd = parent.appendChild(document.createElement("td"));
     selectTd.classList.add("container-checkbox");
@@ -328,7 +334,6 @@ function addSelectCheckbox(parent) {
 function addDelButton(parent) {
     const delBtn = parent.appendChild(document.createElement("td"));
     delBtn.classList.add("delTrash");
-    // delBtn.classList.add("btn");
     const delIcon = document.createElement("i");
     delIcon.classList.add("fa");
     delIcon.classList.add("fa-times");
@@ -379,10 +384,10 @@ function addDelButton(parent) {
     };
 }
 
+//Function handle adding preview button for each loaded file
 function addPreviewButton(parent) {
     const previewBtn = parent.appendChild(document.createElement("td"));
     previewBtn.classList.add("preview");
-    // delBtn.classList.add("btn");
     const previewIcon = document.createElement("i");
     previewIcon.classList.add("fa");
     previewIcon.classList.add("fa-search");
@@ -459,7 +464,7 @@ function addPreviewButton(parent) {
             }
 
             let newPath = null;
-            if (copyChk.checked) {
+            if (copyChk.checked) { //check if the option to copy renamed files to another directory is selected
                 if (pathInput.value === '') {
                     throw 'Empty copy directory!'
                 } else {
@@ -469,7 +474,7 @@ function addPreviewButton(parent) {
                 newPath = path.join(__path, "..", `${name}${extension}`);
             }
 
-            handlePreview(original, __path, name, extension, newPath);
+            handlePreview(original, __path, name, extension, newPath); //handle preview
         } catch (err) {
             errorHandle(err);
         }
@@ -477,6 +482,7 @@ function addPreviewButton(parent) {
     }
 }
 
+//function handle preview operation, send message to main process to invoke a dialog
 function handlePreview(original, oldPath, name, extension, newPath) {
     const message = `Original name: ${original}\nOriginal path: ${oldPath}\nNEW name: ${name}${extension}\nNEW path: ${newPath}`;
     ipc.send('preview-handle', message);
@@ -609,7 +615,7 @@ function createList() {
     });
 }
 
-//functions  events
+//functions handle rules' order drag and drop events
 function dragStart() {
     dragStartIndex = +this.closest("li").getAttribute("data-index");
     console.log(dragStartIndex);
@@ -630,6 +636,7 @@ function dragDrop() {
     this.classList.remove("over");
 }
 
+//function handle swapping two rule order
 function swapItems(fromIndex, toIndex) {
     const itemOne = document.querySelector(`li[data-index='${fromIndex}']`);
     const itemTwo = document.querySelector(`li[data-index='${toIndex}']`);
@@ -681,6 +688,7 @@ btn.addEventListener("click", () => {
                 let name = path.parse(pathList[i]).name;
                 let extension = path.extname(pathList[i]);
 
+                //this loop is to check if any rule occurs exception, if there is then throw operation before going any further
                 for (let j = 0; j < rules.length; j++) {
                     if (rules[j] === "extension") {
                         getExtensionParam();
@@ -693,6 +701,7 @@ btn.addEventListener("click", () => {
                     }
                 }
 
+                //processing files' name
                 for (let j = 0; j < rules.length; j++) {
                     if (rules[j] === "extension") {
                         const params = getExtensionParam();
@@ -739,7 +748,7 @@ btn.addEventListener("click", () => {
 
 
                 let newPath = null;
-                if (copyChk.checked) {
+                if (copyChk.checked) { //checking if the copy renamed files to another folder is selected
                     if (pathInput.value === '') {
                         throw 'Empty copy directory!'
                     } else {
@@ -757,7 +766,7 @@ btn.addEventListener("click", () => {
                             addSelectCheckbox(items[i]);
                         });
                     }
-                } else {
+                } else { //if not, just rename the chosen files
                     newPath = path.join(pathList[i], "..", `${name}${extension}`);
                     fs.rename(pathList[i], newPath, function () {
                         pathList[i] = newPath;
@@ -954,8 +963,8 @@ ruleMap.set("remove-space", "No Space");
 ruleMap.set("lowercase", "Lower Case & No Space");
 ruleMap.set("pascalcase", "PascalCase");
 
-const screenmin1600 = window.matchMedia("(min-width: 1600px)");
-var x = document.getElementById("drag-back");
+const screenmin1600 = window.matchMedia("(min-width: 1600px)"); //reference to screen
+var x = document.getElementById("drag-back"); //reference to drag area
 
 function openNav() {
     var e = document.getElementById("sideBar");
@@ -973,10 +982,10 @@ function openNav() {
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
 
-    x.style.marginLeft = "30%";
+    x.style.marginLeft = "30%"; //margin drag area and table when sidebar is opened
 
     if (screenmin1600.matches) {
-        x.style.marginLeft = "23%";
+        x.style.marginLeft = "23%"; //same but in fullscreen
     }
 }
 
@@ -1010,13 +1019,6 @@ closeMenu.addEventListener("click", closeNav);
 //disable startup easteregg
 document.getElementById("open").disabled = true;
 document.getElementById("open").style.cursor = "default";
-// $('.majorpoints').click(function(){
-//     $(this).find('.hider').toggle();
-// });
-
-// $('.listmajor').click(function(){
-//     $(this).find('.hiders').toggle();
-// });
 
 var acc = document.getElementsByClassName("btn_rule");
 var i;
@@ -1057,11 +1059,9 @@ document.getElementById("ruleBtn").addEventListener('click', function () {
     if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
-        // text.innerHTML = 'Expand rule ';
     } else {
         icon.classList.remove('fa-chevron-right');
         icon.classList.add('fa-chevron-down');
-        // text.innerHTML = 'Retract rule ';
     }
 })
 
@@ -1072,11 +1072,9 @@ document.getElementById("rulelistBtn").addEventListener('click', function () {
     if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
         icon.classList.add('fa-chevron-right');
-        // text.innerHTML = 'Expand list rule ';
     } else {
         icon.classList.remove('fa-chevron-right');
         icon.classList.add('fa-chevron-down');
-        // text.innerHTML = 'Retract list rule ';
     }
 })
 
@@ -1089,18 +1087,6 @@ function toggleClass(elem, className) {
     }
 
     return elem;
-}
-
-function toggleDisplay(elem) {
-    const curDisplayStyle = elem.style.display;
-
-    if (curDisplayStyle === 'none' || curDisplayStyle === '') {
-        elem.style.display = 'block';
-    }
-    else {
-        elem.style.display = 'none';
-    }
-
 }
 
 function toggleMenuDisplay(e) {
@@ -1140,16 +1126,18 @@ dropdownTitle.addEventListener('click', toggleMenuDisplay);
 
 dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
 
-// document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
+document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
 
 //handle browse button
 const browseBtn = document.getElementById('btnBrowse');
 const pathInput = document.getElementById('copy-path');
 
+//when clicked browse button, send message to main process to invoke open folder dialog
 browseBtn.addEventListener("click", function (event) {
     ipc.send("open-browse-dialog");
 });
 
+//show the path in the input box after chosen a directory
 ipc.on("selected-browse-path", function (event, folder) {
     pathInput.value = folder;
 });
@@ -1164,4 +1152,3 @@ function EnableDisablePathInput() {
     }
 }
 copyChk.addEventListener("click", EnableDisablePathInput);
-
