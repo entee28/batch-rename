@@ -562,7 +562,7 @@ h5{
   }
 
   .drag-area span{
-    font-size: 30px;
+    font-size: 25px;
   }
 
   .dropdown{
@@ -589,6 +589,10 @@ h5{
   
   #tablebutton{
     margin-left: 12%;
+  }
+
+  .checkmark{
+    margin-left: 3%;
   }
 }
 

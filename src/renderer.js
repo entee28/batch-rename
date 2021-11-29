@@ -953,6 +953,9 @@ ruleMap.set("remove-space", "No Space");
 ruleMap.set("lowercase", "Lower Case & No Space");
 ruleMap.set("pascalcase", "PascalCase");
 
+const screenmin1600 = window.matchMedia("(min-width: 1600px)");
+var x = document.getElementById("drag-back");
+
 function openNav() {
     var e = document.getElementById("sideBar");
     var f = document.getElementById("menu");
@@ -960,8 +963,8 @@ function openNav() {
         e.style.width = '0px';
         f.style.marginLeft = e.style.width;
     } else {
-        e.style.width = '250px'
-        f.style.marginLeft = '250px'
+        e.style.width = '250px';
+        f.style.marginLeft = '250px';
     }
     document.getElementById("open").style.opacity = "0";
     document.getElementById("close").style.opacity = "1";
@@ -969,11 +972,10 @@ function openNav() {
     document.getElementById("open").disabled = true;
     document.getElementById("open").style.cursor = "default";
 
-    document.getElementById("drag-back").style.marginLeft = "30%";
+    x.style.marginLeft = "30%";
 
-    const screenmin1600 = window.matchMedia("(min-width: 1600px)");
     if (screenmin1600.matches) {
-        document.getElementById("drag-back").style.marginLeft = "23%";
+        x.style.marginLeft = "23%";
     }
 }
 
@@ -991,11 +993,10 @@ function closeNav() {
             }
         });
 
-    document.getElementById("drag-back").style.marginLeft = "20%";
+    x.style.marginLeft = "20%";
 
-    const screenmin1600 = window.matchMedia("(min-width: 1600px)");
     if (screenmin1600.matches) {
-        document.getElementById("drag-back").style.marginLeft = "15%";
+        x.style.marginLeft = "15%";
     }
 }
 
