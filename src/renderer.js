@@ -1054,7 +1054,6 @@ for (j = 0; j < lol.length; j++) {
 
 document.getElementById("ruleBtn").addEventListener('click', function () {
     const icon = this.querySelector("i");
-    const text = this.querySelector("span");
 
     if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
@@ -1067,7 +1066,6 @@ document.getElementById("ruleBtn").addEventListener('click', function () {
 
 document.getElementById("rulelistBtn").addEventListener('click', function () {
     const icon = this.querySelector("i");
-    const text = this.querySelector("span");
 
     if (icon.classList.contains('fa-chevron-down')) {
         icon.classList.remove('fa-chevron-down');
@@ -1125,8 +1123,6 @@ const dropdownOptions = document.querySelectorAll('.dropdown .option');
 dropdownTitle.addEventListener('click', toggleMenuDisplay);
 
 dropdownOptions.forEach(option => option.addEventListener('click', handleOptionSelected));
-
-document.querySelector('.dropdown .title').addEventListener('change', handleTitleChange);
 
 //handle browse button
 const browseBtn = document.getElementById('btnBrowse');
