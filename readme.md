@@ -19,6 +19,7 @@ $ npm install
 ```
 $ npm start
 ```
+> It is recommended to move the Release folder to somewhere else outside this directory to ensure the above command works smoothly
 ## :bulb: Features (things that we've managed to handle)
 ![App Screenshot 2](https://scontent.fsgn5-4.fna.fbcdn.net/v/t1.15752-9/261375591_285262423609264_1508983599461558878_n.png?_nc_cat=102&ccb=1-5&_nc_sid=ae9488&_nc_ohc=DPkdGQAMGLMAX9TUi71&tn=-18x6bk46jtQpwMZ&_nc_ht=scontent.fsgn5-4.fna&oh=799624606219609216cf7782cf0d30a2&oe=61C58CB5)
 - Functions that handle each renaming rule are dynamically loaded from an external DLL file, written in C#.
